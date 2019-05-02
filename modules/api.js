@@ -1,6 +1,5 @@
-const log = require('./helpers/log');
-const {usersDb} = require('./modules/DB');
-
+const log = require('../helpers/log');
+const {usersDb} = require('./DB');
 
 module.exports = (app) => {
     app.get('/api', (req, res) => {
