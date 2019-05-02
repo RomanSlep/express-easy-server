@@ -1,14 +1,17 @@
 const log = require('../helpers/log');
-const {usersDb} = require('./DB');
+const {
+    usersDb
+} = require('./DB');
 
 module.exports = (app) => {
     app.get('/api', (req, res) => {
-        const GET = req.query;
-        res.json({
-            success: true,
-            GET
-        });
-        usersDb.insert(GET); // save in DB
+        try {
+            const GET = req.query;
+            success(null, res);
+            usersDb.insert(GET); // save in DB
+        } catch (e) {
+            error(e, res);
+        }
     });
 };
 
@@ -17,5 +20,12 @@ function error (err, res) {
     res.json({
         success: false,
         error: err
+    });
+}
+
+function success (data, res) {
+    res.json({
+        success: true,
+        result: data
     });
 }
