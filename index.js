@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const log = require('./helpers/log');
 const DIR_NAME = __dirname + '/public/';
 require('./api')(app);
 
@@ -14,4 +15,4 @@ const port = 36669;
 app.use('/', express.static(DIR_NAME));
 app.get('/', (req, res) => res.sendFile(DIR_NAME + 'index.html'));
 
-app.listen(port, () => console.info('Server listening on port ' + port + ' http://localhost:' + port));
+app.listen(port, () => log.info('Server listening on port ' + port + ' http://localhost:' + port));
