@@ -1,6 +1,7 @@
 /node_modules
-/dist
 package-lock.json
-server/logs
-server/db
+/logs
+/db
 server/public/dist
+db
+db/

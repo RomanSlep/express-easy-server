@@ -1,3 +1,0 @@
-const Vm = new Vue({
-
-});
