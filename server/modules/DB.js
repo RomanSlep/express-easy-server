@@ -3,7 +3,7 @@ const Datastore = require('nedb');
 
 module.exports = {
     usersDb: syncNedb(new Datastore({
-        filename: 'db/users',
+        filename: 'db_/users',
         autoload: true
     }), 60),
 };

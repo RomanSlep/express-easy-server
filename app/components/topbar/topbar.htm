@@ -1,0 +1,23 @@
+<div id="topbar">
+    <div class="deposit-block">
+        <input type="number" v-model="store.deposit" style="width:195px;">
+        <div class="but bg-grey w100 hovered">Add deposit</div>
+    </div>
+
+    <div class="buttons-rate">
+        <div v-for="r in buttonsRate" @click="changeRate(r)" class="but hovered"
+            :class="{'bg-red':r<0, 'bg-green': r>0}">
+            {{r > 0 ? '+' : ''}}{{r === -100 ? 'min': r+'%'}}
+        </div>
+    </div>
+
+    <div class="bet_count">
+        <input type="number" v-model="store.bet"  style="width:260px;">
+        <div class="buttons-count">
+            <div v-for="c in buttonsCountBombs" @click="store.countBombs = c"
+                :class="{activeCount: store.countBombs === c}" class="but hovered bg-blue m1">
+                {{c}}
+            </div>
+        </div>
+    </div>
+</div>

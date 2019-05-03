@@ -1,0 +1,17 @@
+<div id="form">
+    <h2 style="text-align: center;" class="txt-blue">{{status}}</h2>
+    <div id="login" v-if="user.isLoginned" class="form">
+        <input type="text" v-model="user.login" placeholder="Login">
+        <input type="text" v-model="user.password" placeholder="Password">
+    </div>
+    <div id="reg" v-else class="form">
+        <input type="text" v-model="user.address" placeholder="Address">
+        <input type="text" v-model="user.login" placeholder="Login">
+        <input type="text" v-model="user.password" placeholder="Password">
+    </div>
+    <div class="but bg-green" @click="logreg">{{status}}</div>
+    <div class="txt-blue hovered" style="text-align:center;" @click="user.isLoginned =!user.isLoginned">
+        <u v-if="user.isLoginned">Got registration?</u>
+        <u v-else>Got login?</u>
+    </div>
+</div>

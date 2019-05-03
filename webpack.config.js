@@ -1,13 +1,10 @@
 /* eslint-disable*/
 const path = require('path');
-// const CopyPlugin = require('copy-webpack-plugin');
-const fs = require('fs');
-const {
-    exec,
-    execSync
-} = require('child_process');
+const watch = require('node-watch');
+const {exec} = require('child_process');
 const Dist = path.resolve(__dirname, './server/public/dist');
 const isDev = process.argv[3] === 'development';
+let ls;
 
 module.exports = {
     entry: {
@@ -35,15 +32,29 @@ module.exports = {
             // Src: path.resolve(__dirname, "src/"),
         }
     },
-    plugins: [
-        () => {
-            if (isDev) {
-                exec('node server')
-                    .stdout.on('data', data => console.log('\x1b[35m', 'Server:', data.replace('\n', '')));
-            }
-        }
-    ],
+    plugins: [],
     watchOptions: {
         ignored: ['node_modules']
     }
 };
+if (isDev) {
+    // startServerWatcher();
+    // startServer();
+}
+function startServer() {
+    // if (ls) {
+    //     console.log('Kill', ls.kill());
+    // }
+    // setTimeout(()=>{
+        ls = exec('node server');
+        ls.stdout.on('data', data => console.log('\x1b[35m', 'Server:', data.replace('\n', '')));
+    // },1000)
+ 
+}
+
+function startServerWatcher() {
+    watch('./server', {
+        recursive: true,
+        filter: /\.js$/
+    }, startServer);
+}
