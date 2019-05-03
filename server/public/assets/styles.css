@@ -1,0 +1,32 @@
+body {
+    font-family: roboto;
+    margin: 0px;
+}
+
+h1,
+h2 {
+    font-weight: 100;
+}
+
+#content {
+    margin: 5px auto;
+    display: flex;
+    justify-content: space-around;
+    width: 1000px;
+}
+
+
+.buts {
+    display: flex;
+    justify-content: space-around;
+}
+
+.but {
+    cursor: pointer;
+    color: white;
+    padding: 4px 14px;
+    border-radius: 5px;
+    width: 91px;
+    text-align: center;
+    margin: 0 auto;
+}
