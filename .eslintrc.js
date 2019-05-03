@@ -11,13 +11,13 @@ module.exports = {
         "eqeqeq": "error", // обязательно === и !== (нельзя == и !=)
         // "no-eq-null": "error", // обязательно === и !== (нельзя == и !=) но тоько в отношении null
         "curly": "error", // проверка шаблонов `${name}`
-        "space-before-function-paren": [ // отступ до и после function
-            "error", {
-                "anonymous": "always",
-                "named": "always",
-                "asyncArrow": "ignore"
-            }
-        ],
+        // "space-before-function-paren": [ // отступ до и после function
+        //     "error", {
+        //         "anonymous": "always",
+        //         "named": "always",
+        //         "asyncArrow": "ignore"
+        //     }
+        // ],
         "key-spacing": ["error", { "mode": "strict" }], // оформление обЪекта
         "space-in-parens": ["error", "never"], // запрет отступов ( a,b)
         "computed-property-spacing": ["error", "never"], // запрет лишних отступов в выражениях a[ i]

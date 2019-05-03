@@ -1,10 +1,12 @@
 body {
+    background: #1e1e1e;
     font-family: roboto;
     margin: 0px;
 }
 
 h1,
 h2 {
+    color: white;
     font-weight: 100;
 }
 
@@ -22,11 +24,116 @@ h2 {
 }
 
 .but {
+    font-weight: 100;
     cursor: pointer;
     color: white;
-    padding: 4px 14px;
-    border-radius: 5px;
+    padding: 4px 0;
     width: 91px;
     text-align: center;
-    margin: 0 auto;
+    margin: 1px auto;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.m1 {
+    margin: 1px;
+}
+
+.hovered {
+    opacity: 0.8;
+    transition: .3s;
+}
+
+.hovered:hover {
+    opacity: 1;
+}
+
+.hovered:active {
+    background: #5c98bb
+}
+
+.bg-grey {
+    background: #323141;
+}
+
+.bg-green {
+    background: #65aa52;
+}
+
+.bg-red {
+    background: #ff7373;
+}
+
+.bg-yellow {
+    background: #fab41d;
+}
+
+.bg-blue {
+    background: #40c4ff;
+}
+
+.txt-grey {
+    color: #323141;
+}
+
+.txt-green {
+    color: #65aa52;
+}
+
+.txt-red {
+    color: #ff7373;
+}
+
+.txt-yellow {
+    color: #fab41d;
+}
+
+.txt-blue {
+    color: #40c4ff;
+}
+
+input {
+    border: 1px solid grey;
+    text-align: center;
+    padding: 3px;
+    color: white;
+    background: #1e1e1e;
+    font-size: 1.3em;
+    margin: 1px;
+    margin-bottom: 3px;
+}
+
+#main {
+    width: 745px;
+    margin: 5px auto;
+}
+
+/* TOPBAR */
+#topbar {
+    border: 1px solid gray;
+    display: flex;
+    width: 100%;
+}
+
+.deposit-block {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+.buttons-rate {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.bet_count {
+    width: 265px;
+}
+.buttons-count{
+    display: flex;
+}
+.activeCount{
+    background: #fab41d;
 }
