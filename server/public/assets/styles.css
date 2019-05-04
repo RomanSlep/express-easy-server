@@ -1,8 +1,23 @@
 body {
-    background: #1e1e1e;
-    font-family: roboto;
+    background: black;
+    font-family: 'Almendra', serif;
+    background-image: url(./gif/bg1.gif);
     margin: 0px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
 }
+
+#paralax {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(./gif/bg1.gif);
+}
+
+/* #400810 */
 
 h1,
 h2 {
@@ -59,19 +74,19 @@ h2 {
 }
 
 .bg-green {
-    background: #65aa52;
+    background: #425a3c;
 }
 
 .bg-red {
-    background: #ff7373;
+    background: #400810;
 }
 
 .bg-yellow {
-    background: #fab41d;
+    background: #745512;
 }
 
 .bg-blue {
-    background: #40c4ff;
+    background: #0e2e41;
 }
 
 .txt-grey {
@@ -83,7 +98,7 @@ h2 {
 }
 
 .txt-red {
-    color: #ff7373;
+    color: #400810;
 }
 
 .txt-yellow {
@@ -91,11 +106,12 @@ h2 {
 }
 
 .txt-blue {
-    color: #40c4ff;
+    color: #0e2e41;
 }
 
 input {
-    border: 1px solid grey;
+    font-family: 'Almendra', serif;
+    border: 1px solid #492828;
     text-align: center;
     color: white;
     background: #1e1e1e;
@@ -116,7 +132,7 @@ input {
     width: 300px;
     left: 50%;
     margin-left: -150px;
-    border: 1px solid #40c4ff;
+    /* border: 1px solid #40c4ff; */
     background: #323141;
 }
 
@@ -135,7 +151,7 @@ input {
 
 /* TOPBAR */
 #topbar {
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
     display: flex;
     width: 100%;
 }
@@ -183,27 +199,54 @@ input {
     transition: .3s;
 }
 
-.wait-finish {
+.no-events {
     pointer-events: none;
 }
 
 /* FIELD */
 #field {
     margin-top: 45px;
-    width: 400px;
+    width: 440px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
 }
 
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px;
+    width: 74px;
+    height: 74px;
+}
+
 .plot {
-    width: 78px;
-    height: 78px;
-    border: 1px solid #5c98bb;
+    height: 90%;
+    width: 90%;
+    transition: 1s;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid rgba(156, 22, 181, 0);
     cursor: pointer;
-    transition: .3s;
 }
 
 .plot:hover {
-    border-color: #fab41d;
+    height: 100%;
+    width: 100%;
+}
+
+.plot.close,
+.plot.choice {
+    background-image: url(./gif/close1.gif);
+}
+
+.plot.smoke {
+    background-image: url(./gif/smoke.gif);
+}
+
+.plot.choice {
+    width: 0;
+    height: 0;
 }

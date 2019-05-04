@@ -1,9 +1,9 @@
 <div id="main">
     <h1>Saper!</h1>
 
-    <div v-if="Store.user.isLogin">
+    <div v-if="Store.user.isLoged">
         <top-bar></top-bar>
-        <div class="but but_play" :class="!Store.isGame ? 'hovered bg-green' : 'wait-finish bg-yellow'"
+        <div class="but but_play" :class="!Store.isGame ? 'hovered bg-green' : 'no-events bg-yellow'"
             @click="startGame">
             <span v-if="!Store.isGame">Go</span>
             <span v-else>Play Bet</span>
@@ -15,5 +15,5 @@
     <div v-else>
         <login></login>
     </div>
-</div>
+    <notifications group="foo" />
 </div>

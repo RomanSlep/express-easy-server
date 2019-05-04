@@ -1,13 +1,13 @@
 <div id="form">
     <h2 style="text-align: center;" class="txt-blue">{{status}}</h2>
-    <div id="login" v-if="user.isLoginned" class="form">
-        <input type="text" v-model="user.login" placeholder="Login">
-        <input type="text" v-model="user.password" placeholder="Password">
+    <div id="login" v-if="user.isLoginned" class="form" required>
+        <input type="text" v-model="user.login" placeholder="Login" required>
+        <input type="password" v-model="user.password" placeholder="Password" required>
     </div>
     <div id="reg" v-else class="form">
-        <input type="text" v-model="user.address" placeholder="Address">
-        <input type="text" v-model="user.login" placeholder="Login">
-        <input type="text" v-model="user.password" placeholder="Password">
+        <input type="text" v-model="user.address" placeholder="Address" required>
+        <input type="text" v-model="user.login" placeholder="Login" required> 
+        <input type="password" v-model="user.password" placeholder="Password" required>
     </div>
     <div class="but bg-green" @click="logreg">{{status}}</div>
     <div class="txt-blue hovered" style="text-align:center;" @click="user.isLoginned =!user.isLoginned">

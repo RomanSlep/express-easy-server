@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue.js';
 
+
 export default new Vue({
     created() {
         this.$watch('topbar', () => {
@@ -23,11 +24,12 @@ export default new Vue({
             nextPrize: 0, // следуюзий выигрыш
         },
         user: {
-            isLoged: false,
+            isLoged: true,
             isLoginned: true, // хочет логиниться / регаться
             password: '',
             login: '',
-            address: ''
+            address: '',
+            token: false
         }
     }
 });
@@ -36,7 +38,7 @@ export default new Vue({
 function createField() {
     const arr = [];
     for (let i = 0; i < 25; i++) {
-        arr.push('с');
+        arr.push('w');
     }
     return arr;
 }

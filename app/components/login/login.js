@@ -19,9 +19,21 @@ export default Vue.component('login', {
     },
     methods: {
         logreg() {
+            const user = this.user;
+            if (!user.login || !user.password || !user.isLoginned && !user.address) {
+                this.$notify({
+                    type: 'error',
+                    group: 'foo',
+                    title: 'Error ' + this.status,
+                    text: 'Fill in all the fields!'
+                });
+                return;
+            }
             api({
-                action: this.status,
-                data: this.user
+                action: this.status.toLowerCase(),
+                data: user
+            }, (data) => {
+                
             });
         }
     }

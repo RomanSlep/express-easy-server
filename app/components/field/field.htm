@@ -1,3 +1,9 @@
 <div id="field">
-    <div class="plot" v-for = "p, i in store.plots">{{i}}</div>
+    <div class="cell" v-for="p, i in Store.field.plots" @click="choice(i)">
+        <div class="plot" :class="{
+            'close': p === 'c',
+             choice:p === 'w',
+             smoke:p === 's',
+        }"></div>
+    </div>
 </div>
