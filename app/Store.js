@@ -10,7 +10,6 @@ export default new Vue({
         });
     },
     data: {
-        isGame: false,
         topbar: {
             bet: 0.001, // ставка
             deposit: 100, // депозит юзера
@@ -20,6 +19,7 @@ export default new Vue({
             plots: createField(),
         },
         game: {
+            isGame: false,
             collected: 0, // сколько выиграно в матче 
             nextPrize: 0, // следуюзий выигрыш
         },

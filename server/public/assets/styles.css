@@ -21,7 +21,7 @@ body {
 
 h1,
 h2 {
-    color: white;
+    color: #767a7b;
     font-weight: 100;
 }
 
@@ -222,28 +222,41 @@ input {
 }
 
 .plot {
-    height: 90%;
-    width: 90%;
+    height: 80%;
+    width: 80%;
     transition: 1s;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border: 2px solid rgba(156, 22, 181, 0);
+    /* border: 2px solid rgba(156, 22, 181, 0); */
+}
+
+.plot.close {
     cursor: pointer;
 }
 
-.plot:hover {
-    height: 100%;
-    width: 100%;
+.plot.close:hover {
+    height: 90%;
+    width: 90%;
 }
 
 .plot.close,
 .plot.choice {
-    background-image: url(./gif/close1.gif);
+    background-image: url(./gif/close_.gif);
+}
+
+.plot.smoke,
+.plot.open {
+    width: 100%;
+    height: 100%;
 }
 
 .plot.smoke {
     background-image: url(./gif/smoke.gif);
+}
+
+.plot.open {
+    background-image: url(./gif/open.gif);
 }
 
 .plot.choice {

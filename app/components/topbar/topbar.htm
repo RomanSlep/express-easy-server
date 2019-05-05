@@ -5,7 +5,7 @@
     </div>
 
     <div class="buttons-rate" @click="sound"
-    :class="{'no-events' : Store.isGame}"
+    :class="{'no-events' : Store.game.isGame}"
     >
         <div v-for="r in buttonsRate" @click="changeRate(r)" class="but hovered"
             :class="{'bg-red':r<0, 'bg-green': r>0}">
@@ -15,7 +15,7 @@
 
     <div class="bet_count">
         <input type="number" v-model="store.bet"  style="width:260px;">
-        <div class="buttons-count"  :class="{'no-events' : Store.isGame}">
+        <div class="buttons-count"  :class="{'no-events' : Store.game.isGame}">
             <div v-for="c in buttonsCountBombs" @click="store.countBombs = c; sound()"
                 :class="{activeCount: store.countBombs === c}" class="but hovered bg-blue m1">
                 {{c}}

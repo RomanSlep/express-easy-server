@@ -18,7 +18,7 @@ new Vue({
     template,
     methods: {
         startGame() {
-            Store.isGame = true;
+            Store.game.isGame = true;
             api({
                 action: 'test',
                 data: {
@@ -39,7 +39,7 @@ new Vue({
 
 const fon = new Audio('./assets/sounds/fone.mp3');
 fon.volume = 0.2;
-fon.addEventListener("ended", mus);
+fon.addEventListener("ended", () => isMus = false);
 document.addEventListener('click', mus);
 document.addEventListener('mousemove', mus);
 let isMus = false;

@@ -1,11 +1,10 @@
 <div id="main">
-    <h1>Saper!</h1>
-
+    <h1>Magic artefacts</h1>
     <div v-if="Store.user.isLoged">
         <top-bar></top-bar>
-        <div class="but but_play" :class="!Store.isGame ? 'hovered bg-green' : 'no-events bg-yellow'"
+        <div class="but but_play" :class="!Store.game.isGame ? 'hovered bg-green' : 'no-events bg-yellow'"
             @click="startGame">
-            <span v-if="!Store.isGame">Go</span>
+            <span v-if="!Store.game.isGame">Go</span>
             <span v-else>Play Bet</span>
             {{Store.topbar.bet}}!</div>
         <div id="game-line">

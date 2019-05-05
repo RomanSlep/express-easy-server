@@ -8,19 +8,27 @@ export default Vue.component('fieldGame', {
     template,
     data() {
         return {
-            Store
+            Store,
+            store: Store.field,
         };
     },
     methods: {
         choice(i) {
-            if (Store.field.plots[i] !== 'c') {
+            const plots = this.store.plots;
+            if (plots[i] !== 'c') {
                 return;
             }
             $u.sound('choice', 0.5);
-            Vue.set(Store.field.plots, i, 'w');
+
+            Vue.set(plots, i, 'w');
             setTimeout(() => {
-                Vue.set(Store.field.plots, i, 's');
+                Vue.set(plots, i, 's');
             }, 1200);
+
+            // ЭТО ПО ОТВЕТУ ОТ РАНДОМАЙЗЕРА!!!
+            setTimeout(() => {
+                Vue.set(plots, i, 'o');
+            }, 5000);
         }
     }
 });
