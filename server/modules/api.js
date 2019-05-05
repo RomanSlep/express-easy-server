@@ -77,7 +77,9 @@ function success(data, res) {
 
 function assignUser(user){
     try {
-        user.token = sha256(new Date().toString());
+        const token = sha256(new Date().toString());
+        user.token = token;
+        usersDb.update({address: user.address}, {$set: {token}});
         delete user._id;
         delete user.password;
         return user;
