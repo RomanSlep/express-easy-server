@@ -29,9 +29,8 @@ new Vue({
                 Store.field.plots.forEach((p, i) => {
                     setTimeout(() => {
                         Vue.set(Store.field.plots, i, 'c');
-                    }, 100 * i);
+                    }, 50 * i);
                 });
-                console.log(data);
             });
         }
     }
