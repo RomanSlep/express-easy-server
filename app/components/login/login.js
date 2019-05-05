@@ -33,7 +33,14 @@ export default Vue.component('login', {
                 action: this.status.toLowerCase(),
                 data: user
             }, (data) => {
-                
+                Vue.set(Store, 'user', Object.assign(Store.user, data));
+                Store.$notify({
+                    type: 'success',
+                    group: 'foo',
+                    title: 'Success ' + this.status,
+                    text: 'Ready!'
+                })
+                Store.user.isLoged = true;
             });
         }
     }

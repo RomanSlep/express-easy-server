@@ -47,7 +47,6 @@ function mus() {
     if (isMus) {
         return;
     }
-    console.log('Start music');
     isMus = true;
     var promise = fon.play();
     if (promise) {

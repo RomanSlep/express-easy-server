@@ -1,6 +1,6 @@
 module.exports = {
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 8,
         "sourceType": "module"
     },
     "rules": {
@@ -36,7 +36,8 @@ module.exports = {
     },
     "globals": {
         "Vue":true,
-        "Symbol":true
+        "Symbol":true,
+        "Promise":true,
     },
     "plugins": []
 }

@@ -5,9 +5,9 @@
         <input type="password" v-model="user.password" placeholder="Password" required>
     </div>
     <div id="reg" v-else class="form">
-        <input type="text" v-model="user.address" placeholder="Address" required>
-        <input type="text" v-model="user.login" placeholder="Login" required> 
-        <input type="password" v-model="user.password" placeholder="Password" required>
+       <input type="text" v-model="user.login" placeholder="Login" required> 
+       <input type="text" v-model="user.address" placeholder="Address" required>
+       <input type="password" v-model="user.password" placeholder="Password" required>
     </div>
     <div class="but bg-blue hovered" @click="logreg">{{status}}</div>
     <div class="hovered" style="text-align:center; color: aliceblue;" @click="user.isLoginned =!user.isLoginned">
