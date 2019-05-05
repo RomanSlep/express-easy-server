@@ -2,12 +2,14 @@ import Vue from 'vue/dist/vue.js';
 import './components/topbar/topbar';
 import './components/field/field';
 import './components/login/login';
+import './components/log/logGame';
 import Store from './Store';
 import api from './core/api';
-import $u from './core/utils';
+// import $u from './core/utils';
 import template from './app.htm';
 import Notifications from 'vue-notification';
-
+Vue.config.productionTip = false;
+Vue.config.devtools = false;
 Vue.use(Notifications);
 
 new Vue({
@@ -17,20 +19,18 @@ new Vue({
     },
     template,
     methods: {
-        startGame() {
-            Store.game.isGame = true;
+        newGame() {
             api({
-                action: 'test',
+                action: 'startGame',
                 data: {
-                    userid: 1
+                    bet: Store.topbar.bet,
+                    countBombs: Store.topbar.countBombs
                 }
-            }, (data) => {
-                $u.sound('gong');
-                Store.field.plots.forEach((p, i) => {
-                    setTimeout(() => {
-                        Vue.set(Store.field.plots, i, 'c');
-                    }, 50 * i);
-                });
+            }, (game) => {
+                Store.game.isGame = true;
+                Vue.set(Store, 'logs', []);
+                Vue.set(Store, 'game', game);
+                Store.startGame();
             });
         }
     }

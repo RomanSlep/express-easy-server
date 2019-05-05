@@ -1,0 +1,22 @@
+<div id="log-game">
+    <div class="current-next">
+        <div class="txt-green">
+            <div>Collect</div> <span>{{((game.collected) || 0).toFixed(8)}}</span>
+        </div>
+        <div class="txt-yellow">
+            <div>Next </div><span>{{((game.nextPrize) || 0).toFixed(8)}}</span>
+        </div>
+    </div>
+    <br>
+    <div class="but bg-green hovered" style="width: 200px;">Get winnings!</div>
+    <div class="log-txt">
+        <div class="str-log" v-for="l in logs">
+            <span v-if="l.status === 'o'">
+                <u class="txt-yellow">You {{l.predCollected}} </u> uppend to <u class="txt-green"> {{l.collected}} coins!</u>!
+            </span>
+            <span v-else>
+                <u class="txt-red" style="font-size:1.5em;">You lose {{l.collected}} coins!</u>
+            </span>
+        </div>
+    </div>
+</div>

@@ -1,14 +1,16 @@
 <div id="main">
     <h1>Magic artefacts</h1>
     <div v-if="Store.user.isLoged">
+        <h2 @click="Store.user.isLoged = false;">{{Store.user.login}} Exit?</h2>
         <top-bar></top-bar>
         <div class="but but_play" :class="!Store.game.isGame ? 'hovered bg-green' : 'no-events bg-yellow'"
-            @click="startGame">
+            @click="newGame">
             <span v-if="!Store.game.isGame">Go</span>
             <span v-else>Play Bet</span>
             {{Store.topbar.bet}}!</div>
         <div id="game-line">
             <field-game></field-game>
+            <log-game></log-game>
         </div>
     </div>
     <div v-else>

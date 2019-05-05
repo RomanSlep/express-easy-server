@@ -1,16 +1,32 @@
 const log = require('../helpers/log');
 const sha256 = require('sha256');
-const {usersDb} = require('./DB');
+const {usersDb, transDb, gamesDb} = require('./DB');
+const startGame = require('./startGame');
+const checkGame = require('./checkGame');
+const $u = require('../helpers/utils');
 
 module.exports = (app) => {
     app.get('/api', async (req, res) => {
         try {
-            const action = req.query.action.toLowerCase();
+            console.log(req.query);
+            const action = req.query.action;
             const GET = JSON.parse(req.query.data);
+            const User = await getUser(GET.token);
+            User.__proto__.updateDeposit = updateDeposit;
             // роуты
             switch (action) {
+            case ('getUser'):
+                if (User) {
+                    //TODO: приделать время жизни токена
+                    User.isLoged = true;
+                    success(User, res);
+                } else {
+                    error(null, res);
+                }
+                break;
+
             case ('login'):
-                usersDb.findOne({$and: [{login: GET.login}, {password: GET.password}]}, (err, user)=>{
+                usersDb.findOne({$and: [{login: GET.login}, {password: sha256(GET.password.toString())}]}, (err, user)=>{
                     if (!user){
                         error('This login and password not found', res);
                         return;
@@ -20,7 +36,7 @@ module.exports = (app) => {
                 break;
                 
             case ('registration'):
-                const { login, password, address } = GET;
+                const {login, password, address} = GET;
                 if (!login.length || !password.length || !address.length) {
                     error('No full data', res);
                     return;
@@ -36,7 +52,8 @@ module.exports = (app) => {
                 usersDb.insert({
                     address,
                     login,
-                    password
+                    password: sha256(password.toString()),
+                    deposit: 0
                 }, (err, newUser) => {
                     if (err){
                         error('Error create user', res);
@@ -45,7 +62,43 @@ module.exports = (app) => {
                     success(assignUser(newUser), res);
                 });
                 break;
+
+            case ('testDeposit'):
+                transDb.insert({user_id: User._id, amount: 1, isTest: true}, ()=>{
+                    User.updateDeposit();
+                });
+                success('Success add!', res);
+                break;
+
+            case ('getNoFinished'):
+                gamesDb.findOne({$and: [{user_id: User._id}, {isGame: true}]}, (err, game) =>{
+                    if (err){
+                        error('Error code 4', res);
+                        return;
+                    }
+                    success($u.filterGame(game), res);
+                });
+                break;
+
+            case ('startGame'):
+                const start = await startGame(User, GET);
+                if (start.res) {
+                    success($u.filterGame(start.game), res);
+                } else {
+                    error(start.msg, res);
+                }
+                break;
+
+            case ('choice'):
+                const check = await checkGame(User, GET);
+                if (check.res) {
+                    success(check.game, res);
+                } else {
+                    error(check.msg, res);
+                }
+                break;
             }
+
         } catch (e) {
             console.log({e});
             error('Error api code 1', res);
@@ -77,11 +130,33 @@ function success(data, res) {
 
 function assignUser(user){
     try {
-        user.token = sha256(new Date().toString());
+        const token = sha256(new Date().toString());
+        user.token = token;
+        usersDb.update({address: user.address}, {$set: {token}});
         delete user._id;
         delete user.password;
         return user;
     } catch (e){
         console.log('assignUser: ' + e);
     }
+}
+async function getUser(token){
+    return await usersDb.syncFindOne({token});
+}
+function updateDeposit() {
+    const user = this;
+    transDb.find({user_id: user._id}, (err, transes) => {
+        if (err) {
+            return;
+        }
+        try {
+            let deposit = transes.reduce((s, t) => {
+                return s + t.amount;
+            }, 0);
+            deposit = Number(deposit.toFixed(8));
+            usersDb.update({address: user.address}, {$set: {deposit}});
+        } catch (e) {
+            log.error('UpdateDeposit ' + e);
+        }
+    });
 }

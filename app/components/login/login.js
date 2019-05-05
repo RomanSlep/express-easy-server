@@ -2,8 +2,6 @@ import Vue from 'vue/dist/vue.js';
 import Store from '../../Store';
 import template from './login.htm';
 import api from '../../core/api';
-// import $u from '../../core/utils';
-
 
 export default Vue.component('login', {
     template,
@@ -39,7 +37,7 @@ export default Vue.component('login', {
                     group: 'foo',
                     title: 'Success ' + this.status,
                     text: 'Ready!'
-                })
+                });
                 Store.user.isLoged = true;
             });
         }

@@ -1,4 +1,4 @@
-const $u = {
+module.exports = {
     round(n) {
         return Number(n.toFixed(8));
     },
@@ -13,7 +13,7 @@ const $u = {
             bet,
             stepLastNum
         } = params;
-        const steps = 25 - countBombs;
+        const steps = 24 - countBombs;
         const countStepsBE = Math.round(steps * 0.66); // шагов безубытка
         let countMult = 0;
         let i = 0;
@@ -21,30 +21,22 @@ const $u = {
             countMult += i * countBombs;
             i++;
         }
+
         const m = bet / countMult; // один множитель
         let result = 0;
         // считаем текущий и следующий призы
-        let current, next, p = 0;
+        let next, p = 0,
+            collected = 0;
         while (stepLastNum > p - 2) {
-            current = result;
-            result += countBombs * m * p;
+            collected = result;
+            result += countBombs * m * p++;
             next = result;
-            p++;
         }
-        return {
-            m,
-            current,
-            next
-        };
+
+        params.nextPrize = next;
+        params.collected = collected;
+    },
+    filterGame(game) {
+        return game;
     }
 };
-
-
-// try {
-//     module.exports = $u;
-// } catch (e) {
-// if (!window) {
-//     module.exports = $u;
-// } else {
-export default $u;
-// }
