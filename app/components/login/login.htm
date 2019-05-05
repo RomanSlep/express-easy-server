@@ -1,5 +1,5 @@
 <div id="form">
-    <h2 style="text-align: center;" class="txt-blue">{{status}}</h2>
+    <h2 style="text-align: center;">{{status}}</h2>
     <div id="login" v-if="user.isLoginned" class="form" required>
         <input type="text" v-model="user.login" placeholder="Login" required>
         <input type="password" v-model="user.password" placeholder="Password" required>
@@ -9,8 +9,8 @@
         <input type="text" v-model="user.login" placeholder="Login" required> 
         <input type="password" v-model="user.password" placeholder="Password" required>
     </div>
-    <div class="but bg-green" @click="logreg">{{status}}</div>
-    <div class="txt-blue hovered" style="text-align:center;" @click="user.isLoginned =!user.isLoginned">
+    <div class="but bg-blue hovered" @click="logreg">{{status}}</div>
+    <div class="hovered" style="text-align:center; color: aliceblue;" @click="user.isLoginned =!user.isLoginned">
         <u v-if="user.isLoginned">Got registration?</u>
         <u v-else>Got login?</u>
     </div>

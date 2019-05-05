@@ -21,7 +21,7 @@ body {
 
 h1,
 h2 {
-    color: #767a7b;
+    color: #cadde2;
     font-weight: 100;
 }
 
@@ -39,6 +39,7 @@ h2 {
 }
 
 .but {
+    border-radius: 5px;
     font-weight: 100;
     cursor: pointer;
     color: white;
@@ -114,11 +115,12 @@ h2 {
 }
 
 input {
+    border-radius: 5px;
     font-family: 'Almendra', serif;
     border: 1px solid #492828;
     text-align: center;
     color: white;
-    background: #1e1e1e;
+    background: rgba(1, 1, 1, 0.7);
     font-size: 1.3em;
     margin: 1px;
 }
@@ -137,7 +139,7 @@ input {
     left: 50%;
     margin-left: -150px;
     /* border: 1px solid #40c4ff; */
-    background: #323141;
+    /* background: #323141; */
 }
 
 #form u {

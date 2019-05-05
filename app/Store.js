@@ -24,7 +24,7 @@ export default new Vue({
             nextPrize: 0, // следуюзий выигрыш
         },
         user: {
-            isLoged: true,
+            isLoged: false,
             isLoginned: true, // хочет логиниться / регаться
             password: '',
             login: '',

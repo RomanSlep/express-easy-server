@@ -15,11 +15,14 @@ module.exports = {
         path: Dist,
         filename: 'build.js'
     },
-    devtool: isDev ? 'eval-source-map' : false,
+    devtool: isDev && 'eval-source-map',
     module: {
         rules: [{
             test: /\.js$/,
-            exclude: /node_modules/
+            exclude: /node_modules/,
+            use: {
+                loader: "babel-loader"
+            }
         }, {
             test: /\.(htm)$/,
             use: {
@@ -40,7 +43,6 @@ module.exports = {
 };
 
 if (isDev) {
-    ls = exec('node server');
+    ls = exec('nodemon server --watch server');
     ls.stdout.on('data', data => console.log('\x1b[35m', 'Server:', data.replace('\n', '')));
-
 }
