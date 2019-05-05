@@ -12,7 +12,9 @@ module.exports = (app) => {
             const action = req.query.action;
             const GET = JSON.parse(req.query.data);
             const User = await getUser(GET.token);
-            User.__proto__.updateDeposit = updateDeposit;
+            if (User) {
+                User.__proto__.updateDeposit = updateDeposit;
+            }
             // роуты
             switch (action) {
             case ('getUser'):
