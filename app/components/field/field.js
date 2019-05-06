@@ -76,7 +76,7 @@ function updateGame(game) { // ОТВЕТ ОТ РАНДОМАЙЗЕРА!!!!
         $u.sound('open');
         console.log('Норм!');
     } else {
-        $u.sound('bomb');
+        $u.sound('bomb1');
         self.classResult = 'lose';
         console.warn('BOMB');
     }

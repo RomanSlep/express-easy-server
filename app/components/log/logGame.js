@@ -21,6 +21,15 @@ export default Vue.component('log-game', {
     },
     methods: {
         pickUpWinnings() {
+            if (Store.game.isWaitRnd) {
+                this.$notify({
+                    type: 'info',
+                    group: 'foo',
+                    title: 'Info!',
+                    text: 'Wait randomiser!'
+                });
+                return;
+            }
             api({
                 action: 'pickUpWinnings',
                 data: {
@@ -31,6 +40,11 @@ export default Vue.component('log-game', {
                     isWin: true,
                     collected: $u.round(game.collected)
                 });
+                if (game.collected){
+                    $u.sound('win');
+                } else {
+                    
+                }
                 Store.updateUser();
                 Store.game.isGame = false;
             });
