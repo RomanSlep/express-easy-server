@@ -21,6 +21,7 @@ module.exports = (app) => {
                 if (User) {
                     //TODO: приделать время жизни токена
                     User.isLoged = true;
+                    console.log(User)
                     success(User, res);
                 } else {
                     error(null, res);
@@ -92,11 +93,22 @@ module.exports = (app) => {
                 break;
 
             case ('choice'):
+                GET.isStep = true;
                 const check = await checkGame(User, GET);
                 if (check.res) {
                     success(check.game, res);
                 } else {
                     error(check.msg, res);
+                }
+                break;
+            case ('pickUpWinnings'):
+                GET.isPickUpWinnings = true;
+                // проверяем начатую игру
+                const checkg = await checkGame(User, GET);
+                if (checkg.res) {
+                    success(checkg.game, res);
+                } else {
+                    error(checkg.msg, res);
                 }
                 break;
             }
@@ -155,7 +167,7 @@ function updateDeposit() {
             let deposit = transes.reduce((s, t) => {
                 return s + t.amount;
             }, 0);
-            deposit = Number(deposit.toFixed(8));
+            deposit = Number(deposit.toFixed(8)) || 0;
             usersDb.update({address: user.address}, {$set: {deposit}});
         } catch (e) {
             log.error('UpdateDeposit ' + e);

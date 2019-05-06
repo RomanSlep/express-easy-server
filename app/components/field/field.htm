@@ -1,4 +1,4 @@
-<div id="field" :class="{'no-events' : !Store.game.isGame}">
+<div id="field">
     <div class="cell" v-for="p, i in cells" @click="choice(i)">
         <div class="plot" :class="{
              close: p === 'c',

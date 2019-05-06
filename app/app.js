@@ -31,6 +31,7 @@ new Vue({
                 Vue.set(Store, 'logs', []);
                 Vue.set(Store, 'game', game);
                 Store.startGame();
+                Store.updateUser();
             });
         }
     }
