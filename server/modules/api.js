@@ -56,7 +56,8 @@ module.exports = (app) => {
                     address,
                     login,
                     password: sha256(password.toString()),
-                    deposit: 0
+                    deposit: 0,
+                    score: 0
                 }, (err, newUser) => {
                     if (err){
                         error('Error create user', res);
@@ -164,11 +165,16 @@ function updateDeposit() {
             return;
         }
         try {
+            let score = 0;
             let deposit = transes.reduce((s, t) => {
+                if (t.game_id){
+                    score += t.amount * 1000000;
+                };
                 return s + t.amount;
             }, 0);
             deposit = Number(deposit.toFixed(8)) || 0;
-            usersDb.update({address: user.address}, {$set: {deposit}});
+            score = Number(score.toFixed(0)) || 0;
+            usersDb.update({address: user.address}, {$set: {deposit, score}});
         } catch (e) {
             log.error('UpdateDeposit ' + e);
         }

@@ -1,14 +1,14 @@
 <div id="log-game">
     <div class="current-next">
         <div class="txt-green">
-            <div>Collect</div> <span>{{((game.collected) || 0).toFixed(8)}}</span>
+            <div>Collect</div> <span>{{game.collected || 0}}</span>
         </div>
         <div class="txt-yellow">
-            <div>Next </div><span>{{((game.nextPrize) || 0).toFixed(8)}}</span>
+            <div>Next </div><span>{{game.nextPrize || 0}}</span>
         </div>
     </div>
     <br>
-    <div class="but bg-green hovered" style="width: 200px;" @click="pickUpWinnings">Get winnings!</div>
+    <div class="but bg-green hovered" style="width: 200px;" @click="pickUpWinnings" >{{game.collected ? 'Get winnings!' : 'Reset game?'}}</div>
     <div class="log-txt">
         <div class="str-log" v-for="l in logs">
             <span v-if="l.status && l.status === 'o'">

@@ -1,7 +1,10 @@
 <div id="main">
     <h1>Lost Artifacts</h1>
     <div v-if="Store.user.isLoged">
-        <h2 @click="Store.user.isLoged = false;">{{Store.user.login}} Exit?</h2>
+        <h2 @click="Store.user.isLoged = false;">Hy, {{Store.user.login}}! 
+            <span class="txt-green">Deposit: {{Store.user.deposit | numFormat}}.</span> 
+            <span class="txt-green">Score: {{Store.user.score | numFormat}}.</span> 
+            <span class="txt-red">Exit?</span></h2>
         <top-bar></top-bar>
         <div class="but but_play" :class="!Store.game.isGame ? 'hovered bg-green' : 'no-events bg-yellow'"
             @click="newGame">

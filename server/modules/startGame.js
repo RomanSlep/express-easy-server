@@ -45,6 +45,7 @@ module.exports = async (User, params) => {
         waitNumberCell: null,
         steps: {},
         stepLastNum: 0, // номер последнего шага по очередности нажатия
+        lastCell: 0, // номер последнего шага по очередности нажатия
         isGame: true
     };
 

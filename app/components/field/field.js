@@ -24,6 +24,15 @@ export default Vue.component('fieldGame', {
     },
     methods: {
         choice(i) {
+            if (Store.game.isWaitRnd) {
+                this.$notify({
+                    type: 'info',
+                    group: 'foo',
+                    title: 'Info!',
+                    text: 'Wait randomiser!'
+                });
+                return;
+            }
             const self = this;
             const plots = this.store.plots;
             if (plots[i] !== 'c') {
@@ -44,26 +53,31 @@ export default Vue.component('fieldGame', {
                     game_id: Store.game._id
                 }
             }, game => {
+                Store.game.isWaitRnd = true;
                 setTimeout(() => {
-                    const predCollected = $u.round(Store.game.collected);
-                    Vue.set(Store, 'game', game);
-                    const status = game.steps[i].status;
-                    Store.logs.push({
-                        cell: i,
-                        status: status,
-                        predCollected,
-                        collected: $u.round(game.collected)
-                    });
-                    if (status === 'o') {
-                        $u.sound('open');
-                        console.log('Норм!');
-                    } else {
-                        $u.sound('bomb');
-                        self.classResult = 'lose';
-                        console.warn('BOMB');
-                    }
-                }, 2000);
+                    updateGame(game);
+                }, 3000);
             });
         }
     }
 });
+
+function updateGame(game) { // ОТВЕТ ОТ РАНДОМАЙЗЕРА!!!!
+    const predCollected = $u.round(Store.game.collected);
+    Vue.set(Store, 'game', game);
+    const status = game.steps[game.lastCell].status;
+    Store.logs.push({
+        cell: game.lastCell,
+        status: status,
+        predCollected,
+        collected: $u.round(game.collected)
+    });
+    if (status === 'o') {
+        $u.sound('open');
+        console.log('Норм!');
+    } else {
+        $u.sound('bomb');
+        self.classResult = 'lose';
+        console.warn('BOMB');
+    }
+}

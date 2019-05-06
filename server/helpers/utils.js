@@ -1,6 +1,6 @@
 module.exports = {
     round(n) {
-        return Number(n.toFixed(8));
+        return Number(n.toFixed(4));
     },
     sound(name, v = 0.2) {
         const s = new Audio('assets/sounds/' + name + '.mp3');
@@ -33,8 +33,8 @@ module.exports = {
             next = result;
         }
 
-        params.nextPrize = next;
-        params.collected = collected;
+        params.nextPrize = this.round(next);
+        params.collected = this.round(collected);
     },
     filterGame(game) {
         return game;

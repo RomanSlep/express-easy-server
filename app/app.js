@@ -8,8 +8,9 @@ import api from './core/api';
 // import $u from './core/utils';
 import template from './app.htm';
 import Notifications from 'vue-notification';
-Vue.config.productionTip = false;
-Vue.config.devtools = false;
+import numFormat from 'vue-filter-number-format';
+
+Vue.filter('numFormat', numFormat);
 Vue.use(Notifications);
 
 new Vue({

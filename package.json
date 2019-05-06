@@ -22,6 +22,7 @@
         "nedb": "^1.8.0",
         "sha256": "^0.2.0",
         "vue": "^2.6.10",
+        "vue-filter-number-format": "^1.0.3",
         "vue-notification": "^1.3.16"
     },
     "devDependencies": {

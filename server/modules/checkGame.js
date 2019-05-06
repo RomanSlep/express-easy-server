@@ -41,9 +41,9 @@ module.exports = async (User, params) => {
 async function step(game, params) {
     const cell = params.cell;
     game.clickedCells.push(cell);
+    game.lastCell = cell;
 
     const step = game.steps[cell] = {};
-
     if (game.cellsBomb.includes(cell)) {
         step.status = 'b';
         game.isGame = false;
@@ -64,18 +64,20 @@ async function step(game, params) {
 
 async function pickUpWinnings(User, game) {
     game.isGame = false;
-    game.isWin = true;
+    game.isWin = game.collected && true;
     gamesDb.update({
         _id: game._id
     }, game, (err, res) => {
     });
 
-    transDb.insert({
-        user_id: User._id,
-        amount: game.collected || 0,
-        game_id: game._id,
-        isTest: true
-    }, () => {
-        User.updateDeposit();
-    });
+    if (game.isWin){
+        transDb.insert({
+            user_id: User._id,
+            amount: game.collected || 0,
+            game_id: game._id,
+            isTest: true
+        }, () => {
+            User.updateDeposit();
+        });
+    }
 }

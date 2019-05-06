@@ -10,17 +10,30 @@ export default Vue.component('topBar', {
         return {
             Store,
             store: Store.topbar,
-            buttonsRate: [10, 50, 100, -100, -50, -10],
+            buttonsRate: [
+                {text: '+0.1', val: 0.1},
+                {text: '+0.5', val: 0.5},
+                {text: 'x2', val: 2},
+                {text: 'min', val: - 100000000000000},
+                {text: '-0.1', val: -0.1},
+                {text: '-0.5', val: -0.5},
+            ],
             buttonsCountBombs: [1, 3, 5, 10, 20],
-            min: 0.001,
+            min: 0.1,
             className: ''
         };
     },
     methods: {
-        changeRate(r) {
+        changeRate(rate) {
             const dep = Store.user.deposit;
             const min = this.min;
-            let bet = $u.round(Store.topbar.bet * (1 + r / 100));
+            let bet;
+            if (rate.text === 'x2'){
+                bet = Store.topbar.bet * 2;
+            } else {
+                bet = Store.topbar.bet + rate.val;
+            }
+            bet = $u.round(bet);
             if (bet < min) {
                 bet = min;
             }

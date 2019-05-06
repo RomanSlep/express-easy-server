@@ -15,13 +15,14 @@ export default new Vue({
     data: {
         isLoad: false,
         topbar: {
-            bet: 0.001, // ставка
+            bet: 0.1, // ставка
             countBombs: 1
         },
         field: {
             plots: createField(),
         },
         game: {
+            isWaitRnd: false,
             isGame: false,
             collected: 0, // сколько выиграно в матче 
             nextPrize: 0, // следуюзий выигрыш
