@@ -9,12 +9,12 @@ export default new Vue({
         });
 
         this.$watch('game.cellsBomb', () => {
-           
+            console.log(this.game.cellsBomb);
             if (this.game.cellsBomb) {
                 this.game.cellsBomb.forEach((c, i) => {
-                    setTimeout(()=>{
-                        this.field.plots[c] = 'b';
-                    }, i * 100);
+
+                    this.field.plots[c] = 'b';
+
                 });
             }
         });

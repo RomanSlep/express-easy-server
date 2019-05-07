@@ -106,6 +106,7 @@ function createBombs(countBombs) {
     //         arrBombs.push(pos);
     //     }
     // };
+    console.log(Math.max(arrBombs));
     return arrBombs;
 }
 
