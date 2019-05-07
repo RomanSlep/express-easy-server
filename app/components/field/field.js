@@ -74,10 +74,11 @@ function updateGame(game) { // ОТВЕТ ОТ РАНДОМАЙЗЕРА!!!!
     });
     if (status === 'o') {
         $u.sound('open');
-        console.log('Норм!');
+        console.warn('Open!');
     } else {
         $u.sound('bomb1');
-        self.classResult = 'lose';
+        // console.log('Finish game', game)
+        // self.classResult = 'lose';
         console.warn('BOMB');
     }
 }

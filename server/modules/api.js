@@ -102,9 +102,9 @@ module.exports = (app) => {
                     error(check.msg, res);
                 }
                 break;
+
             case ('pickUpWinnings'):
                 GET.isPickUpWinnings = true;
-                // проверяем начатую игру
                 const checkg = await checkGame(User, GET);
                 if (checkg.res) {
                     success(checkg.game, res);

@@ -5,7 +5,7 @@ const {
 const $u = require('../helpers/utils');
 
 module.exports = async (User, params) => {
-    const game = await gamesDb.syncFindOne({
+    let game = await gamesDb.syncFindOne({
         $and: [{
             _id: params.game_id
         }, {
@@ -33,7 +33,7 @@ module.exports = async (User, params) => {
     return {
         res: !msg,
         msg,
-        game: $u.filterGame(game)
+        game: game.isGame ? $u.filterGame(game) : game
     };
 };
 

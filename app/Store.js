@@ -7,6 +7,16 @@ export default new Vue({
         this.$watch('user.token', () => {
             localStorage.setItem('wstoken', this.user.token);
         });
+
+        this.$watch('game.cellsBomb', () => {
+            console.log('Cells!');
+            if (this.game.cellsBomb) {
+                this.game.cellsBomb.forEach(c => {
+                    this.field.plots[c] = 'b';
+                });
+            }
+        });
+
         this.user.token = localStorage.getItem('wstoken') || false;
         this.updateUser(() => {
             this.getNoFinished();

@@ -1,4 +1,6 @@
+const clone = require('clone');
 module.exports = {
+    clone,
     round(n) {
         return Number(n.toFixed(4));
     },
@@ -37,6 +39,11 @@ module.exports = {
         params.collected = this.round(collected);
     },
     filterGame(game) {
+        if (!game) {
+            return game;
+        }
+        game = clone(game);
+        game.cellsBomb = null;
         return game;
     }
 };

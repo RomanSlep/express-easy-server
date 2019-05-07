@@ -40,11 +40,12 @@ export default Vue.component('log-game', {
                     isWin: true,
                     collected: $u.round(game.collected)
                 });
-                if (game.collected){
+                if (game.collected) {
                     $u.sound('win');
                 } else {
-                    
+                    // TODO: звук ресета
                 }
+                Vue.set(Store, 'game', game);
                 Store.updateUser();
                 Store.game.isGame = false;
             });
