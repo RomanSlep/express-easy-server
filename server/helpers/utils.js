@@ -32,12 +32,6 @@ module.exports = {
         if (countBombs === 20) {
             countStepsBE = 1;
         }
-
-
-        // console.log({
-        //     countStepsBE,
-        //     // P
-        // })
         let countMult = 0;
         let i = 0;
         while (countStepsBE >= i) {
@@ -45,12 +39,15 @@ module.exports = {
             i++;
         }
 
-        const m = bet / countMult; // один множитель
+        let m = bet / countMult; // один множитель
+        if (countBombs === 20) {
+            m = bet / countBombs * 2;
+        }
         let result = 0;
         // считаем текущий и следующий призы
         let next, p = 0,
             collected = 0;
-        let str = '';
+        // let str = '';
         while (stepLastNum > p - 2) {
             collected = result;
             // str += `
@@ -73,8 +70,8 @@ module.exports = {
 };
 
 
-console.log(module.exports.prizes({ // абсолютный размер множителя
-    countBombs: 10,
-    bet: 10,
-    stepLastNum: 24
-}));
+// console.log(module.exports.prizes({ // абсолютный размер множителя
+//     countBombs: 10,
+//     bet: 10,
+//     stepLastNum: 24
+// }));
