@@ -17,6 +17,7 @@ module.exports = {
         } = params;
         const steps = 24 - countBombs;
         const countStepsBE = Math.round(steps * 0.66); // шагов безубытка
+        console.log('[countStepsBE]', countStepsBE)
         let countMult = 0;
         let i = 0;
         while (countStepsBE >= i) {
@@ -29,12 +30,15 @@ module.exports = {
         // считаем текущий и следующий призы
         let next, p = 0,
             collected = 0;
+        let str = '';
         while (stepLastNum > p - 2) {
             collected = result;
+            str += `
+            ` + p + ' ' + collected.toFixed(8);
             result += countBombs * m * p++;
             next = result;
         }
-
+        // console.log(str);
         params.nextPrize = this.round(next);
         params.collected = this.round(collected);
     },
@@ -47,3 +51,10 @@ module.exports = {
         return game;
     }
 };
+
+
+console.log(module.exports.prizes({ // абсолютный размер множителя
+    countBombs: 10,
+    bet: 100,
+    stepLastNum: 24
+}));

@@ -57,7 +57,6 @@ async function step(game, params) {
     gamesDb.update({
         _id: game._id
     }, game, (err, res) => {
-        console.log('SAVED: ', res);
     });
 
 };

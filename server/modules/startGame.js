@@ -88,6 +88,12 @@ function createBombs(countBombs) {
             }
             posTop++;
             posLow--;
+            if (posTop > 25) {
+                posTop = 25;
+            }
+            if (posLow < 0) {
+                posLow = 0;
+            }
         }
     }
 
@@ -106,7 +112,6 @@ function createBombs(countBombs) {
     //         arrBombs.push(pos);
     //     }
     // };
-    console.log(Math.max(arrBombs));
     return arrBombs;
 }
 
@@ -116,7 +121,7 @@ function getRndArray(max) {
     let i = 0;
     const arr = [];
     while (randoms[i + 1]) {
-        const rnd = Math.round((randoms[i] + randoms[i + 1]) / (100 / max - 1));
+        const rnd = Math.round((randoms[i] + randoms[i + 1]) / (100 / (max - 1)));
         arr.push(rnd);
         i++;
     }

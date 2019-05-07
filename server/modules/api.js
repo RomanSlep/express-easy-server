@@ -8,7 +8,7 @@ const $u = require('../helpers/utils');
 module.exports = (app) => {
     app.get('/api', async (req, res) => {
         try {
-            console.log(req.query);
+            // console.log(req.query);
             const action = req.query.action;
             const GET = JSON.parse(req.query.data);
             const User = await getUser(GET.token);
@@ -21,7 +21,6 @@ module.exports = (app) => {
                 if (User) {
                     //TODO: приделать время жизни токена
                     User.isLoged = true;
-                    console.log(User)
                     success(User, res);
                 } else {
                     error(null, res);
