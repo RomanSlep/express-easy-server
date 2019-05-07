@@ -115,7 +115,7 @@ function getRndArray(max) {
     let i = 0;
     const arr = [];
     while (randoms[i + 1]) {
-        const rnd = Math.round((randoms[i] + randoms[i + 1]) / (100 / max));
+        const rnd = Math.round((randoms[i] + randoms[i + 1]) / (100 / max - 1));
         arr.push(rnd);
         i++;
     }
