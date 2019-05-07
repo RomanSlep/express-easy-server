@@ -73,7 +73,7 @@ function createBombs(countBombs) {
         count = 25 - countBombs;
     }
     let arrBombs = [];
-    const rndArr = getRndArray(25);
+    const rndArr = getRndArray(24);
     while (arrBombs.length < count) {
         let posLow = rndArr.shift();
         let posTop = posLow;
@@ -88,8 +88,8 @@ function createBombs(countBombs) {
             }
             posTop++;
             posLow--;
-            if (posTop > 25) {
-                posTop = 25;
+            if (posTop > 24) {
+                posTop = 24;
             }
             if (posLow < 0) {
                 posLow = 0;

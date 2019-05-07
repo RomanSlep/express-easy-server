@@ -56,7 +56,7 @@ export default Vue.component('fieldGame', {
                 Store.game.isWaitRnd = true;
                 setTimeout(() => {
                     updateGame(game);
-                }, 3000);
+                }, 1000);
             });
         }
     }

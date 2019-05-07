@@ -15,9 +15,29 @@ module.exports = {
             bet,
             stepLastNum
         } = params;
-        const steps = 24 - countBombs;
-        const countStepsBE = Math.round(steps * 0.66); // шагов безубытка
-        console.log('[countStepsBE]', countStepsBE)
+        // const steps = 24 - countBombs;
+        // const P = 1 / (25 / countBombs) * 100; // вероятность нарваться
+        // const countStepsBE = Math.round(66 / P * countBombs); // шагов безубытка
+        // const countStepsBE = Math.round(steps * 0.66); // шагов безубытка
+        let countStepsBE = 20;
+        if (countBombs === 3) {
+            countStepsBE = 8;
+        }
+        if (countBombs === 5) {
+            countStepsBE = 6;
+        }
+        if (countBombs === 10) {
+            countStepsBE = 4;
+        }
+        if (countBombs === 20) {
+            countStepsBE = 1;
+        }
+
+
+        // console.log({
+        //     countStepsBE,
+        //     // P
+        // })
         let countMult = 0;
         let i = 0;
         while (countStepsBE >= i) {
@@ -33,8 +53,8 @@ module.exports = {
         let str = '';
         while (stepLastNum > p - 2) {
             collected = result;
-            str += `
-            ` + p + ' ' + collected.toFixed(8);
+            // str += `
+            // ` + p + ' ' + collected.toFixed(8);
             result += countBombs * m * p++;
             next = result;
         }
@@ -55,6 +75,6 @@ module.exports = {
 
 console.log(module.exports.prizes({ // абсолютный размер множителя
     countBombs: 10,
-    bet: 100,
+    bet: 10,
     stepLastNum: 24
 }));
