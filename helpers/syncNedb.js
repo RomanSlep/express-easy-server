@@ -2,7 +2,7 @@ module.exports = (db, compact) => {
 	
     db.__proto__.syncInsert = async function (q) {
         return new Promise((resolve) => {
-            db.insert(q, (err, res) => {
+            this.insert(q, (err, res) => {
                 if (err) {
                     resolve(false);
                 } else {
@@ -14,7 +14,7 @@ module.exports = (db, compact) => {
 
     db.__proto__.syncFind = async function (q) {
         return new Promise((resolve) => {
-            db.find(q, (err, res) => {
+            this.find(q, (err, res) => {
                 if (err) {
                     resolve(false);
                 } else {
@@ -26,7 +26,7 @@ module.exports = (db, compact) => {
 
     db.__proto__.syncFindOne = async function (q) {
         return new Promise((resolve) => {
-            db.findOne(q, (err, res) => {
+            this.findOne(q, (err, res) => {
                 if (err) {
                     resolve(false);
                 } else {
@@ -38,7 +38,7 @@ module.exports = (db, compact) => {
 
     db.__proto__.syncUpdate = async function (a, b, c = {}) {
         return new Promise((resolve) => {
-            db.update(a, b, c, (err, res) => {
+            this.update(a, b, c, (err, res) => {
                 if (err) {
                     resolve(false);
                 } else {
@@ -53,4 +53,4 @@ module.exports = (db, compact) => {
     }
 
     return db;
-}
+};
