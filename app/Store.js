@@ -19,12 +19,8 @@ export default new Vue({
     },
     methods: {
         updateUser (cb = false) {
-            const self = this;
-            api({
-                action: 'getUser',
-                token: this.user.token
-            }, (data) => {
-                Vue.set(self, 'user', Object.assign(self.user, data));
+            api('getUser', (data) => {
+                Vue.set(this, 'user', Object.assign(this.user, data));
                 if (cb) {
                     cb();
                 }

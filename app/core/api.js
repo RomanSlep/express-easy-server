@@ -2,6 +2,11 @@ import axios from 'axios';
 import Store from '../Store';
 
 export default (obj, cb = () => {}, silent) => {
+    if (typeof obj === 'string'){
+        obj = {
+            action: obj
+        };
+    }
     obj.data = obj.data || {};
     obj.data.token = obj.token || Store.user.token;
     // console.log('Req: ', obj.action, obj.data);
