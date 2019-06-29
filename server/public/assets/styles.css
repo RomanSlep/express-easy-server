@@ -27,6 +27,19 @@ h2 {
     padding: 4px 14px;
     border-radius: 5px;
     width: 91px;
+    background-color: blueviolet;
     text-align: center;
-    margin: 0 auto;
+    margin: 4px auto;
+}
+
+.form{
+    width: 300px;
+    margin: 200px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+input{
+    font-size: 1.2em;
+    margin: 2px;
 }

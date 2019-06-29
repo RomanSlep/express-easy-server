@@ -1,6 +1,5 @@
 import Vue from 'vue/dist/vue.js';
 import api from './core/api';
-import $u from './core/utils';
 
 export default new Vue({
     created () {
@@ -11,6 +10,7 @@ export default new Vue({
     },
     data: {
         user: {
+            isLogged: false,
             password: '',
             login: '',
             address: '',
