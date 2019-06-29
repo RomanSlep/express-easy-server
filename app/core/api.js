@@ -7,7 +7,6 @@ export default (obj, cb = () => {}, silent) => {
             action: obj
         };
     }
-    console.log({obj});
     obj.data = obj.data || {};
     obj.data.token = obj.token || Store.user.token;
     console.log('Req: ', obj.action, obj.data);
@@ -21,7 +20,7 @@ export default (obj, cb = () => {}, silent) => {
             }
             console.warn(obj.action + ' error: ', data);
             if (!silent) {
-                Store.$notify({
+                console.log({
                     type: 'error',
                     group: 'foo',
                     title: 'Error ' + obj.action,

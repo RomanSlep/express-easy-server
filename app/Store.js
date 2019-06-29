@@ -23,12 +23,12 @@ export default new Vue({
     },
     methods: {
         updateUser (cb = false) {
-            api('getUser', data => {
-                console.log('update>', {data})
-                // Vue.set(this, 'user', Object.assign(this.user, data));
-                // if (cb) {
-                //     cb();
-                // }
+            api({action: 'getuser', token: this.user.token}, data => {
+                Vue.set(this, 'user', Object.assign(this.user, data));
+                this.user.isLogged = true;
+                if (cb) {
+                    cb();
+                }
             }, true);
         }
     }

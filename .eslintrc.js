@@ -36,6 +36,7 @@ module.exports = {
     },
     "globals": {
         "Vue":true,
+        "Promise":true,
         "Symbol":true
     },
     "plugins": []

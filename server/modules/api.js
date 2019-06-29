@@ -4,19 +4,29 @@ const {usersDb} = require('./DB');
 
 module.exports = (app) => {
     app.get('/api', async (req, res) => {
+        let checkUser;
         try {
             const action = req.query.action.toLowerCase();
             const GET = JSON.parse(req.query.data);
+            const User = await getUserFromToken(GET.token);
             // роуты
             switch (action) {
+            case ('getuser'):
+                if (User) {
+                    //TODO: приделать время жизни токена
+                    success(User, res);
+                } else {
+                    error(null, res);
+                }
+                break;
             case ('login'):
-                usersDb.findOne({$and: [{login: GET.login}, {password: GET.password}]}, (err, user)=>{
-                    if (!user){
-                        error('This login and password not found', res);
-                        return;
-                    }
-                    success(assignUser(user), res);
-                });
+                checkUser = await usersDb.findOne({$and: [{login: GET.login}, {password: GET.password}]});
+                if (!checkUser){
+                    error('This login and password not found', res);
+                    return;
+                }
+                success(await assignUser(checkUser), res);
+
                 break;
 
             case ('registration'):
@@ -25,28 +35,19 @@ module.exports = (app) => {
                     error('No full data', res);
                     return;
                 }
-                const checkUser = await usersDb.syncFindOne({
+                checkUser = await usersDb.findOne({
                     $or: [{ address }, { login }]
                 });
-
                 if (checkUser){
                     error('Login or password already exists!', res);
                     return;
                 }
-                usersDb.insert({
+                const newUser = new usersDb({
                     address,
                     login,
                     password
-                }, (err, newUser) => {
-                    if (err){
-                        error('Error create user', res);
-                        return;
-                    }
-                    success(assignUser(newUser), res);
-                });
-                break;
-            case ('getUser'):
-
+                }, true);
+                success(await assignUser(newUser), res);
                 break;
             }
         } catch (e) {
@@ -78,15 +79,21 @@ function success (data, res) {
     }
 }
 
-function assignUser (user){
+async function assignUser (user){
     try {
         const token = sha256(new Date().toString());
         user.token = token;
-        usersDb.update({address: user.address}, {$set: {token}});
+        await user.save();
         delete user._id;
         delete user.password;
         return user;
     } catch (e){
         console.log('assignUser: ' + e);
     }
+}
+
+async function getUserFromToken (token) {
+    return await usersDb.findOne({
+        token
+    });
 }

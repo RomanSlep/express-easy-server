@@ -1,9 +1,10 @@
-const syncNedb = require('../helpers/syncNedb');
+const {syncNedb, modelDb} = require('../helpers/syncNedb');
+
 const Datastore = require('nedb');
 
 module.exports = {
-    usersDb: syncNedb(new Datastore({
+    usersDb: modelDb(syncNedb(new Datastore({
         filename: 'db_/users',
         autoload: true
-    }), 60),
+    }), 60)),
 };
