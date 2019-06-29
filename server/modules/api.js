@@ -18,18 +18,18 @@ module.exports = (app) => {
                     success(assignUser(user), res);
                 });
                 break;
-                
+
             case ('registration'):
                 const { login, password, address } = GET;
                 if (!login.length || !password.length || !address.length) {
                     error('No full data', res);
                     return;
                 }
-                const checUser = await usersDb.syncFindOne({
+                const checkUser = await usersDb.syncFindOne({
                     $or: [{ address }, { login }]
                 });
-               
-                if (checUser){
+
+                if (checkUser){
                     error('Login or password already exists!', res);
                     return;
                 }
@@ -45,6 +45,9 @@ module.exports = (app) => {
                     success(assignUser(newUser), res);
                 });
                 break;
+            case ('getUser'):
+
+                break;
             }
         } catch (e) {
             console.log({e});
@@ -53,7 +56,7 @@ module.exports = (app) => {
     });
 };
 
-function error(msg, res) {
+function error (msg, res) {
     try {
         log.error(msg);
         res.json({
@@ -64,7 +67,7 @@ function error(msg, res) {
         console.log(e);
     }
 }
-function success(data, res) {
+function success (data, res) {
     try {
         res.json({
             success: true,
@@ -75,7 +78,7 @@ function success(data, res) {
     }
 }
 
-function assignUser(user){
+function assignUser (user){
     try {
         const token = sha256(new Date().toString());
         user.token = token;

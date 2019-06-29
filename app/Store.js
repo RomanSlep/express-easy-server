@@ -7,6 +7,10 @@ export default new Vue({
             localStorage.setItem('wstoken', this.user.token);
         });
         this.user.token = localStorage.getItem('wstoken') || false;
+        console.log(this.user);
+        if (this.user.token){
+            this.updateUser();
+        }
     },
     data: {
         user: {
@@ -19,11 +23,12 @@ export default new Vue({
     },
     methods: {
         updateUser (cb = false) {
-            api('getUser', (data) => {
-                Vue.set(this, 'user', Object.assign(this.user, data));
-                if (cb) {
-                    cb();
-                }
+            api('getUser', data => {
+                console.log('update>', {data})
+                // Vue.set(this, 'user', Object.assign(this.user, data));
+                // if (cb) {
+                //     cb();
+                // }
             }, true);
         }
     }

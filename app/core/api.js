@@ -7,13 +7,14 @@ export default (obj, cb = () => {}, silent) => {
             action: obj
         };
     }
+    console.log({obj});
     obj.data = obj.data || {};
     obj.data.token = obj.token || Store.user.token;
-    // console.log('Req: ', obj.action, obj.data);
+    console.log('Req: ', obj.action, obj.data);
     axios.get('/api?action=' + obj.action + '&data=' + JSON.stringify(obj.data))
         .then(function (res) {
             const data = res.data;
-            // console.log('Resp:', obj.action + ' -> ', data.result);
+            console.log('Resp:', obj.action + ' -> ', data.result);
             if (data.success) {
                 cb(data.result);
                 return;
