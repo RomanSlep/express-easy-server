@@ -17,10 +17,13 @@ export default new Vue({
         });
 
         this.user.token = localStorage.getItem('wstoken') || false;
-        this.updateUser(() => {
-            this.getNoFinished();
-        });
-
+        if (this.user.token) {
+            this.updateUser(() => {
+                this.getNoFinished();
+            });
+        } else {
+            this.isLoad = true;
+        }
         this.updatePublic();
         setInterval(() => {
             this.updatePublic();
