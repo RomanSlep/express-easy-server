@@ -25,12 +25,13 @@ export default Vue.component('fieldGame', {
     methods: {
         choice(i) {
             if (Store.game.isWaitRnd) {
-                this.$notify({
-                    type: 'info',
-                    group: 'foo',
-                    title: 'Info!',
-                    text: 'Wait randomiser!'
-                });
+                $u.sound('wait');
+                // this.$notify({
+                //     type: 'info',
+                //     group: 'foo',
+                //     title: 'Info!',
+                //     text: 'Wait randomiser!'
+                // });
                 return;
             }
             const plots = this.store.plots;

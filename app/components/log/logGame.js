@@ -22,11 +22,12 @@ export default Vue.component('log-game', {
     methods: {
         pickUpWinnings() {
             if (Store.game.isWaitRnd) {
+                $u.sound('wait');
                 this.$notify({
-                    type: 'info',
+                    type: 'warn',
                     group: 'foo',
-                    title: 'Info!',
-                    text: 'Wait randomiser!'
+                    title: 'Warn!',
+                    text: 'Wait for the opening'
                 });
                 return;
             }
