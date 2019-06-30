@@ -58,8 +58,9 @@ module.exports = {
             next = result;
         }
         // console.log(str);
-        params.nextPrize = this.round(next * (config.martin || 1));
-        params.collected = this.round(collected);
+        const martin = config.martin || 1;
+        params.nextPrize = this.round(next * martin);
+        params.collected = this.round(collected * martin);
     },
     filterGame(game) {
         if (!game) {

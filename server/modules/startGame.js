@@ -106,12 +106,15 @@ function createBombs(countBombs) {
         }
         arrBombs = invertArray;
     }
+    
+    // ***** НЕ УДАЛЯТЬ ***** простой алгоритм
     // while (arrBombs.length < count) {
     //     const pos = +(Math.random() * 24).toFixed(0);
     //     if (!arrBombs.includes(pos)) {
     //         arrBombs.push(pos);
     //     }
     // };
+    
     return arrBombs;
 }
 
