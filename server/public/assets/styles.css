@@ -126,7 +126,7 @@ input {
 }
 
 #main {
-    width: 745px;
+    width: 1050px;
     margin: 5px auto;
 }
 
@@ -153,6 +153,13 @@ input {
     flex-direction: column;
     display: flex;
     flex-direction: column;
+}
+
+
+/* TOPLINE */
+#topline {
+    display: flex;
+    justify-content: space-around;
 }
 
 /* TOPBAR */
@@ -191,6 +198,42 @@ input {
 }
 
 /* GAME */
+#gameBlock {
+    width: 745px;
+}
+
+#rating {
+    background: rgba(1, 1, 1, 0.6);
+    width: 230px;
+    padding: 10px;
+}
+
+#rating table {
+    text-align: center;
+    width: 100%;
+    color: #cadde2;
+}
+
+#rating table th {
+    color: #cadde2;
+}
+
+#rating table tr {
+    color: #838080;
+}
+
+.rating-0 {
+    color: goldenrod !important;
+}
+
+.rating-1 {
+    color: silver !important;
+}
+
+.rating-2 {
+    color: burlywood !important;
+}
+
 #game-line {
     margin-top: 10px;
     display: flex;
@@ -266,6 +309,7 @@ input {
 .plot.open {
     background-image: url(./gif/open.gif);
 }
+
 .plot.bomb {
     background-image: url(./gif/bomb.gif);
 }
@@ -274,10 +318,12 @@ input {
     width: 0;
     height: 0;
 }
-.lose{
-    border-radius:5px;
+
+.lose {
+    border-radius: 5px;
     background: #492828;
 }
+
 /* LOG */
 #log-game {
     color: #cadde2;
@@ -295,7 +341,8 @@ input {
 .current-next span {
     font-size: 1.3em;
 }
-.log-txt{    
+
+.log-txt {
     overflow-y: hidden;
     margin: 3px;
     text-align: center;

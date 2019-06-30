@@ -1,19 +1,40 @@
-<div id="main">
-    <h1>Lost Artifacts</h1>
-    <div v-if="Store.user.isLogged">
-        <h2 @click="exit">Hy, {{Store.user.login}}! 
-            <span class="txt-green">Deposit: {{Store.user.deposit | numFormat}}.</span> 
-            <span class="txt-green">Score: {{Store.user.score | numFormat}}.</span> 
-            <span class="txt-red">Exit?</span></h2>
-        <top-bar></top-bar>
-        <div class="but but_play" :class="!Store.game.isGame ? 'hovered bg-green' : 'no-events bg-yellow'"
-            @click="newGame">
-            <span v-if="!Store.game.isGame">Go</span>
-            <span v-else>Play Bet</span>
-            {{Store.topbar.bet}}!</div>
-        <div id="game-line" :class="{'no-events' : !Store.game.isGame}">
-            <field-game></field-game>
-            <log-game></log-game>
+<div id="main" v-if="Store.isLoad">
+    <div id="topline">
+        <h1>Lost Artifacts </h1>
+        <h1><i class="rating-0">Total Prize: {{Store.totalPrize | numFormat}} SWG</i></h1>
+    </div>
+    <div id="content" v-if="Store.user.isLogged">
+        <div id="rating">
+            <h2>Rating players!</h2>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Rating</th>
+                </tr>
+                <tr v-for="(u, i) in Store.totalRatings" :class="'rating-' + i">
+                    <td>{{i+1}}.</td>
+                    <td>{{u.login}}</td>
+                    <td>{{u.score | numFormat}}</td>
+                </tr>
+            </table>
+        </div>
+        <div id="gameBlock">
+            <h2>Hy, {{Store.user.login}}!
+                <span class="txt-green">Deposit: {{Store.user.deposit | numFormat}}.</span>
+                <span class="txt-green" :class="'rating-' + (Store.user.rating - 1)">
+                    Score: {{Store.user.score | numFormat}} (#{{Store.user.rating}}).</span>
+                <span class="txt-red" @click="exit">Exit?</span></h2>
+            <top-bar></top-bar>
+            <div class="but but_play" :class="!Store.game.isGame ? 'hovered bg-green' : 'no-events bg-yellow'"
+                @click="newGame">
+                <span v-if="!Store.game.isGame">Go</span>
+                <span v-else>Play Bet</span>
+                {{Store.topbar.bet}}!</div>
+            <div id="game-line" :class="{'no-events' : !Store.game.isGame}">
+                <field-game></field-game>
+                <log-game></log-game>
+            </div>
         </div>
     </div>
     <div v-else>

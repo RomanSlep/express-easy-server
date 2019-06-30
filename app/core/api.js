@@ -1,11 +1,11 @@
 import axios from 'axios';
 import Store from '../Store';
 
-export default (obj, cb = () => {}, silent) => {
+export default (obj, cb = () => {}, silent, type = 'api') => {
     obj.data = obj.data || {};
-    obj.data.token = obj.token || Store.user.token;
+    obj.data.token = type === 'api' && (obj.token || Store.user.token);
     // console.log('Req: ', obj.action, obj.data);
-    axios.get('/api?action=' + obj.action + '&data=' + JSON.stringify(obj.data))
+    axios.get('/' + type + '?action=' + obj.action + '&data=' + JSON.stringify(obj.data))
         .then(function (res) {
             const data = res.data;
             // console.log('Resp:', obj.action + ' -> ', data.result);

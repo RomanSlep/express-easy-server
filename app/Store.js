@@ -9,21 +9,22 @@ export default new Vue({
         });
 
         this.$watch('game.cellsBomb', () => {
-            console.log(this.game.cellsBomb);
             if (this.game.cellsBomb) {
                 this.game.cellsBomb.forEach((c, i) => {
-
                     this.field.plots[c] = 'b';
-
                 });
             }
         });
 
         this.user.token = localStorage.getItem('wstoken') || false;
-        console.log(this.user.token)
         this.updateUser(() => {
             this.getNoFinished();
         });
+
+        this.updatePublic();
+        setInterval(() => {
+            this.updatePublic();
+        }, 60 * 1000);
     },
     data: {
         isLoad: false,
@@ -50,9 +51,19 @@ export default new Vue({
             token: false,
             deposit: 0
         },
+        totalPrize: 0,
+        totalRatings: [],
         logs: []
     },
     methods: {
+        updatePublic() {
+            api({
+                action: 'getPublic'
+            }, (data) => {
+                this.totalRatings = data.totalRatings;
+                this.totalPrize = data.totalPrize;
+            }, true, 'public');
+        },
         updateUser(cb = false) {
             const self = this;
             api({

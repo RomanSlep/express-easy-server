@@ -4,6 +4,8 @@ const {usersDb, transDb, gamesDb} = require('./DB');
 const startGame = require('./startGame');
 const checkGame = require('./checkGame');
 const $u = require('../helpers/utils');
+const publicApi = require('./publicApi');
+const Store = require('../helpers/Store');
 
 module.exports = (app) => {
     app.get('/api', async (req, res) => {
@@ -33,6 +35,7 @@ module.exports = (app) => {
                     error('This login and password not found', res);
                     return;
                 }
+                checkUser.rating = Store.getRatingFromLogin(checkUser.login);
                 success(await assignUser(checkUser), res);
                 break;
                 
@@ -112,6 +115,9 @@ module.exports = (app) => {
             error('Error api code 1', res);
         }
     });
+    app.get('/public', async (req, res) => {
+        publicApi(req, res);
+    });
 };
 
 function error(msg, res) {
@@ -153,6 +159,7 @@ async function getUserFromToken (token) {
     const user = await usersDb.findOne({token});
     if (user){
         user.updateDeposit = updateDeposit;
+        user.rating = Store.getRatingFromLogin(user.login);
     }
     return user;
 }
