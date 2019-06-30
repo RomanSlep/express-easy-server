@@ -26,10 +26,10 @@ module.exports = {
             countStepsBE = 8;
         }
         if (countBombs === 5) {
-            countStepsBE = 6;
+            countStepsBE = 5;
         }
         if (countBombs === 10) {
-            countStepsBE = 4;
+            countStepsBE = 3;
         }
         if (countBombs === 20) {
             countStepsBE = 1;
@@ -58,9 +58,9 @@ module.exports = {
             next = result;
         }
         // console.log(str);
-        const martin = config.martin || 1;
-        params.nextPrize = this.round(next * martin);
-        params.collected = this.round(collected * martin);
+
+        params.nextPrize = this.round(next);
+        params.collected = this.round(collected);
     },
     filterGame(game) {
         if (!game) {
