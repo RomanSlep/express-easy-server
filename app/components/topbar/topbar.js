@@ -3,6 +3,7 @@ import Store from '../../Store';
 import template from './topbar.htm';
 import $u from '../../core/utils';
 import api from '../../core/api';
+import config from "../../../config";
 
 export default Vue.component('topBar', {
     template,
@@ -19,7 +20,7 @@ export default Vue.component('topBar', {
                 {text: '-0.5', val: -0.5},
             ],
             buttonsCountBombs: [1, 3, 5, 10, 20],
-            min: 0.1,
+            min: config.min_bid,
             className: ''
         };
     },
