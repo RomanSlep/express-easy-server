@@ -28,7 +28,7 @@ module.exports = (app) => {
                 break;
 
             case ('login'):
-                checkUser = await usersDb.findOne({$and: [{login: GET.login}, {password: GET.password}]});
+                checkUser = await usersDb.findOne({$and: [{login: GET.login}, {password: sha256(GET.password.toString())}]});
                 if (!checkUser){
                     error('This login and password not found', res);
                     return;
@@ -42,7 +42,10 @@ module.exports = (app) => {
                     error('No full data', res);
                     return;
                 }
-                if (await usersDb.findOne({$or: [{ address }, { login }]})){
+                checkUser = await usersDb.findOne({
+                    $or: [{ address }, { login }]
+                });
+                if (checkUser){
                     error('Login or address already exists!', res);
                     return;
                 }
