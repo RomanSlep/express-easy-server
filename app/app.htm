@@ -1,7 +1,7 @@
 <div id="main">
     <h1>Lost Artifacts</h1>
-    <div v-if="Store.user.isLoged">
-        <h2 @click="Store.user.isLoged = false;">Hy, {{Store.user.login}}! 
+    <div v-if="Store.user.isLogged">
+        <h2 @click="exit">Hy, {{Store.user.login}}! 
             <span class="txt-green">Deposit: {{Store.user.deposit | numFormat}}.</span> 
             <span class="txt-green">Score: {{Store.user.score | numFormat}}.</span> 
             <span class="txt-red">Exit?</span></h2>

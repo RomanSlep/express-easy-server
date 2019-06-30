@@ -38,7 +38,7 @@ export default Vue.component('login', {
                     title: 'Success ' + this.status,
                     text: 'Ready!'
                 });
-                Store.user.isLoged = true;
+                Store.user.isLogged = true;
             });
         }
     }

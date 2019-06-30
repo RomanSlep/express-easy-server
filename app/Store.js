@@ -20,6 +20,7 @@ export default new Vue({
         });
 
         this.user.token = localStorage.getItem('wstoken') || false;
+        console.log(this.user.token)
         this.updateUser(() => {
             this.getNoFinished();
         });
@@ -41,7 +42,7 @@ export default new Vue({
             steps: {}
         },
         user: {
-            isLoged: false,
+            isLogged: false,
             isLoginned: true, // хочет логиниться / регаться
             password: '',
             login: '',

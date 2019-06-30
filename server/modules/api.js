@@ -7,20 +7,20 @@ const $u = require('../helpers/utils');
 
 module.exports = (app) => {
     app.get('/api', async (req, res) => {
+        let checkUser;
         try {
             // console.log(req.query);
             const action = req.query.action;
             const GET = JSON.parse(req.query.data);
-            const User = await getUser(GET.token);
-            if (User) {
-                User.__proto__.updateDeposit = updateDeposit;
-            }
+            const User = await getUserFromToken(GET.token);
             // роуты
             switch (action) {
             case ('getUser'):
                 if (User) {
                     //TODO: приделать время жизни токена
-                    User.isLoged = true;
+                    User.isLogged = true;
+                    delete User.password;
+                    delete User._id;
                     success(User, res);
                 } else {
                     error(null, res);
@@ -28,13 +28,12 @@ module.exports = (app) => {
                 break;
 
             case ('login'):
-                usersDb.findOne({$and: [{login: GET.login}, {password: sha256(GET.password.toString())}]}, (err, user)=>{
-                    if (!user){
-                        error('This login and password not found', res);
-                        return;
-                    }
-                    success(assignUser(user), res);
-                });
+                checkUser = await usersDb.findOne({$and: [{login: GET.login}, {password: GET.password}]});
+                if (!checkUser){
+                    error('This login and password not found', res);
+                    return;
+                }
+                success(await assignUser(checkUser), res);
                 break;
                 
             case ('registration'):
@@ -43,38 +42,30 @@ module.exports = (app) => {
                     error('No full data', res);
                     return;
                 }
-                const checUser = await usersDb.syncFindOne({
-                    $or: [{ address }, { login }]
-                });
-               
-                if (checUser){
-                    error('Login or password already exists!', res);
+                if (await usersDb.findOne({$or: [{ address }, { login }]})){
+                    error('Login or address already exists!', res);
                     return;
                 }
-                usersDb.insert({
+                let newUser = new usersDb({
                     address,
                     login,
                     password: sha256(password.toString()),
                     deposit: 0,
                     score: 0
-                }, (err, newUser) => {
-                    if (err){
-                        error('Error create user', res);
-                        return;
-                    }
-                    success(assignUser(newUser), res);
                 });
+                success(await assignUser(newUser), res);
                 break;
 
             case ('testDeposit'):
                 transDb.insert({user_id: User._id, amount: 1, isTest: true}, ()=>{
-                    User.updateDeposit();
+                    User.updateDeposit(()=>{
+                        success('Success add!', res);
+                    });
                 });
-                success('Success add!', res);
                 break;
 
             case ('getNoFinished'):
-                gamesDb.findOne({$and: [{user_id: User._id}, {isGame: true}]}, (err, game) =>{
+                gamesDb.db.findOne({$and: [{user_id: User._id}, {isGame: true}]}, (err, game) =>{
                     if (err){
                         error('Error code 4', res);
                         return;
@@ -142,11 +133,11 @@ function success(data, res) {
     }
 }
 
-function assignUser(user){
+async function assignUser (user){
     try {
         const token = sha256(new Date().toString());
         user.token = token;
-        usersDb.update({address: user.address}, {$set: {token}});
+        await user.save();
         delete user._id;
         delete user.password;
         return user;
@@ -154,12 +145,18 @@ function assignUser(user){
         console.log('assignUser: ' + e);
     }
 }
-async function getUser(token){
-    return await usersDb.syncFindOne({token});
+
+async function getUserFromToken (token) {
+    const user = await usersDb.findOne({token});
+    if (user){
+        user.updateDeposit = updateDeposit;
+    }
+    return user;
 }
-function updateDeposit() {
+
+async function updateDeposit(cb) {
     const user = this;
-    transDb.find({user_id: user._id}, (err, transes) => {
+    transDb.find({user_id: user._id}, async (err, transes) => {
         if (err) {
             return;
         }
@@ -173,7 +170,8 @@ function updateDeposit() {
             }, 0);
             deposit = Number(deposit.toFixed(8)) || 0;
             score = Number(score.toFixed(0)) || 0;
-            usersDb.update({address: user.address}, {$set: {deposit, score}});
+            await user.update({deposit, score}, true);
+            cb && cb();
         } catch (e) {
             log.error('UpdateDeposit ' + e);
         }

@@ -16,7 +16,7 @@ module.exports = async (User, params) => {
         msg = 'No valid count cells!';
     }
     //TODO: Проверить что есть незаконченный матч
-    const noFinished = await gamesDb.syncFindOne({
+    const noFinished = await gamesDb.db.syncFindOne({
         $and: [{
             user_id: User._id
         }, {
@@ -57,7 +57,7 @@ module.exports = async (User, params) => {
     };
 
     $u.prizes(game);
-    const newGame = await gamesDb.syncInsert(game);
+    const newGame = await gamesDb.db.syncInsert(game);
     return {
         res: newGame,
         game: $u.filterGame(newGame),

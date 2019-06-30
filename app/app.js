@@ -34,6 +34,10 @@ new Vue({
                 Store.startGame();
                 Store.updateUser();
             });
+        },
+        exit(){
+            Store.user.isLogged = false;
+            Store.user.token = false;
         }
     }
 });

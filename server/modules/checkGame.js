@@ -5,7 +5,7 @@ const {
 const $u = require('../helpers/utils');
 
 module.exports = async (User, params) => {
-    let game = await gamesDb.syncFindOne({
+    let game = await gamesDb.findOne({
         $and: [{
             _id: params.game_id
         }, {
@@ -53,21 +53,13 @@ async function step(game, params) {
         game.stepLastNum++;
         $u.prizes(game);
     }
-
-    gamesDb.update({
-        _id: game._id
-    }, game, (err, res) => {
-    });
-
+    game.save();
 };
 
 async function pickUpWinnings(User, game) {
     game.isGame = false;
     game.isWin = game.collected && true;
-    gamesDb.update({
-        _id: game._id
-    }, game, (err, res) => {
-    });
+    game.save();
 
     if (game.isWin){
         transDb.insert({
