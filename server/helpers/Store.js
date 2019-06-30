@@ -39,7 +39,7 @@ const Store = module.exports = {
 };
 
 Store.updateTotalRating();
-
+Store.updatePrise();
 setInterval(() => {
     Store.updatePrise();
     Store.updateTotalRating();
