@@ -29,7 +29,7 @@ module.exports = {
             countStepsBE = 5;
         }
         if (countBombs === 10) {
-            countStepsBE = 3;
+            countStepsBE = 2;
         }
         if (countBombs === 20) {
             countStepsBE = 1;
