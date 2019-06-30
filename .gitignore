@@ -3,3 +3,4 @@ package-lock.json
 /logs
 /db_
 server/public/dist
+server/config.js

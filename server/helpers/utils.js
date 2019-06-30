@@ -1,4 +1,6 @@
 const clone = require('clone');
+const config = require('../config');
+
 module.exports = {
     clone,
     round(n) {
@@ -56,7 +58,7 @@ module.exports = {
             next = result;
         }
         // console.log(str);
-        params.nextPrize = this.round(next);
+        params.nextPrize = this.round(next * (config.martin || 1));
         params.collected = this.round(collected);
     },
     filterGame(game) {
