@@ -4,7 +4,7 @@ const {
     gamesDb
 } = require('../modules/DB');
 const $u = require('./utils');
-const config = require('../config');
+const config = require('../../config.json');
 
 const Store = module.exports = {
     totalRatings: [],
@@ -35,6 +35,7 @@ const Store = module.exports = {
         }, 0);
 
         this.totalPrize = $u.round(prize * config.percent_prize / 100);
+        console.log(this.totalPrize)
     }
 };
 
