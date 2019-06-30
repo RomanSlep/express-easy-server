@@ -33,7 +33,6 @@ export default Vue.component('fieldGame', {
                 });
                 return;
             }
-            const self = this;
             const plots = this.store.plots;
             if (plots[i] !== 'c') {
                 return;
@@ -56,7 +55,7 @@ export default Vue.component('fieldGame', {
                 Store.game.isWaitRnd = true;
                 setTimeout(() => {
                     updateGame(game);
-                }, 1000);
+                }, delays[Store.topbar.countBombs] * 1000);
             });
         }
     }
@@ -82,3 +81,11 @@ function updateGame(game) { // ОТВЕТ ОТ РАНДОМАЙЗЕРА!!!!
         console.warn('BOMB');
     }
 }
+
+const delays = {
+    1: 1,
+    3: 4,
+    5: 5,
+    10: 6,
+    20: 8
+};
