@@ -41,7 +41,7 @@ export default new Vue({
         game: {
             isWaitRnd: false,
             isGame: false,
-            collected: 0, // сколько выиграно в матче 
+            collected: 0, // сколько выиграно в матче
             nextPrize: 0, // следуюзий выигрыш
             steps: {}
         },
@@ -68,12 +68,13 @@ export default new Vue({
             }, true, 'public');
         },
         updateUser(cb = false) {
-            this.isLoad = true;   
+            this.isLoad = true;
             const self = this;
             api({
                 action: 'getUser',
                 token: this.user.token
             }, (data) => {
+                data.score = +(data.score * 10).toFixed(0);
                 Vue.set(self, 'user', Object.assign(self.user, data));
                 if (cb) {
                     cb();

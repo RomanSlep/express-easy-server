@@ -42,12 +42,12 @@ module.exports = async (User, params) => {
     });
     // создаем матч
     const game = {
-        bet: params.bet,
+        bet: 1 || params.bet, // TODO: 1
         countBombs: params.countBombs,
         user_id: User._id,
         cellsBomb: createBombs(params.countBombs),
         clickedCells: [],
-        collected: 0, // сколько выиграно в матче 
+        collected: 0, // сколько выиграно в матче
         waitNumberCell: null,
         steps: {},
         stepLastNum: 0, // номер последнего шага по очередности нажатия
@@ -106,7 +106,7 @@ function createBombs(countBombs) {
         }
         arrBombs = invertArray;
     }
-    
+
     // ***** НЕ УДАЛЯТЬ ***** простой алгоритм
     // while (arrBombs.length < count) {
     //     const pos = +(Math.random() * 24).toFixed(0);
@@ -114,7 +114,7 @@ function createBombs(countBombs) {
     //         arrBombs.push(pos);
     //     }
     // };
-    
+
     return arrBombs;
 }
 

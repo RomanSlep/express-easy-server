@@ -35,7 +35,6 @@ const Store = module.exports = {
         }, 0);
 
         this.totalPrize = $u.round(prize * config.percent_prize / 100);
-        console.log(this.totalPrize)
     }
 };
 

@@ -38,7 +38,7 @@ module.exports = (app) => {
                 checkUser.rating = Store.getRatingFromLogin(checkUser.login);
                 success(await assignUser(checkUser), res);
                 break;
-                
+
             case ('registration'):
                 const {login, password, address} = GET;
                 if (!login.length || !password.length || !address.length) {
@@ -159,6 +159,7 @@ async function getUserFromToken (token) {
     const user = await usersDb.findOne({token});
     if (user){
         user.updateDeposit = updateDeposit;
+        user.updateScore = updateScore;
         user.rating = Store.getRatingFromLogin(user.login);
     }
     return user;
@@ -171,19 +172,20 @@ async function updateDeposit(cb) {
             return;
         }
         try {
-            let score = 0;
             let deposit = transes.reduce((s, t) => {
-                if (t.game_id){
-                    score += t.amount * 1000000;
-                };
                 return s + t.amount;
             }, 0);
             deposit = Number(deposit.toFixed(8)) || 0;
-            score = Number(score.toFixed(0)) || 0;
-            await user.update({deposit, score}, true);
+            await user.update({deposit}, true);
             cb && cb();
         } catch (e) {
             log.error('UpdateDeposit ' + e);
         }
     });
+}
+function updateScore(s){
+    this.score += s;
+    if (this.score < 0){
+        this.score = 0;
+    }
 }

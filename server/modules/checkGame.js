@@ -23,7 +23,7 @@ module.exports = async (User, params) => {
         msg = 'This step exist!';
     } else { // делаем шаг!
         if (params.isStep) {
-            await step(game, params);
+            await step(game, params, User);
         }
         if (params.isPickUpWinnings) {
             await pickUpWinnings(User, game, params);
@@ -38,7 +38,7 @@ module.exports = async (User, params) => {
 };
 
 
-async function step(game, params) {
+async function step(game, params, User) {
     const cell = params.cell;
     game.clickedCells.push(cell);
     game.lastCell = cell;
@@ -48,6 +48,8 @@ async function step(game, params) {
         step.status = 'b';
         game.isGame = false;
         game.isWin = false;
+        User.updateScore(-game.bet);
+        await User.save();
     } else {
         step.status = 'o';
         game.stepLastNum++;
@@ -59,8 +61,8 @@ async function step(game, params) {
 async function pickUpWinnings(User, game) {
     game.isGame = false;
     game.isWin = game.collected && true;
+    User.updateScore(game.collected - game.bet);
     game.save();
-
     if (game.isWin){
         transDb.insert({
             user_id: User._id,

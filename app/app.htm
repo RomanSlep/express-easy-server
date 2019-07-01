@@ -15,7 +15,7 @@
                 <tr v-for="(u, i) in Store.totalRatings" :class="'rating-' + i">
                     <td>{{i+1}}.</td>
                     <td>{{u.login}}</td>
-                    <td>{{u.score | numFormat}}</td>
+                    <td>{{+(u.score * 10).toFixed(0) | numFormat}}</td>
                 </tr>
             </table>
         </div>

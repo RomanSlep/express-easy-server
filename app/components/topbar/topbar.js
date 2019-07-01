@@ -47,7 +47,8 @@ export default Vue.component('topBar', {
             } else {
                 this.className = 'txt-red';
             }
-            Store.topbar.bet = bet;
+            // Store.topbar.bet = bet;
+            Store.topbar.bet = 1; // FIXME:!!!!!!!!!!!!!!!!!
 
         },
         addDeposit() {
