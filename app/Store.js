@@ -81,6 +81,7 @@ export default new Vue({
         },
         getNoFinished() {
             const self = this;
+this.isLoad = true;
             api({
                 action: 'getNoFinished'
             }, g => {
