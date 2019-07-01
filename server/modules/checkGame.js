@@ -61,7 +61,7 @@ async function step(game, params, User) {
 async function pickUpWinnings(User, game) {
     game.isGame = false;
     game.isWin = game.collected && true;
-    User.updateScore(game.collected - game.bet);
+    User.updateScore(game.collected >= game.bet ? game.collected : 0);
     game.save();
     if (game.isWin){
         transDb.insert({
