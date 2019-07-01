@@ -68,6 +68,7 @@ export default new Vue({
             }, true, 'public');
         },
         updateUser(cb = false) {
+            this.isLoad = true;   
             const self = this;
             api({
                 action: 'getUser',
@@ -81,7 +82,6 @@ export default new Vue({
         },
         getNoFinished() {
             const self = this;
-this.isLoad = true;
             api({
                 action: 'getNoFinished'
             }, g => {
