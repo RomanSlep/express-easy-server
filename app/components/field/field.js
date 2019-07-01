@@ -56,7 +56,7 @@ export default Vue.component('fieldGame', {
                 Store.game.isWaitRnd = true;
                 setTimeout(() => {
                     updateGame(game);
-                }, delays[Store.topbar.countBombs] * 1000);
+                }, 1000 || delays[Store.topbar.countBombs] * 1000); //FIXME:
             });
         }
     }
