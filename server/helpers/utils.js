@@ -27,10 +27,10 @@ module.exports = {
         // const countStepsBE = Math.round(steps * 0.66); // шагов безубытка
         let countStepsBE = 18;
         if (countBombs === 3) {
-            countStepsBE = 6;
+            countStepsBE = 5;
         }
         if (countBombs === 5) {
-            countStepsBE = 4;
+            countStepsBE = 3;
         }
         if (countBombs === 10) {
             countStepsBE = 2;
