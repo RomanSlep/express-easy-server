@@ -60,17 +60,16 @@ module.exports = async (User, params) => {
 };
 
 function createBombs(countBombs) {
-    let count = countBombs;
     let arrBombs = [];
 
     // ПРОСТОЙ
-    while (arrBombs.length < count) {
+    while (arrBombs.length < countBombs) {
         const pos = +(Math.random() * 24).toFixed(0);
         if (!arrBombs.includes(pos)) {
             arrBombs.push(pos);
         }
     };
-
+    // let count = countBombs;
     // let isCurrent = true;
     // if (countBombs > 14) {
     //     isCurrent = false;
