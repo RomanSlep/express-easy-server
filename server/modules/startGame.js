@@ -15,7 +15,7 @@ module.exports = async (User, params) => {
     if (params.countBombs < 1 || params.countBombs > 24) {
         msg = 'No valid count cells!';
     }
-    //TODO: Проверить что есть незаконченный матч
+    
     const noFinished = await gamesDb.db.syncFindOne({
         $and: [{
             user_id: User._id
@@ -42,7 +42,7 @@ module.exports = async (User, params) => {
     });
     // создаем матч
     const game = {
-        bet: 1 || params.bet, // TODO: 1
+        bet: params.bet,
         countBombs: params.countBombs,
         user_id: User._id,
         cellsBomb: createBombs(params.countBombs),

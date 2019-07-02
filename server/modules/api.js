@@ -174,7 +174,7 @@ async function updateDeposit(cb) {
             let score = 0;
             let deposit = transes.reduce((s, t) => {
                 if (t.game_id){
-                    score += t.amount * 1000000;
+                    score += t.amount * 100;
                 };
                 return s + t.amount;
             }, 0);
