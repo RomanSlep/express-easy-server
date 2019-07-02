@@ -61,54 +61,54 @@ module.exports = async (User, params) => {
 
 function createBombs(countBombs) {
     let count = countBombs;
-    let isCurrent = true;
-    if (countBombs > 14) {
-        isCurrent = false;
-        count = 25 - countBombs;
-    }
     let arrBombs = [];
-    const rndArr = getRndArray(24);
+
+    // ПРОСТОЙ
     while (arrBombs.length < count) {
-        let posLow = rndArr.shift();
-        let posTop = posLow;
-        const length = arrBombs.length;
-        while (arrBombs.length === length) {
-            if (!arrBombs.includes(posTop)) {
-                arrBombs.push(posTop);
-                continue;
-            }
-            if (!arrBombs.includes(posLow)) {
-                arrBombs.push(posLow);
-            }
-            posTop++;
-            posLow--;
-            if (posTop > 24) {
-                posTop = 24;
-            }
-            if (posLow < 0) {
-                posLow = 0;
-            }
+        const pos = +(Math.random() * 24).toFixed(0);
+        if (!arrBombs.includes(pos)) {
+            arrBombs.push(pos);
         }
-    }
+    };
 
-    if (!isCurrent) { // обернуть массив
-        const invertArray = [];
-        for (let c = 0; c < 25; c++) {
-            if (!arrBombs.includes(c)) {
-                invertArray.push(c);
-            }
-        }
-        arrBombs = invertArray;
-    }
-
-    // ***** НЕ УДАЛЯТЬ ***** простой алгоритм
+    // let isCurrent = true;
+    // if (countBombs > 14) {
+    //     isCurrent = false;
+    //     count = 25 - countBombs;
+    // }
+    // const rndArr = getRndArray(24);
     // while (arrBombs.length < count) {
-    //     const pos = +(Math.random() * 24).toFixed(0);
-    //     if (!arrBombs.includes(pos)) {
-    //         arrBombs.push(pos);
+    //     let posLow = rndArr.shift();
+    //     let posTop = posLow;
+    //     const length = arrBombs.length;
+    //     while (arrBombs.length === length) {
+    //         if (!arrBombs.includes(posTop)) {
+    //             arrBombs.push(posTop);
+    //             continue;
+    //         }
+    //         if (!arrBombs.includes(posLow)) {
+    //             arrBombs.push(posLow);
+    //         }
+    //         posTop++;
+    //         posLow--;
+    //         if (posTop > 24) {
+    //             posTop = 24;
+    //         }
+    //         if (posLow < 0) {
+    //             posLow = 0;
+    //         }
     //     }
-    // };
+    // }
 
+    // if (!isCurrent) { // обернуть массив
+    //     const invertArray = [];
+    //     for (let c = 0; c < 25; c++) {
+    //         if (!arrBombs.includes(c)) {
+    //             invertArray.push(c);
+    //         }
+    //     }
+    //     arrBombs = invertArray;
+    // }
     return arrBombs;
 }
 
