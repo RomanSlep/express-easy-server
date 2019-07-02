@@ -1,4 +1,5 @@
 const clone = require('clone');
+const {gamesDb} = require('../modules/DB');
 const config = require('../../config');
 
 module.exports = {
@@ -10,6 +11,9 @@ module.exports = {
         const s = new Audio('assets/sounds/' + name + '.mp3');
         s.play();
         s.volume = v;
+    },
+    async getNofinishGame(user){
+        return await gamesDb.db.syncFindOne({$and: [{user_id: user._id}, {isGame: true}]});
     },
     prizes(params) { // абсолютный размер множителя
         const {

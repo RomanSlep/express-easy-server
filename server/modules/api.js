@@ -71,13 +71,7 @@ module.exports = (app) => {
                 break;
 
             case ('getNoFinished'):
-                gamesDb.db.findOne({$and: [{user_id: User._id}, {isGame: true}]}, (err, game) =>{
-                    if (err){
-                        error('Error code 4', res);
-                        return;
-                    }
-                    success($u.filterGame(game), res);
-                });
+                success($u.filterGame(await $u.getNofinishGame(User)), res);
                 break;
 
             case ('startGame'):

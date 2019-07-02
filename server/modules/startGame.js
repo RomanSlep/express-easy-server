@@ -15,14 +15,8 @@ module.exports = async (User, params) => {
     if (params.countBombs < 1 || params.countBombs > 24) {
         msg = 'No valid count cells!';
     }
-    
-    const noFinished = await gamesDb.db.syncFindOne({
-        $and: [{
-            user_id: User._id
-        }, {
-            isGame: true
-        }]
-    });
+
+    const noFinished = await $u.getNofinishGame(User);
     if (noFinished) {
         msg = 'You have no finished game!';
     }
