@@ -36,6 +36,7 @@ module.exports = async (User, params) => {
     });
     // создаем матч
     const game = {
+        type: params.type || 'farm',
         bet: params.bet,
         countBombs: params.countBombs,
         user_id: User._id,
@@ -46,7 +47,9 @@ module.exports = async (User, params) => {
         steps: {},
         stepLastNum: 0, // номер последнего шага по очередности нажатия
         lastCell: 0, // номер последнего шага по очередности нажатия
-        isGame: true,
+        isGame: true, // игра не закончена
+        getScores: 0, // собрано очков
+        getExp: 0, // собрано экспы
         unixStart: new Date().getTime()
     };
 

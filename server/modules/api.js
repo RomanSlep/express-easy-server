@@ -6,6 +6,7 @@ const checkGame = require('./checkGame');
 const $u = require('../helpers/utils');
 const publicApi = require('./publicApi');
 const Store = require('../helpers/Store');
+const config = require('../helpers/configReader');
 
 module.exports = (app) => {
     app.get('/api', async (req, res) => {
@@ -57,7 +58,9 @@ module.exports = (app) => {
                     login,
                     password: sha256(password.toString()),
                     deposit: 0,
-                    score: 0
+                    score: 0,
+                    lvl: 1,
+                    satats: config.defaultStatPers
                 });
                 success(await assignUser(newUser), res);
                 break;

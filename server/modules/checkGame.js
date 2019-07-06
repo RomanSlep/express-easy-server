@@ -3,7 +3,6 @@ const {
     transDb
 } = require('./DB');
 const $u = require('../helpers/utils');
-
 module.exports = async (User, params) => {
     let game = await gamesDb.findOne({
         $and: [{
@@ -23,7 +22,7 @@ module.exports = async (User, params) => {
         msg = 'This step exist!';
     } else { // делаем шаг!
         if (params.isStep) {
-            await step(game, params);
+            await step(game, params, User);
         }
         if (params.isPickUpWinnings) {
             await pickUpWinnings(User, game, params);
@@ -53,6 +52,10 @@ async function step(game, params) {
         game.stepLastNum++;
         $u.prizes(game);
     }
+    // ДРОПЫ
+    const isDrop = false;
+
+
     game.save();
 };
 

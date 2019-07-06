@@ -1,4 +1,4 @@
-const $u = {
+export default {
     round(n) {
         return Number(n.toFixed(8));
     },
@@ -8,13 +8,3 @@ const $u = {
         s.volume = v;
     }
 };
-
-
-// try {
-//     module.exports = $u;
-// } catch (e) {
-// if (!window) {
-//     module.exports = $u;
-// } else {
-export default $u;
-// }

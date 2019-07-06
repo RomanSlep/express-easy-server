@@ -1,6 +1,9 @@
 const clone = require('clone');
-const {gamesDb} = require('../modules/DB');
-const config = require('../../config');
+const {
+    gamesDb
+} = require('../../modules/DB');
+const drops = require('./drops');
+const config = require('../../helpers/configReader');
 
 module.exports = {
     clone,
@@ -12,8 +15,14 @@ module.exports = {
         s.play();
         s.volume = v;
     },
-    async getNofinishGame(user){
-        return await gamesDb.db.syncFindOne({$and: [{user_id: user._id}, {isGame: true}]});
+    async getNofinishGame(user) {
+        return await gamesDb.db.syncFindOne({
+            $and: [{
+                user_id: user._id
+            }, {
+                isGame: true
+            }]
+        });
     },
     prizes(params) { // абсолютный размер множителя
         const {
@@ -73,9 +82,17 @@ module.exports = {
         game = clone(game);
         game.cellsBomb = null;
         return game;
-    }
+    },
+    /**
+     * @description получение вероятности по заданному параметру 
+     * @argument {number} процент от 1 до 100
+     * @returns {boolean}
+     */
+    getProb(proc) {
+        return Math.random() * 100 < proc;
+    },
+    drops
 };
-
 
 // console.log(module.exports.prizes({ // абсолютный размер множителя
 //     countBombs: 10,
