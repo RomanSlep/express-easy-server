@@ -32,7 +32,7 @@ module.exports = async (User, params) => {
         amount: -params.bet,
         isTest: true
     }, () => {
-        User.updateDeposit();
+        User.updateData();
     });
     // создаем матч
     const game = {
@@ -48,8 +48,8 @@ module.exports = async (User, params) => {
         stepLastNum: 0, // номер последнего шага по очередности нажатия
         lastCell: 0, // номер последнего шага по очередности нажатия
         isGame: true, // игра не закончена
-        getScores: 0, // собрано очков
-        getExp: 0, // собрано экспы
+        dropedScores: 0, // собрано очков
+        drops: {}, // дропы в ячейках
         unixStart: new Date().getTime()
     };
 

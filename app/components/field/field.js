@@ -3,7 +3,7 @@ import Store from '../../Store';
 import template from './field.htm';
 import $u from '../../core/utils';
 import api from '../../core/api';
-
+import config from '../../../config';
 
 export default Vue.component('fieldGame', {
     template,
@@ -63,26 +63,39 @@ export default Vue.component('fieldGame', {
 });
 
 function updateGame(game) { // ОТВЕТ ОТ РАНДОМАЙЗЕРА!!!!
-    const predCollected = $u.round(Store.game.collected);
-    Vue.set(Store, 'game', game);
     const status = game.steps[game.lastCell].status;
-    Store.logs.push({
+    Vue.set(Store, 'game', game);
+    let event;
+    if (status === 'b'){
+        event = 'bomb1';
+    } else if (status === 'o'){
+        event = 'open';
+    } else {
+        event = 'drop';
+    }
+    $u.sound(event);
+    updateLog(game);
+}
+
+function updateLog(game){
+    const status = game.steps[game.lastCell].status;
+    const predCollected = $u.round(Store.game.collected);
+    const log = {
         cell: game.lastCell,
         status: status,
         predCollected,
         collected: $u.round(game.collected)
-    });
-    if (status === 'o') {
-        $u.sound('open');
-        console.warn('Open!');
-    } else {
-        $u.sound('bomb1');
-        // console.log('Finish game', game)
-        // self.classResult = 'lose';
-        console.warn('BOMB');
+    };
+    if (game.needUpdateUser) {
+        Store.updateUser();
+        const drop = game.drops[game.lastCell];
+        if (drop.type === 'scr'){
+            drop.value *= config.scoreMult;
+        }
+        log.dropMsg = `You dropped ${drop.value.toFixed(0)} ${drop.type}!`;
     }
+    Store.logs.push(log);
 }
-
 const delays = {
     1: 1,
     3: 4,

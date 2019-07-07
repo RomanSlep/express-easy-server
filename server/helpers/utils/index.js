@@ -1,7 +1,5 @@
 const clone = require('clone');
-const {
-    gamesDb
-} = require('../../modules/DB');
+const {gamesDb} = require('../../modules/DB');
 const drops = require('./drops');
 const config = require('../../helpers/configReader');
 
@@ -83,17 +81,27 @@ module.exports = {
         game.cellsBomb = null;
         return game;
     },
-    /**
-     * @description получение вероятности по заданному параметру 
-     * @argument {number} процент от 1 до 100
-     * @returns {boolean}
-     */
-    getProb(proc) {
-        return Math.random() * 100 < proc;
-    },
-    drops
+    async updateExp(user, exp, needSave) {
+        if (!exp){
+            console.log('Error apdate exp, ', exp);
+            return;
+        }
+        const nextLvlExp = config.levels[user.lvl + 1];
+        if (user.exp + exp >= nextLvlExp) { // апаем левел
+            user.lvl++;
+            user.leftStatPoints++;
+            user.exp = user.exp + exp - nextLvlExp;
+        } else {
+            user.exp += exp;
+        }
+        user.exp = Math.round(user.exp);
+        if (needSave) {
+            await user.save();
+        }
+    }
 };
 
+Object.assign(module.exports, drops);
 // console.log(module.exports.prizes({ // абсолютный размер множителя
 //     countBombs: 10,
 //     bet: 10,

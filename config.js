@@ -13,6 +13,7 @@ export default {
         probDropBaff: 0.1, // дроп бафа
         escapeBomb: 20 // выжить при взрыве
     },
+    scoreMult: 1000, // умножение очков
     levelsOpt: {
         first: 5,
         martin: 1.5,

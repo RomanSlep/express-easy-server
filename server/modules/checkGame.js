@@ -3,12 +3,14 @@ const {
     transDb
 } = require('./DB');
 const $u = require('../helpers/utils');
-module.exports = async (User, params) => {
+const config = require('../helpers/configReader');
+
+module.exports = async (user, params) => {
     let game = await gamesDb.findOne({
         $and: [{
             _id: params.game_id
         }, {
-            user_id: User._id
+            user_id: user._id
         }]
     });
 
@@ -22,10 +24,10 @@ module.exports = async (User, params) => {
         msg = 'This step exist!';
     } else { // делаем шаг!
         if (params.isStep) {
-            await step(game, params, User);
+            await step(game, params, user);
         }
         if (params.isPickUpWinnings) {
-            await pickUpWinnings(User, game, params);
+            await pickUpWinnings(user, game, params);
         }
     }
 
@@ -37,7 +39,7 @@ module.exports = async (User, params) => {
 };
 
 
-async function step(game, params) {
+async function step(game, params, user) {
     const cell = params.cell;
     game.clickedCells.push(cell);
     game.lastCell = cell;
@@ -51,27 +53,60 @@ async function step(game, params) {
         step.status = 'o';
         game.stepLastNum++;
         $u.prizes(game);
+        // ДРОПЫ
+        const isDrop = mathDrops(user, game, cell, step);
+        if (isDrop) {
+            await user.updateData();
+            console.log('isDrop!User saved');
+        }
     }
-    // ДРОПЫ
-    const isDrop = false;
-
-
-    game.save();
+    await game.save();
 };
 
-async function pickUpWinnings(User, game) {
+async function pickUpWinnings(user, game) {
     game.isGame = false;
-    game.isWin = game.collected && true;
-    game.save();
+    game.isWin = Boolean(game.collected);
+    await updateLvl(user, game);
+    await game.save();
 
-    if (game.isWin){
+    if (game.isWin) {
         transDb.insert({
-            user_id: User._id,
+            user_id: user._id,
             amount: game.collected || 0,
             game_id: game._id,
             isTest: true
         }, () => {
-            User.updateDeposit();
+            user.updateData();
         });
     }
+}
+
+async function updateLvl(user, game) {
+    const exp = Math.round(game.collected / game.bet * 100);
+    await $u.updateExp(user, exp, true);
+}
+
+function mathDrops(user, game, cell, step) {
+    game.needUpdateUser = true;
+    const expDrop = $u.dropExp(user, game);
+    if (expDrop) {
+        step.status = 'exp';
+        game.drops[cell] = {
+            type: 'exp',
+            value: expDrop
+        };
+        return true;
+    }
+
+    const scrDrop = $u.dropScore(user, game);
+    if (scrDrop) {
+        step.status = 'scr';
+        game.drops[cell] = {
+            type: 'scr',
+            value: scrDrop
+        };
+        return true;
+    }
+    game.needUpdateUser = false;
+    return false;
 }

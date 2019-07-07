@@ -101,7 +101,7 @@ module.exports = {
                         if (err){
                             resolve(false);
                         } else {
-                            this._id = doc._id;
+                            this._id = this._id || doc._id;
                             resolve(true);
                         }
                     });

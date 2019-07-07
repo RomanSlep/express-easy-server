@@ -13,10 +13,12 @@ function mathLvl(opts) {
     for (let i = 3; i <= opts.maxLvl; i++) {
         let res = Math.floor(lvls[i - 1] + opts.martin * i);
         lvls[i] = res;
-        console.log(res / i);
     };
+    for (let l in lvls){
+        lvls[l] *= 100;
+    }
     return lvls;
 };
 
-console.log('LVLV', config.levels);
+// console.log('LVLV', config.levels);
 module.exports = config;

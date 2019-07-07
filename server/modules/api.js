@@ -60,14 +60,16 @@ module.exports = (app) => {
                     deposit: 0,
                     score: 0,
                     lvl: 1,
-                    satats: config.defaultStatPers
+                    exp: 0,
+                    leftStatPoints: 0, // очки статистики
+                    stats: config.defaultStatPers
                 });
                 success(await assignUser(newUser), res);
                 break;
 
             case ('testDeposit'):
                 transDb.insert({user_id: User._id, amount: 1, isTest: true}, ()=>{
-                    User.updateDeposit(()=>{
+                    User.updateData(()=>{
                         success('Success add!', res);
                     });
                 });
@@ -155,13 +157,13 @@ async function assignUser (user){
 async function getUserFromToken (token) {
     const user = await usersDb.findOne({token});
     if (user){
-        user.updateDeposit = updateDeposit;
+        user.updateData = updateData;
         user.rating = Store.getRatingFromLogin(user.login);
     }
     return user;
 }
 
-async function updateDeposit(cb) {
+async function updateData(cb) {
     const user = this;
     transDb.find({user_id: user._id}, async (err, transes) => {
         if (err) {
@@ -171,16 +173,22 @@ async function updateDeposit(cb) {
             let score = 0;
             let deposit = transes.reduce((s, t) => {
                 if (t.game_id){
-                    score += t.amount * 100;
+                    score += t.amount;
                 };
                 return s + t.amount;
             }, 0);
+
+            (await gamesDb.db.syncFind({user_id: user._id, dropedScores: {$gt: 0}})).forEach(g=>{
+                score += g.dropedScores;
+            });
+            console.log('2', score);
             deposit = Number(deposit.toFixed(8)) || 0;
+            score *= config.scoreMult;
             score = Number(score.toFixed(0)) || 0;
             await user.update({deposit, score}, true);
             cb && cb();
         } catch (e) {
-            log.error('UpdateDeposit ' + e);
+            log.error('updateData ' + e);
         }
     });
 }

@@ -15,16 +15,20 @@
                 <tr v-for="(u, i) in Store.totalRatings" :class="'rating-' + i">
                     <td>{{i+1}}.</td>
                     <td>{{u.login}}</td>
-                    <td>{{+(u.score * 10).toFixed(0) | numFormat}}</td>
+                    <td>{{+(u.score).toFixed(0) | numFormat}}</td>
                 </tr>
             </table>
         </div>
         <div id="gameBlock">
-            <h2>Hy, {{Store.user.login}}!
+
+
+            <h2>Hy, {{Store.user.login}}! Lvl {{Store.user.lvl}}, Exp ({{Store.user.exp}}/{{Store.levels[Store.user.lvl + 1]}})
                 <span class="txt-green">Deposit: {{Store.user.deposit | numFormat}}.</span>
                 <span class="txt-green" :class="'rating-' + (Store.user.rating - 1)">
                     Score: {{Store.user.score | numFormat}} (#{{Store.user.rating}}).</span>
-                <span class="txt-red" @click="exit">Exit?</span></h2>
+                <span class="txt-red" @click="exit">Exit?</span>
+            </h2>
+
             <top-bar></top-bar>
             <div class="but but_play" :class="!Store.game.isGame ? 'hovered bg-green' : 'no-events bg-yellow'"
                 @click="newGame">

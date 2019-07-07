@@ -11,7 +11,8 @@
     <div class="but bg-green hovered" style="width: 200px;" @click="pickUpWinnings" >{{game.collected ? 'Get winnings!' : 'Reset game?'}}</div>
     <div class="log-txt">
         <div class="str-log" v-for="l in logs">
-            <span v-if="l.status && l.status === 'o'">
+            <span v-if="l.status && l.status !== 'b'">
+                <u v-if="l.dropMsg" class="txt-green drop-msg">{{l.dropMsg}}</br></u>
                 <u class="txt-yellow">You {{l.predCollected}} </u> uppend to <u class="txt-green"> {{l.collected}} coins!</u>!
             </span>
             <span v-else v-show="l.status">

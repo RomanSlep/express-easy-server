@@ -1,6 +1,7 @@
 import Vue from 'vue/dist/vue.js';
 import api from './core/api';
 import $u from './core/utils';
+import config from '../config';
 
 export default new Vue({
     created() {
@@ -54,6 +55,7 @@ export default new Vue({
             token: false,
             deposit: 0
         },
+        levels: mathLvl(config.levelsOpt),
         totalPrize: 0,
         totalRatings: [],
         logs: []
@@ -74,11 +76,13 @@ export default new Vue({
                 action: 'getUser',
                 token: this.user.token
             }, (data) => {
+                const lvl = this.user.lvl;
+                if (data.lvl > lvl){
+                    $u.sound('level_up');
+                }
                 data.score = +(data.score * 10).toFixed(0);
                 Vue.set(self, 'user', Object.assign(self.user, data));
-                if (cb) {
-                    cb();
-                }
+                cb && cb();
             }, true);
         },
         getNoFinished() {
@@ -116,3 +120,18 @@ function createField() {
     }
     return arr;
 }
+
+
+function mathLvl(opts) {
+    const lvls = {
+        2: opts.first
+    };
+    for (let i = 3; i <= opts.maxLvl; i++) {
+        let res = Math.floor(lvls[i - 1] + opts.martin * i);
+        lvls[i] = res;
+    };
+    for (let l in lvls){
+        lvls[l] *= 100;
+    }
+    return lvls;
+};

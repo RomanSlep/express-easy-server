@@ -314,6 +314,14 @@ input {
     background-image: url(./gif/bomb.gif);
 }
 
+.plot.exp {
+    background-image: url(./gif/exp.gif);
+}
+
+.plot.score {
+    background-image: url(./gif/score.gif);
+}
+
 .plot.choice {
     width: 0;
     height: 0;
@@ -347,4 +355,8 @@ input {
     margin: 3px;
     text-align: center;
     height: 280px;
+}
+
+.drop-msg {
+    font-size: 1.3em;
 }
