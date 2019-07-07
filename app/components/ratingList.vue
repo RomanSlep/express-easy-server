@@ -9,7 +9,7 @@
                 </tr>
                 <tr v-for="(u, i) in totalRatings" :class="'rating-' + i" :key="u.login">
                     <td>{{i+1}}.</td>
-                    <td>{{u.login}}</td>
+                    <td>{{u.login}} ({{u.lvl}} lvl.)</td>
                     <td>{{+(u.score).toFixed(0) | numFormat}}</td>
                 </tr>
             </table>
