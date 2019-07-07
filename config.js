@@ -7,8 +7,8 @@ export default {
         pvp: ['']
     },
     defaultStatPers: {
-        probDropScore: 1, // дроп очков
-        probDropExp: 1, // дроп экспы
+        probDropScore: 10, // дроп очков
+        probDropExp: 10, // дроп экспы
         probDropArtefact: 1, // дроп артефакта
         probDropBaff: 1, // дроп бафа
         escapeBomb: 1 // выжить при взрыве

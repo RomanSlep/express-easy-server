@@ -3,13 +3,13 @@
         <h1>Lost Artifacts </h1>
         <h1><i class="rating-0">Total Prize: {{Store.totalPrize | numFormat}} SWG</i></h1>
     </div>
-    <div id="content" >
-      <rating-list></rating-list>
+    <div id="content">
+        <rating-list></rating-list>
         <div id="gameBlock">
             <span v-if="Store.user.isLogged">
-            <user-icon></user-icon>
-            <game v-if="Store.router === '#game'"></game>
-            <user-page v-if="Store.router === '#userpage'"></user-page>
+                <user-icon></user-icon>
+                <game v-show="Store.router === '#game'"></game>
+                <user-page v-show="Store.router === '#userpage'"></user-page>
             </span>
             <login v-else></login>
         </div>
