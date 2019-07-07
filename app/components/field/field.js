@@ -26,12 +26,6 @@ export default Vue.component('fieldGame', {
         choice(i) {
             if (Store.game.isWaitRnd) {
                 $u.sound('wait');
-                // this.$notify({
-                //     type: 'info',
-                //     group: 'foo',
-                //     title: 'Info!',
-                //     text: 'Wait randomiser!'
-                // });
                 return;
             }
             const plots = this.store.plots;
@@ -86,13 +80,18 @@ function updateLog(game){
         predCollected,
         collected: $u.round(game.collected)
     };
+
     if (game.needUpdateUser) {
         Store.updateUser();
         const drop = game.drops[game.lastCell];
-        if (drop.type === 'scr'){
-            drop.value *= config.scoreMult;
+        if (drop){
+            if (drop.type === 'scr'){
+                drop.value *= config.scoreMult;
+            }
+            log.dropMsg = `You dropped ${drop.value.toFixed(0)} ${drop.type}!`;
+        } else {
+            console.log('Error drop ', game);
         }
-        log.dropMsg = `You dropped ${drop.value.toFixed(0)} ${drop.type}!`;
     }
     Store.logs.push(log);
 }

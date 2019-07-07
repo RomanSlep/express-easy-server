@@ -5,22 +5,13 @@ import config from '../config';
 
 export default new Vue({
     created() {
-        this.$watch('user.token', () => {
-            localStorage.setItem('wstoken', this.user.token);
-        });
-
-        this.$watch('game.cellsBomb', () => {
-            if (this.game.cellsBomb) {
-                this.game.cellsBomb.forEach((c, i) => {
-                    this.field.plots[c] = 'b';
-                });
-            }
-        });
-
         this.user.token = localStorage.getItem('wstoken') || false;
         if (this.user.token) {
             this.updateUser(() => {
-                this.getNoFinished();
+                if (this.user.lvl){
+                    this.rout(window.location.hash || '#game');
+                    this.getNoFinished();
+                }
             });
         } else {
             this.isLoad = true;
@@ -32,6 +23,7 @@ export default new Vue({
     },
     data: {
         isLoad: false,
+        router: '',
         topbar: {
             bet: 0.1, // ставка
             countBombs: 1
@@ -79,9 +71,15 @@ export default new Vue({
                 const lvl = this.user.lvl;
                 if (data.lvl > lvl){
                     $u.sound('level_up');
+                    this.$notify({
+                        type: 'success',
+                        group: 'foo',
+                        title: 'Congratulation!',
+                        text: `You level UP to ${data.lvl}!`
+                    });
                 }
-                data.score = +(data.score * 10).toFixed(0);
-                Vue.set(self, 'user', Object.assign(self.user, data));
+                data.score = +data.score.toFixed(0);
+                self.user = data;
                 cb && cb();
             }, true);
         },
@@ -106,8 +104,20 @@ export default new Vue({
                 setTimeout(() => {
                     const self = this;
                     Vue.set(this.field.plots, i, self.game.steps[i] && self.game.steps[i].status || 'c');
-                }, 80 * i);
+                }, 50 * i);
             });
+        }
+    },
+    watch: {
+        'user.token'() {
+            localStorage.setItem('wstoken', this.user.token);
+        },
+        'game.cellsBomb'(){
+            if (this.game.cellsBomb) {
+                this.game.cellsBomb.forEach((c, i) => {
+                    this.field.plots[c] = 'b';
+                });
+            }
         }
     }
 });

@@ -1,8 +1,7 @@
 /* eslint-disable*/
 const path = require('path');
-const {
-    exec
-} = require('child_process');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const {exec} = require('child_process');
 const Dist = path.resolve(__dirname, './server/public/dist');
 const isDev = process.argv[3] === 'development';
 let ls;
@@ -28,7 +27,10 @@ module.exports = {
             use: {
                 loader: 'html-loader'
             }
-        }]
+        },{
+            test: /\.vue$/,
+            loader: 'vue-loader'
+          }]
     },
     resolve: {
         alias: {
@@ -36,7 +38,9 @@ module.exports = {
             // Src: path.resolve(__dirname, "src/"),
         }
     },
-    plugins: [],
+    plugins: [
+        new VueLoaderPlugin()
+      ],
     watchOptions: {
         ignored: ['node_modules']
     }

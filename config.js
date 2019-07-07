@@ -7,12 +7,13 @@ export default {
         pvp: ['']
     },
     defaultStatPers: {
-        probDropScore: 20, // дроп очков
-        probDropExp: 20, // дроп экспы
-        probDropArtefact: 0.1, // дроп артефакта
-        probDropBaff: 0.1, // дроп бафа
-        escapeBomb: 20 // выжить при взрыве
+        probDropScore: 1, // дроп очков
+        probDropExp: 1, // дроп экспы
+        probDropArtefact: 1, // дроп артефакта
+        probDropBaff: 1, // дроп бафа
+        escapeBomb: 1 // выжить при взрыве
     },
+    multUpStats: 0.3,
     scoreMult: 1000, // умножение очков
     levelsOpt: {
         first: 5,

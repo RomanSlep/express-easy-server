@@ -3,8 +3,12 @@ import './components/topbar/topbar';
 import './components/field/field';
 import './components/login/login';
 import './components/log/logGame';
+import userIcon from './components/userIcon.vue';
+import ratingList from './components/ratingList.vue';
+import game from './components/game.vue';
+import userPage from './components/userPage.vue';
 import Store from './Store';
-import api from './core/api';
+
 // import $u from './core/utils';
 import template from './app.htm';
 import Notifications from 'vue-notification';
@@ -15,32 +19,27 @@ Vue.use(Notifications);
 
 new Vue({
     el: '#app',
-    data: {
-        Store
+    components: {
+        userPage,
+        userIcon,
+        ratingList,
+        game
     },
-    template,
-    methods: {
-        newGame() {
-            api({
-                action: 'startGame',
-                data: {
-                    bet: Store.topbar.bet,
-                    countBombs: Store.topbar.countBombs
-                }
-            }, (game) => {
-                Store.game.isGame = true;
-                Vue.set(Store, 'logs', []);
-                Vue.set(Store, 'game', game);
-                Store.startGame();
-                Store.updateUser();
-            });
-        },
-        exit(){
-            Store.user.isLogged = false;
-            Store.user.token = false;
-        }
-    }
+    data: {Store},
+    template
 });
+// Router
+// Store.$watch('router', function(hash){
+//     window.location.hash = hash;
+// });
+Vue.prototype.rout = function(hash){
+    window.location.hash = hash;
+    Store.router = hash;
+};
+window.addEventListener('popstate', ()=>{
+    Store.rout(window.location.hash);
+});
+
 
 const fon = new Audio('./assets/sounds/fone.mp3');
 fon.volume = 0.2;
