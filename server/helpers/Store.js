@@ -18,7 +18,8 @@ const Store = module.exports = {
                 .map(u => {
                     return {
                         score: u.score,
-                        login: u.login
+                        login: u.login,
+                        lvl: u.lvl
                     };
                 });
             this.totalRatings.sort((b, a) => a.score - b.score);
