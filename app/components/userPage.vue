@@ -22,7 +22,7 @@
                 <div class="plot score"></div><span>Probobility drop scores: </span>{{user.stats.probDropScore}}%
                 <span v-show="user.leftStatPoints">
                     <i class="fa fa-long-arrow-right txt-yellow" aria-hidden="true"></i>
-                    {{user.stats.probDropScore + 0.1}}%
+                    {{(user.stats.probDropScore + 0.1).toFixed(1)}}%
                     <i class="hovered txt-green fa fa-plus" aria-hidden="true" @click="upgradePers('probDropScore')"></i>
                 </span>
             </div>
@@ -31,7 +31,7 @@
                 <div class="plot exp"></div><span>Probobility drop exp: </span>{{user.stats.probDropExp}}%
                 <span v-show="user.leftStatPoints">
                     <i class="fa fa-long-arrow-right txt-yellow" aria-hidden="true"></i>
-                    {{user.stats.probDropExp + 0.1}}%
+                    {{(user.stats.probDropExp + 0.1).toFixed(1)}}%
                     <i class="hovered txt-green fa fa-plus" aria-hidden="true" @click="upgradePers('probDropExp')"></i>
                 </span>
             </div>
