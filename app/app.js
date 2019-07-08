@@ -33,9 +33,12 @@ new Vue({
 //     window.location.hash = hash;
 // });
 Vue.prototype.rout = function(hash){
+    if (hash === Store.hash){
+        return;
+    }
+    $u.sound('click');
     window.location.hash = hash;
     Store.router = hash;
-    $u.sound('click');
 };
 window.addEventListener('popstate', ()=>{
     Store.rout(window.location.hash);
