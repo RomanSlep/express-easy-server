@@ -22,9 +22,9 @@ module.exports = async () => {
     const prizer_2 = Store.totalRatings[1].login;
     const prizer_3 = Store.totalRatings[2].login;
     console.log('Store.totalPrize', Store.totalPrize);
-    const prize_1 = Math.float(Store.totalPrize / 2);
-    const prize_2 = Math.float((Store.totalPrize - prize_1) / 1.5);
-    const prize_3 = Math.float((Store.totalPrize - prize_1 - prize_2));
+    const prize_1 = Math.round(Store.totalPrize / 2);
+    const prize_2 = Math.round((Store.totalPrize - prize_1) / 1.5);
+    const prize_3 = Math.round((Store.totalPrize - prize_1 - prize_2));
     console.log({prizer_1, prize_1});
     console.log({prizer_2, prize_2});
     console.log({prizer_3, prize_3});
