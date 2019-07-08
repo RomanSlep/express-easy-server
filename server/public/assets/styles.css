@@ -16,6 +16,9 @@ body {
     height: 100%;
     background-image: url(./gif/bg1.gif);
 }
+.bg{
+    background: url('./img/bg.png') repeat;
+}
 
 /* #400810 */
 
@@ -72,27 +75,27 @@ h3 {
 }
 
 .hovered:active {
-    background: #5c98bb
+    background-color: #5c98bb
 }
 
 .bg-grey {
-    background: #323141;
+    background-color: #323141;
 }
 
 .bg-green {
-    background: #425a3c !important;
+    background-color: #425a3c;
 }
 
 .bg-red {
-    background: #400810;
+    background-color: #400810;
 }
 
 .bg-yellow {
-    background: #745512;
+    background-color: #745512;
 }
 
 .bg-blue {
-    background: #0e2e41;
+    background-color: #0e2e41;
 }
 
 .txt-grey {
@@ -195,7 +198,7 @@ input {
 }
 
 .activeCount {
-    background: #fab41d;
+    background-color: #fab41d !important;
 }
 
 /* GAME */
@@ -204,7 +207,7 @@ input {
 }
 
 #rating {
-    background: rgba(1, 1, 1, 0.6);
+    background-color: rgba(1, 1, 1, 0.6);
     width: 300px;
     height: 610px;
     padding: 10px;
@@ -329,14 +332,14 @@ input {
 
 .lose {
     border-radius: 5px;
-    background: #492828;
+    background-color: #492828;
 }
 
 /* LOG */
 #log-game {
     color: #cadde2;
     margin-top: 5px;
-    background: rgba(1, 1, 1, 0.6);
+    background-color: rgba(1, 1, 1, 0.6);
     width: 300px;
 }
 
@@ -364,7 +367,7 @@ input {
 /* USER BLOCK */
 #userInfo {
     color: wheat;
-    background: rgba(1, 1, 1, 0.6);
+    background-color: rgba(1, 1, 1, 0.6);
     text-align: center;
     border-radius: 5px;
     width: 336px;
@@ -389,8 +392,8 @@ input {
     border: 2px solid #444;
 }
 
-.avatar-icons{
-    background: rgba(1, 1, 1, 0.6);
+.avatar-icons {
+    background-color: rgba(1, 1, 1, 0.6);
     margin-top: 60px;
     width: 20px;
     border: 1px solid grey;
@@ -402,12 +405,15 @@ input {
     align-items: center;
     justify-content: center;
 }
-.user-left-points{
+
+.user-left-points {
     margin-left: 66px;
 }
-.infoblock{
+
+.infoblock {
     width: 220px;
 }
+
 .progressbar {
     width: 100%;
     text-align: center;
@@ -415,16 +421,49 @@ input {
     width: 100%;
 }
 
-.lineinfo{
+.lineinfo {
     display: flex;
     justify-content: space-around;
 }
-.userlogin{
+
+.userlogin {
     font-size: 1.2em;
 }
 
 /* USERPAGE */
 
-.statList{
+.statList {
     color: wheat;
+}
+
+.user-data{
+    color: wheat;
+    display: flex;
+    justify-content: center;
+}
+.mage-gif {
+    margin-right: 50px;
+    width: 200px;
+    height: 200px;
+}
+
+.mage-gif img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.line-user-info span{
+    color: #838080;
+    display: inline-block;
+    width: 100px;
+}
+.line-user-info,
+.stat-line {
+    font-size: 1.1em;
+}
+.stat-line span{
+    font-size: 1.1em;
+    color: #838080;
+    display: inline-block;
+    width: 250px;
 }

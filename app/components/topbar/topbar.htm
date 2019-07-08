@@ -1,11 +1,12 @@
 <div id="topbar">
     <div class="deposit-block">
         <input type="number" v-model.number="Store.user.deposit" style="width:195px;">
-        <div class="but bg-grey w100 hovered" @click="addDeposit">Add deposit</div>
+        <div class="but bg-grey w100 hovered bg" @click="addDeposit">Add deposit</div>
     </div>
 
     <div class="buttons-rate" @click="sound" :class="{'no-events' : Store.game.isGame}">
-        <div v-for="r in buttonsRate" @click="changeRate(r)" class="but hovered"
+        <div v-for="r in buttonsRate" @click="changeRate(r)" 
+            class="but hovered bg"
             :class="{'bg-red':r.val < 0, 'bg-green': r.val > 0}">
             {{r.text}}
         </div>
@@ -15,7 +16,8 @@
         <input type="number" v-model.number="store.bet" style="width:260px;" :class="className">
         <div class="buttons-count" :class="{'no-events' : Store.game.isGame}">
             <div v-for="c in buttonsCountBombs" @click="store.countBombs = c; sound()"
-                :class="{activeCount: store.countBombs === c}" class="but hovered bg-blue m1">
+                :class="{activeCount: store.countBombs === c}" 
+                class="but hovered bg-blue m1 bg">
                 {{c}}
             </div>
         </div>

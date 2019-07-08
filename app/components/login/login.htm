@@ -9,7 +9,7 @@
        <input type="text" v-model="user.address" placeholder="Address" required>
        <input type="password" v-model="user.password" placeholder="Password" required>
     </div>
-    <div class="but bg-blue hovered" @click="logreg">{{status}}</div>
+    <div class="but bg-blue hovered bg" @click="logreg">{{status}}</div>
     <div class="hovered" style="text-align:center; color: aliceblue;" @click="user.isLoginned =!user.isLoginned">
         <u v-if="user.isLoginned">Got registration?</u>
         <u v-else>Got login?</u>

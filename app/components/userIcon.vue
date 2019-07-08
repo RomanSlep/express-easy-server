@@ -1,10 +1,10 @@
 <template>
-    <div id="userInfo">
+    <div id="userInfo" class="bg">
         <div class="avatar" @click="rout('#userpage')">
             <div class="user-lvl avatar-icons">{{user.lvl}}</div>
-            <div class="user-left-points avatar-icons" :class="{'bg-green': user.leftStatPoints}">{{user.leftStatPoints}}</div>
+            <div class="user-left-points avatar-icons" :class="{'activeCount': user.leftStatPoints}">{{user.leftStatPoints}}</div>
 
-            <img src="assets/avatars/default.jpg">
+            <img src="assets/gif/avatar.gif">
         </div>
         <div class="infoblock">
             <div class="userlogin" :class="'rating-' + (user.rating - 1)">{{user.login}} #{{user.rating}}</div>
@@ -12,7 +12,7 @@
             <div class="lineinfo">
                 <span class="txt-yellow">{{user.deposit}} SWG </span>
                   <span class="txt-green"> Score: {{user.score | numFormat}}.</span>
-                  <span class="txt-red" @click="exit">Exit</span>
+                  <span class="txt-red" @click="exit">Exit <i class="fa fa-sign-out" aria-hidden="true"></i></span>
             </div>
         </div>
     </div>

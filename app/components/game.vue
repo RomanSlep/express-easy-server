@@ -1,7 +1,7 @@
 <template>
 <span>
     <top-bar></top-bar>
-    <div class="but but_play" :class="!game.isGame ? 'hovered bg-green' : 'no-events bg-yellow'" @click="newGame">
+    <div class="but but_play bg" :class="!game.isGame ? 'hovered bg-green' : 'no-events bg-yellow'" @click="newGame">
         <span v-if="!game.isGame">Go</span>
         <span v-else>Play Bet</span>
         {{bet}}!
