@@ -10,6 +10,10 @@
                 <user-icon></user-icon>
                 <game v-show="Store.router === '#game'"></game>
                 <user-page v-show="Store.router === '#userpage'"></user-page>
+                <span v-show="!['#game', '#userpage'].includes(Store.router)">
+                    <h1 class="txt-red">Error 404!</h1>
+                    <h1 class="txt-red">Page not found!</h1>
+                </span>
             </span>
             <login v-else></login>
         </div>
