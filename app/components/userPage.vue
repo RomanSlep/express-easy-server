@@ -17,9 +17,24 @@
             </div>
         </div>
         <div class="statList">
-          <h3>Upgrade you pers! Left {{user.leftStatPoints}} points.</h3>
-            <div class="stat-line"><span>Probobility drop scores: </span>{{user.stats.probDropScore}}%</div>
-            <div class="stat-line"><span>Probobility drop exp: </span>{{user.stats.probDropExp}}%</div>
+            <h3>Upgrade you pers! Left {{user.leftStatPoints}} points.</h3>
+            <div class="stat-line">
+                <div class="plot score"></div><span>Probobility drop scores: </span>{{user.stats.probDropScore}}%
+                <span v-show="user.leftStatPoints">
+                    <i class="fa fa-long-arrow-right txt-yellow" aria-hidden="true"></i>
+                    {{user.stats.probDropScore + 0.1}}%
+                    <i class="hovered txt-green fa fa-plus" aria-hidden="true" @click="upgradePers('probDropScore')"></i>
+                </span>
+            </div>
+
+            <div class="stat-line">
+                <div class="plot exp"></div><span>Probobility drop exp: </span>{{user.stats.probDropExp}}%
+                <span v-show="user.leftStatPoints">
+                    <i class="fa fa-long-arrow-right txt-yellow" aria-hidden="true"></i>
+                    {{user.stats.probDropExp + 0.1}}%
+                    <i class="hovered txt-green fa fa-plus" aria-hidden="true" @click="upgradePers('probDropExp')"></i>
+                </span>
+            </div>
         </div>
     </div>
 
@@ -27,19 +42,41 @@
 </template>
 
 <script>
+import config from '../../config';
 import Store from '../Store';
 import api from '../core/api';
 import Vue from 'vue/dist/vue.js';
+import $u from '../core/utils';
 
 export default {
-    data(){
+    data() {
         return {
+            stepStat: config.stepStat,
             levels: Store.levels
         }
     },
     computed: {
         user() {
             return Store.user;
+        }
+    },
+    methods: {
+        upgradePers(stat) {
+            $u.sound('click');
+            api({
+                action: 'updateStat',
+                data: {
+                    param: stat
+                }
+            }, data => {
+                this.$notify({
+                    type: 'success',
+                    group: 'foo',
+                    title: 'Congritulations!',
+                    text: data
+                });
+                Store.updateUser();
+            });
         }
     }
 }

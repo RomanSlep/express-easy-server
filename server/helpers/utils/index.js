@@ -8,10 +8,8 @@ module.exports = {
     round(n) {
         return Number(n.toFixed(4));
     },
-    sound(name, v = 0.2) {
-        const s = new Audio('assets/sounds/' + name + '.mp3');
-        s.play();
-        s.volume = v;
+    unix(){
+        return new Date().getTime();
     },
     async getNofinishGame(user) {
         return await gamesDb.db.syncFindOne({

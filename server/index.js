@@ -5,7 +5,8 @@ const app = express();
 const log = require('./helpers/log');
 const DIR_NAME = __dirname + '/public/';
 require('./modules/api')(app);
-require('./modules/sesonFinish');
+require('./modules/seasonFinish');
+require('./modules/cron');
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded

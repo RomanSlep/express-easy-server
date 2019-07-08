@@ -19,5 +19,7 @@ export default {
         first: 5,
         martin: 1.5,
         maxLvl: 100
-    }
+    },
+    stepStat: 0.1, // шаг прокачки
+    seasonPeriod: '1d'
 };

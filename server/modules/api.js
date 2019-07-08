@@ -68,6 +68,7 @@ module.exports = (app) => {
                 break;
 
             case ('testDeposit'):
+                console.log('Test deposit');
                 await depositsDb.db.syncInsert({user_id: User._id, amount: 1, type: 'deposit'});
                 User.updateData(()=>{
                     success('Success add!', res);
@@ -76,6 +77,18 @@ module.exports = (app) => {
 
             case ('getNoFinished'):
                 success($u.filterGame(await $u.getNofinishGame(User)), res);
+                break;
+
+            case ('updateStat'):
+                if (!User.leftStatPoints){
+                    error('You have not points!', res);
+                    return;
+                }
+                User.stats[GET.param] += config.stepStat;
+                User.stats[GET.param] = +(User.stats[GET.param]).toFixed(1);
+                User.leftStatPoints--;
+                await User.save();
+                success('Pers success upgraded!', res);
                 break;
 
             case ('startGame'):
@@ -164,16 +177,16 @@ async function getUserFromToken (token) {
 
 async function updateData(cb) {
     const user = this;
-
+    const id = user._id;
     try {
-        let {deposit, score} = await $u.getGamesDepositAndScore(user._id);
-        deposit += await $u.getUserDeposits(user._id);
-        score += await $u.getDropsScores(user._id);
+        let {deposit, score} = await $u.getGamesDepositAndScore(id);
+        deposit += await $u.getUserDeposits(id);
+        score += await $u.getDropsScores(id);
         score *= config.scoreMult;
-
         deposit = Number(deposit.toFixed(8)) || 0;
         score = Number(score.toFixed(0)) || 0;
-        if (!deposit || !score) {
+        if (deposit === NaN || score === NaN) {
+            cb && cb();
             return;
         }
         await user.update({deposit, score}, true);

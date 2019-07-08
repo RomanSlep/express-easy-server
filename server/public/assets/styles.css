@@ -16,7 +16,8 @@ body {
     height: 100%;
     background-image: url(./gif/bg1.gif);
 }
-.bg{
+
+.bg {
     background: url('./img/bg.png') repeat;
 }
 
@@ -436,11 +437,12 @@ input {
     color: wheat;
 }
 
-.user-data{
+.user-data {
     color: wheat;
     display: flex;
     justify-content: center;
 }
+
 .mage-gif {
     margin-right: 50px;
     width: 200px;
@@ -452,18 +454,32 @@ input {
     max-height: 100%;
 }
 
-.line-user-info span{
+.line-user-info span {
     color: #838080;
     display: inline-block;
     width: 100px;
 }
+
 .line-user-info,
 .stat-line {
     font-size: 1.1em;
 }
-.stat-line span{
+
+.stat-line span {
+    margin-left: 25px;
     font-size: 1.1em;
     color: #838080;
     display: inline-block;
     width: 250px;
+}
+
+.stat-line .plot {
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    display: inline-block;
+}
+
+.stat-line .fa {
+    font-size: 0.8em;
 }

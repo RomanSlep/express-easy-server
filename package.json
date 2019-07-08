@@ -21,6 +21,7 @@
         "express": "^4.16.4",
         "express-session": "^1.16.1",
         "nedb": "^1.8.0",
+        "node-cron": "^2.0.3",
         "sha256": "^0.2.0",
         "vue": "^2.6.10",
         "vue-filter-number-format": "^1.0.3",

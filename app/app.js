@@ -8,7 +8,7 @@ import ratingList from './components/ratingList.vue';
 import game from './components/game.vue';
 import userPage from './components/userPage.vue';
 import Store from './Store';
-
+import $u from './core/utils';
 // import $u from './core/utils';
 import template from './app.htm';
 import Notifications from 'vue-notification';
@@ -35,6 +35,7 @@ new Vue({
 Vue.prototype.rout = function(hash){
     window.location.hash = hash;
     Store.router = hash;
+    $u.sound('click');
 };
 window.addEventListener('popstate', ()=>{
     Store.rout(window.location.hash);

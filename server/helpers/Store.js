@@ -17,6 +17,7 @@ const Store = module.exports = {
                 .filter(u => u.score)
                 .map(u => {
                     return {
+                        _id: u._id,
                         score: u.score,
                         login: u.login,
                         lvl: u.lvl
@@ -36,6 +37,7 @@ const Store = module.exports = {
         }, 0);
 
         this.totalPrize = $u.round(prize * config.percent_prize / 100);
+        console.log(this.totalPrize)
     }
 };
 

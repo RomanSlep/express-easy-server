@@ -43,8 +43,8 @@ async function step(game, params, user) {
     const cell = params.cell;
     game.clickedCells.push(cell);
     game.lastCell = cell;
-
     const step = game.steps[cell] = {};
+    let isDrop = false;
     if (game.cellsBomb.includes(cell)) {
         step.status = 'b';
         game.isGame = false;
@@ -54,13 +54,13 @@ async function step(game, params, user) {
         game.stepLastNum++;
         $u.prizes(game);
         // ДРОПЫ
-        const isDrop = mathDrops(user, game, cell, step);
-        if (isDrop) {
-            await user.updateData();
-            console.log('isDrop!User saved');
-        }
+        isDrop = mathDrops(user, game, cell, step);
     }
     await game.save();
+    if (isDrop) {
+        await user.updateData();
+        console.log('isDrop!User saved');
+    }
 };
 
 async function pickUpWinnings(user, game) {

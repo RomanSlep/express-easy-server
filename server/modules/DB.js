@@ -5,12 +5,12 @@ module.exports = {
     usersDb: modelDb(syncNedb(new Datastore({
         filename: 'db_/users',
         autoload: true
-    }), 63)),
+    }), 10)),
    
     gamesDb: modelDb(syncNedb(new Datastore({
         filename: 'db_/games',
         autoload: true
-    }), 24)),
+    }), 10)),
 
     gameTransDb: modelDb(syncNedb(new Datastore({
         filename: 'db_/gameTrans',
@@ -19,6 +19,11 @@ module.exports = {
 
     depositsDb: modelDb(syncNedb(new Datastore({
         filename: 'db_/deposits',
+        autoload: true
+    }))),
+
+    seasonsDb: modelDb(syncNedb(new Datastore({
+        filename: 'db_/seasons',
         autoload: true
     }))),
 };
