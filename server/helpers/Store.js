@@ -1,6 +1,6 @@
 const {
     usersDb,
-    transDb,
+    gameTransDb,
     gamesDb
 } = require('../modules/DB');
 const $u = require('./utils');

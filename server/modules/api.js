@@ -1,6 +1,6 @@
 const log = require('../helpers/log');
 const sha256 = require('sha256');
-const {usersDb, transDb, gamesDb} = require('./DB');
+const {usersDb, gameTransDb, gamesDb, depositsDb} = require('./DB');
 const startGame = require('./startGame');
 const checkGame = require('./checkGame');
 const $u = require('../helpers/utils');
@@ -68,10 +68,9 @@ module.exports = (app) => {
                 break;
 
             case ('testDeposit'):
-                transDb.insert({user_id: User._id, amount: 1, isTest: true}, ()=>{
-                    User.updateData(()=>{
-                        success('Success add!', res);
-                    });
+                await depositsDb.db.syncInsert({user_id: User._id, amount: 1, type: 'deposit'});
+                User.updateData(()=>{
+                    success('Success add!', res);
                 });
                 break;
 
@@ -165,30 +164,21 @@ async function getUserFromToken (token) {
 
 async function updateData(cb) {
     const user = this;
-    transDb.find({user_id: user._id}, async (err, transes) => {
-        if (err) {
+
+    try {
+        let {deposit, score} = await $u.getGamesDepositAndScore(user._id);
+        deposit += await $u.getUserDeposits(user._id);
+        score += await $u.getDropsScores(user._id);
+        score *= config.scoreMult;
+
+        deposit = Number(deposit.toFixed(8)) || 0;
+        score = Number(score.toFixed(0)) || 0;
+        if (!deposit || !score) {
             return;
         }
-        try {
-            let score = 0;
-            let deposit = transes.reduce((s, t) => {
-                if (t.game_id){
-                    score += t.amount;
-                };
-                return s + t.amount;
-            }, 0);
-
-            (await gamesDb.db.syncFind({user_id: user._id, dropedScores: {$gt: 0}})).forEach(g=>{
-                score += g.dropedScores;
-            });
-            console.log('2', score);
-            deposit = Number(deposit.toFixed(8)) || 0;
-            score *= config.scoreMult;
-            score = Number(score.toFixed(0)) || 0;
-            await user.update({deposit, score}, true);
-            cb && cb();
-        } catch (e) {
-            log.error('updateData ' + e);
-        }
-    });
+        await user.update({deposit, score}, true);
+        cb && cb();
+    } catch (e) {
+        log.error('updateData ' + e);
+    }
 }

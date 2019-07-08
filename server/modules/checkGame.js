@@ -1,6 +1,6 @@
 const {
     gamesDb,
-    transDb
+    gameTransDb
 } = require('./DB');
 const $u = require('../helpers/utils');
 const config = require('../helpers/configReader');
@@ -70,11 +70,11 @@ async function pickUpWinnings(user, game) {
     await game.save();
 
     if (game.isWin) {
-        transDb.insert({
+        gameTransDb.db.insert({
             user_id: user._id,
             amount: game.collected || 0,
             game_id: game._id,
-            isTest: true
+            // isTest: true
         }, () => {
             user.updateData();
         });

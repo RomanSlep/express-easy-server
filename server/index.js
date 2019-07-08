@@ -5,6 +5,7 @@ const app = express();
 const log = require('./helpers/log');
 const DIR_NAME = __dirname + '/public/';
 require('./modules/api')(app);
+require('./modules/sesonFinish');
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded

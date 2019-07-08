@@ -1,5 +1,5 @@
 const clone = require('clone');
-const {gamesDb} = require('../../modules/DB');
+const {gamesDb, gameTransDb, depositsDb} = require('../../modules/DB');
 const drops = require('./drops');
 const config = require('../../helpers/configReader');
 
@@ -98,6 +98,40 @@ module.exports = {
         if (needSave) {
             await user.save();
         }
+    },
+    /**
+     * @description Получение суммарного депозита за игры (ставки + выигрыши)
+     * @param {string} user_id
+     * @returns {deposit, score}
+     */
+    async getGamesDepositAndScore(user_id){
+        let deposit = 0;
+        let score = 0;
+        (await gameTransDb.db.syncFind({user_id})).forEach(t => { // по играм в текущем сезоне
+            if (t.amount > 0){
+                score += t.amount;
+            }
+            deposit += t.amount;
+        });
+        return {deposit, score};
+    },
+    /**
+     * @description Получение суммы транзакций бч и отчетов по сезонам
+     * @param {string} user_id 
+     */
+    async getUserDeposits(user_id){
+        let deposit = 0;
+        (await depositsDb.db.syncFind({user_id})).forEach(d => {// депозит вводы/выводы за все время
+            deposit += d.amount;
+        });
+        return deposit;
+    },
+    async getDropsScores(user_id){
+        let score = 0;
+        (await gamesDb.db.syncFind({user_id, dropedScores: {$gt: 0}})).forEach(g =>{ // дропы очков
+            score += g.dropedScores;
+        });
+        return score;
     }
 };
 

@@ -1,5 +1,5 @@
 const {
-    transDb,
+    gameTransDb,
     gamesDb
 } = require('./DB');
 const $u = require('../helpers/utils');
@@ -27,10 +27,10 @@ module.exports = async (User, params) => {
         };
     }
 
-    transDb.insert({
+    gameTransDb.db.insert({
         user_id: User._id,
         amount: -params.bet,
-        isTest: true
+        // isTest: true
     }, () => {
         User.updateData();
     });
