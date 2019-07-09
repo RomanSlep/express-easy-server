@@ -17,7 +17,7 @@ module.exports = async (User, params) => {
     if (params.bet > config.max_bet) {
         msg = 'Maximum bet ' +config.max_bet+'!';
     }
-    if(typeof params.bet !=== 'number'){
+    if(typeof params.bet !== 'number'){
         msg = 'Bet must type <number>';
     }
     if (params.countBombs < 1 || params.countBombs > 24) {
