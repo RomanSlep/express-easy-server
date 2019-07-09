@@ -1,5 +1,5 @@
 export default {
-    min_bid: 0.1,
+    min_bet: 0.1,
     percent_prize: 50,
     // игровые настройки
     randoms: { // какие возможности дропа/эффектов доступны в режимах
