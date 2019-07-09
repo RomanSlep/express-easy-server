@@ -21,13 +21,14 @@ export default Vue.component('topBar', {
             ],
             buttonsCountBombs: [1, 3, 5, 10, 20],
             min: config.min_bet,
+            max: config.max_bet,
             className: ''
         };
     },
     methods: {
         changeRate(rate) {
             const dep = Store.user.deposit;
-            const min = this.min;
+            const {min, max} = this;
             let bet;
             if (rate.text === 'x2'){
                 bet = Store.topbar.bet * 2;
@@ -41,7 +42,9 @@ export default Vue.component('topBar', {
             if (bet > dep) {
                 bet = dep;
             };
-
+            if (bet > max) {
+                bet = max;
+            };
             if (bet !== dep && bet !== min) {
                 this.className = '';
             } else {
