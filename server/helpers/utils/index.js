@@ -52,7 +52,7 @@ module.exports = {
 
         let m = bet / countMult; // один множитель
         if (countBombs === 20) {
-            m = bet / countBombs * 2;
+            m = bet / countBombs * 1.5;
         }
         let result = 0;
         // считаем текущий и следующий призы
