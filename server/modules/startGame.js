@@ -3,7 +3,7 @@ const {
     gamesDb
 } = require('./DB');
 const $u = require('../helpers/utils');
-const config = require('./configReader');
+const config = require('../helpers/configReader');
 module.exports = async (User, params) => {
     params.countBombs = Number(params.countBombs);
     // Проверки:
