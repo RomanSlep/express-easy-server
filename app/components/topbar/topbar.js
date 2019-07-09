@@ -20,7 +20,7 @@ export default Vue.component('topBar', {
                 {text: '-0.5', val: -0.5},
             ],
             buttonsCountBombs: [1, 3, 5, 10, 20],
-            min: config.min_bid,
+            min: config.min_bet,
             className: ''
         };
     },
