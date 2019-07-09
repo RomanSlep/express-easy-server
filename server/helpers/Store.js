@@ -31,7 +31,8 @@ const Store = module.exports = {
     },
     async updatePrise(){
         const prize = (await gamesDb.db.syncFind({
-            isWin: false
+            isWin: false,
+            bet: {$gt:0}
         })).reduce((sum, g) => {
             return sum + g.bet;
         }, 0);
