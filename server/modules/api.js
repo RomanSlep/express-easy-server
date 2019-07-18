@@ -1,6 +1,6 @@
 const log = require('../helpers/log');
 const sha256 = require('sha256');
-const {usersDb, gameTransDb, gamesDb, depositsDb} = require('./DB');
+const {usersDb} = require('./DB');
 const startGame = require('./startGame');
 const checkGame = require('./checkGame');
 const $u = require('../helpers/utils');
@@ -15,7 +15,7 @@ module.exports = (app) => {
             // console.log(req.query);
             const action = req.query.action;
             const GET = JSON.parse(req.query.data);
-            const User = await getUserFromToken(GET.token);
+            const User = await $u.getUserFromQ({token: GET.token});
             // роуты
             switch (action) {
             case ('getUser'):
@@ -53,26 +53,9 @@ module.exports = (app) => {
                     error('Login or address already exists!', res);
                     return;
                 }
-                let newUser = new usersDb({
-                    address,
-                    login,
-                    password: sha256(password.toString()),
-                    deposit: 0,
-                    score: 0,
-                    lvl: 1,
-                    exp: 0,
-                    leftStatPoints: 0, // очки статистики
-                    stats: config.defaultStatPers
-                });
-                success(await assignUser(newUser), res);
-                break;
+                const newUser = await $u.createUser({address, login, password});
 
-            case ('testDeposit'):
-                console.log('Test deposit');
-                await depositsDb.db.syncInsert({user_id: User._id, amount: 1, type: 'deposit'});
-                User.updateData(()=>{
-                    success('Success add!', res);
-                });
+                success(await assignUser(newUser), res);
                 break;
 
             case ('getNoFinished'):
@@ -119,6 +102,17 @@ module.exports = (app) => {
                     error(checkg.msg, res);
                 }
                 break;
+
+            default:
+                error('error endpoint', res);
+                break;
+                // case ('testDeposit'):
+                //     console.log('Test deposit');
+                //     await depositsDb.db.syncInsert({user_id: User._id, amount: 1, type: 'deposit'});
+                //     User.updateData(()=>{
+                //         success('Success add!', res);
+                //     });
+                //     break;
             }
 
         } catch (e) {
@@ -166,32 +160,4 @@ async function assignUser (user){
     }
 }
 
-async function getUserFromToken (token) {
-    const user = await usersDb.findOne({token});
-    if (user){
-        user.updateData = updateData;
-        user.rating = Store.getRatingFromLogin(user.login);
-    }
-    return user;
-}
 
-async function updateData(cb) {
-    const user = this;
-    const id = user._id;
-    try {
-        let {deposit, score} = await $u.getGamesDepositAndScore(id);
-        deposit += await $u.getUserDeposits(id);
-        score += await $u.getDropsScores(id);
-        score *= config.scoreMult;
-        deposit = Number(deposit.toFixed(8)) || 0;
-        score = Number(score.toFixed(0)) || 0;
-        if (deposit === NaN || score === NaN) {
-            cb && cb();
-            return;
-        }
-        await user.update({deposit, score}, true);
-        cb && cb();
-    } catch (e) {
-        log.error('updateData ' + e);
-    }
-}

@@ -73,12 +73,12 @@ function updateGame(game) { // ОТВЕТ ОТ РАНДОМАЙЗЕРА!!!!
 
 function updateLog(game){
     const status = game.steps[game.lastCell].status;
-    const predCollected = $u.round(Store.game.collected);
+    const predCollected = Store.game.collected.toFixed(3);
     const log = {
         cell: game.lastCell,
         status: status,
         predCollected,
-        collected: $u.round(game.collected)
+        collected: game.collected.toFixed(3)
     };
 
     if (game.needUpdateUser) {
@@ -88,7 +88,7 @@ function updateLog(game){
             if (drop.type === 'scr'){
                 drop.value *= config.scoreMult;
             }
-            log.dropMsg = `You dropped ${drop.value.toFixed(0)} ${drop.type}!`;
+            log.dropMsg = `You dropped ${drop.value.toFixed(3)} ${drop.type}!`;
         } else {
             console.log('Error drop ', game);
         }

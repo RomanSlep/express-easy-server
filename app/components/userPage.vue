@@ -80,5 +80,5 @@ export default {
         }
     }
 }
-// "stats":{"probDropScore":50,"probDropExp":50,"probDropArtefact":0.1,"probDropBaff":0.1,"escapeBomb":20},
+// "stats":{"probDropScore":50,"probDropExp":50,"probDropArtifact":0.1,"probDropBaff":0.1,"escapeBomb":20},
 </script>

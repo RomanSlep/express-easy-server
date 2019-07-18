@@ -24,7 +24,7 @@ module.exports = {
         console.log('Drop scores!', scr);
         return scr;
     }
-    // 'dropExp', 'dropScore', 'dropBaff', 'dropArtefact'
+    // 'dropExp', 'dropScore', 'dropBaff', 'dropArtifact'
 };
 
 /**
@@ -38,7 +38,7 @@ function getProb(proc) {
 
 // probDropScore: 20, // дроп очков
 // probDropExp: 20, // дроп экспы
-// probDropArtefact: 0.1, // дроп артефакта
+// probDropArtifact: 0.1, // дроп артефакта
 // probDropBaff: 0.1, // дроп бафа
 // escapeBomb: 20 // выжить при взрыве
 

@@ -7,6 +7,7 @@ import userIcon from './components/userIcon.vue';
 import ratingList from './components/ratingList.vue';
 import game from './components/game.vue';
 import userPage from './components/userPage.vue';
+import modal from './components/modal.vue';
 import Store from './Store';
 import $u from './core/utils';
 // import $u from './core/utils';
@@ -23,7 +24,8 @@ new Vue({
         userPage,
         userIcon,
         ratingList,
-        game
+        game,
+        modal
     },
     data: {Store},
     template

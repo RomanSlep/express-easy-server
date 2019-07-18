@@ -1,15 +1,26 @@
 const clone = require('clone');
-const {gamesDb, gameTransDb, depositsDb} = require('../../modules/DB');
+const {usersDb, gamesDb, gameTransDb, depositsDb} = require('../../modules/DB');
 const drops = require('./drops');
 const config = require('../../helpers/configReader');
+const sha256 = require('sha256');
+const log = require('../log');
+const Store = require('../Store');
 
 module.exports = {
     clone,
     round(n) {
-        return Number(n.toFixed(4));
+        return Number(n.toFixed(0));
     },
     unix(){
         return new Date().getTime();
+    },
+    async getUserFromQ (q) {
+        const user = await usersDb.findOne(q);
+        if (user){
+            user.updateData = updateData;
+            user.rating = Store.getRatingFromLogin(user.login);
+        }
+        return user;
     },
     async getNofinishGame(user) {
         return await gamesDb.db.syncFindOne({
@@ -61,15 +72,12 @@ module.exports = {
         // let str = '';
         while (stepLastNum > p - 2) {
             collected = result;
-            // str += `
-            // ` + p + ' ' + collected.toFixed(8);
             result += countBombs * m * p++;
             next = result;
         }
-        // console.log(str);
 
-        params.nextPrize = this.round(next);
-        params.collected = this.round(collected);
+        params.nextPrize = +next.toFixed(3);
+        params.collected = +collected.toFixed(3);
     },
     filterGame(game) {
         if (!game) {
@@ -130,12 +138,44 @@ module.exports = {
             score += g.dropedScores;
         });
         return score;
+    },
+    async createUser(params){
+        const user = new usersDb({
+            address: params.address,
+            login: params.login,
+            password: sha256(params.password.toString()),
+            deposit: config.regDrop,
+            score: 0,
+            lvl: 1,
+            exp: 0,
+            leftStatPoints: 0, // очки статистики
+            stats: config.defaultStatPers
+        });
+        await user.save();
+        depositsDb.db.syncInsert({user_id: user._id, amount: config.regDrop, type: 'regdrop'});
+        return user;
     }
 };
 
+async function updateData(cb) {
+    const user = this;
+    const id = user._id;
+    const $u = module.exports;
+    try {
+        let {deposit, score} = await $u.getGamesDepositAndScore(id);
+        deposit += await $u.getUserDeposits(id);
+        score += await $u.getDropsScores(id);
+        score *= config.scoreMult;
+        deposit = Number(deposit.toFixed(0)) || 0;
+        score = Number(score.toFixed(0)) || 0;
+        if (deposit === NaN || score === NaN) {
+            cb && cb();
+            return;
+        }
+        await user.update({deposit, score}, true);
+        cb && cb();
+    } catch (e) {
+        log.error('updateData ' + e);
+    }
+};
 Object.assign(module.exports, drops);
-// console.log(module.exports.prizes({ // абсолютный размер множителя
-//     countBombs: 10,
-//     bet: 10,
-//     stepLastNum: 24
-// }));

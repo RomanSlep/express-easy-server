@@ -1,7 +1,7 @@
 <div id="main" v-if="Store.isLoad">
     <div id="topline">
         <h1>Lost Artifacts </h1>
-        <h1><i class="rating-0">Total Prize: {{Store.totalPrize | numFormat}} SWG</i></h1>
+        <h1><i class="rating-0">Total Prize: {{Store.totalPrize | numFormat}} <small>ARTS</small></i></h1>
     </div>
     <div id="content">
         <rating-list></rating-list>
@@ -18,6 +18,6 @@
             <login v-else></login>
         </div>
     </div>
-
+    <modal></modal>
     <notifications group="foo" />
 </div>

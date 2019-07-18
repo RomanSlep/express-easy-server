@@ -39,7 +39,7 @@ export default Vue.component('log-game', {
             }, game => {
                 Store.logs.push({
                     isWin: true,
-                    collected: $u.round(game.collected)
+                    collected: game.collected
                 });
                 if (game.collected) {
                     $u.sound('win');

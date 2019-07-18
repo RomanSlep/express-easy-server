@@ -12,12 +12,12 @@ export default Vue.component('topBar', {
             Store,
             store: Store.topbar,
             buttonsRate: [
-                {text: '+0.1', val: 0.1},
-                {text: '+0.5', val: 0.5},
+                {text: '+100', val: 100},
+                {text: '+500', val: 500},
                 {text: 'x2', val: 2},
                 {text: 'min', val: - 100000000000000},
-                {text: '-0.1', val: -0.1},
-                {text: '-0.5', val: -0.5},
+                {text: '-100', val: -100},
+                {text: '-500', val: -500},
             ],
             buttonsCountBombs: [1, 3, 5, 10, 20],
             min: config.min_bet,
@@ -53,10 +53,9 @@ export default Vue.component('topBar', {
             Store.topbar.bet = bet;
         },
         addDeposit() {
-            api({
-                action: 'testDeposit'
-            }, () => {
-                Store.updateUser();
+            Store.modal.show({
+                header: 'Deposit Artifacts',
+                body: `To replenish the game deposit, send to the wallet <i>${config.gameMinterAddress}</i> <b>Artifacts</b>. Within a minute, your account will be .`,
             });
         },
         sound() {

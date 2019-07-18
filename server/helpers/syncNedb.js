@@ -97,14 +97,21 @@ module.exports = {
             }
             save () {
                 return new Promise((resolve, reject) => {
-                    db.update({_id: this._id}, {$set: this._data()}, {upsert: true}, (err, doc) => {
-                        if (err){
-                            resolve(false);
-                        } else {
-                            this._id = this._id || doc._id;
-                            resolve(true);
-                        }
-                    });
+                    if (!this._id){
+                        db.insert(this._data(), (err, doc)=>{
+                            this._id = doc._id;
+                            resolve();
+                        });
+                    } else {
+                        db.update({_id: this._id}, {$set: this._data()}, {upsert: true}, (err, doc) => {
+                            if (err){
+                                resolve(false);
+                            } else {
+                                resolve(true);
+                            }
+                        });
+                    }
+                  
                 });
             }
         };

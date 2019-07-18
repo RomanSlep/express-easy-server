@@ -10,7 +10,7 @@
             <div class="userlogin" :class="'rating-' + (user.rating - 1)">{{user.login}} #{{user.rating}}</div>
             <div class="progressbar" :style="progressBarStyle">Exp: {{user.exp}}/{{levels[user.lvl + 1]}}</div>
             <div class="lineinfo">
-                <span class="txt-yellow">{{user.deposit}} SWG </span>
+                <span class="txt-yellow">{{user.deposit}} <small>ARTS</small> </span>
                   <span class="txt-green"> Score: {{user.score | numFormat}}.</span>
                   <span class="txt-red" @click="exit">Exit <i class="fa fa-sign-out" aria-hidden="true"></i></span>
             </div>

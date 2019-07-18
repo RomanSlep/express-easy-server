@@ -1,9 +1,5 @@
-const {
-    gamesDb,
-    gameTransDb
-} = require('./DB');
+const {gamesDb, gameTransDb} = require('./DB');
 const $u = require('../helpers/utils');
-const config = require('../helpers/configReader');
 
 module.exports = async (user, params) => {
     let game = await gamesDb.findOne({

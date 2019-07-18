@@ -25,7 +25,7 @@ export default new Vue({
         isLoad: false,
         router: '',
         topbar: {
-            bet: 0.1, // ставка
+            bet: config.min_bet, // ставка
             countBombs: 1
         },
         field: {
@@ -50,7 +50,8 @@ export default new Vue({
         levels: mathLvl(config.levelsOpt),
         totalPrize: 0,
         totalRatings: [],
-        logs: []
+        logs: [],
+        modal: {}
     },
     methods: {
         updatePublic() {

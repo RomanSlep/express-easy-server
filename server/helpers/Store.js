@@ -1,11 +1,6 @@
-const {
-    usersDb,
-    gameTransDb,
-    gamesDb
-} = require('../modules/DB');
-const $u = require('./utils');
+const {usersDb, gamesDb} = require('../modules/DB');
+let $u = {};
 const config = require('../helpers/configReader');
-
 const Store = module.exports = {
     totalRatings: [],
     totalPrize: 0,
@@ -32,21 +27,22 @@ const Store = module.exports = {
     async updatePrise(){
         const prize = (await gamesDb.db.syncFind({
             isWin: false,
-            bet: {$gt:0}
+            bet: {$gt: 0}
         })).reduce((sum, g) => {
             return sum + g.bet;
         }, 0);
 
         this.totalPrize = $u.round(prize * config.percent_prize / 100);
-        console.log(this.totalPrize)
+        console.log('TOtal prize', this.totalPrize);
     }
 };
 
+setTimeout(()=>{
+    $u = require('./utils');
+    Store.updateTotalRating();
+    Store.updatePrise();
+}, 1000);
 
-
-
-Store.updateTotalRating();
-Store.updatePrise();
 setInterval(() => {
     Store.updatePrise();
     Store.updateTotalRating();
