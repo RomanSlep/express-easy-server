@@ -1,7 +1,7 @@
 export default {
     min_bet: 10,
     max_bet: 10000,
-    scoreMult: 1, // умножение очков
+    scoreMult: 10, // умножение очков
     percent_prize: 80,
     regDrop: 100,
     coinName: 'ARTS',
