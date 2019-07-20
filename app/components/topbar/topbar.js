@@ -2,7 +2,6 @@ import Vue from 'vue/dist/vue.js';
 import Store from '../../Store';
 import template from './topbar.htm';
 import $u from '../../core/utils';
-import api from '../../core/api';
 import config from "../../../config";
 
 export default Vue.component('topBar', {

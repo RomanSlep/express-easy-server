@@ -30,10 +30,7 @@ new Vue({
     data: {Store},
     template
 });
-// Router
-// Store.$watch('router', function(hash){
-//     window.location.hash = hash;
-// });
+
 Vue.prototype.rout = function(hash){
     if (hash === Store.hash){
         return;
@@ -46,22 +43,3 @@ window.addEventListener('popstate', ()=>{
     Store.rout(window.location.hash);
 });
 
-
-const fon = new Audio('./assets/sounds/fone.mp3');
-fon.volume = 0.2;
-fon.addEventListener("ended", () => isMus = false);
-document.addEventListener('click', mus);
-document.addEventListener('mousemove', mus);
-let isMus = false;
-
-function mus() {
-    if (isMus) {
-        return;
-    }
-    isMus = true;
-    var promise = fon.play();
-    if (promise) {
-        promise.catch(() => isMus = false);
-    }
-}
-mus();

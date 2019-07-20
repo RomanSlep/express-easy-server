@@ -8,7 +8,7 @@ export default new Vue({
         this.user.token = localStorage.getItem('wstoken') || false;
         if (this.user.token) {
             this.updateUser(() => {
-                if (this.user.lvl){
+                if (this.user.lvl) {
                     this.rout(window.location.hash || '#game');
                     this.getNoFinished();
                 }
@@ -20,9 +20,26 @@ export default new Vue({
         setInterval(() => {
             this.updatePublic();
         }, 60 * 1000);
+
+        const mus = () => {
+            if (this.isMus || !this.isSoundOn) {
+                return;
+            }
+            this.isMus = true;
+            const promise = this.fon.play();
+            if (promise) {
+                promise.catch(() => this.isMus = false);
+            }
+        };
+        this.fon = new Audio('./assets/sounds/fone.mp3');
+        this.fon.volume = 0.2;
+        this.fon.addEventListener("ended", () => this.isMus = false);
+        document.addEventListener('click', mus);
+        document.addEventListener('mousemove', mus);
     },
     data: {
         isLoad: false,
+        isSoundOn: localStorage.isSoundOn === "false" ? false : true,
         router: '',
         topbar: {
             bet: config.min_bet, // ставка
@@ -51,7 +68,9 @@ export default new Vue({
         totalPrize: 0,
         totalRatings: [],
         logs: [],
-        modal: {}
+        modal: {},
+        fon: null,
+        isMus: false
     },
     methods: {
         updatePublic() {
@@ -70,7 +89,7 @@ export default new Vue({
                 token: this.user.token
             }, (data) => {
                 const lvl = this.user.lvl;
-                if (data.lvl > lvl){
+                if (data.lvl > lvl) {
                     $u.sound('level_up');
                     this.$notify({
                         type: 'success',
@@ -110,10 +129,17 @@ export default new Vue({
         }
     },
     watch: {
+        isSoundOn() {
+            localStorage.setItem('isSoundOn', this.isSoundOn);
+            if (!this.isSoundOn){
+                this.fon.pause();
+                this.isMus = false;
+            }
+        },
         'user.token'() {
             localStorage.setItem('wstoken', this.user.token);
         },
-        'game.cellsBomb'(){
+        'game.cellsBomb'() {
             if (this.game.cellsBomb) {
                 this.game.cellsBomb.forEach((c, i) => {
                     this.field.plots[c] = 'b';
@@ -141,7 +167,7 @@ function mathLvl(opts) {
         let res = Math.floor(lvls[i - 1] + opts.martin * i);
         lvls[i] = res;
     };
-    for (let l in lvls){
+    for (let l in lvls) {
         lvls[l] *= 100;
     }
     return lvls;
