@@ -41,9 +41,9 @@ module.exports = {
         // const P = 1 / (25 / countBombs) * 100; // вероятность нарваться
         // const countStepsBE = Math.round(66 / P * countBombs); // шагов безубытка
         // const countStepsBE = Math.round(steps * 0.66); // шагов безубытка
-        let countStepsBE = 18;
+        let countStepsBE = 19;
         if (countBombs === 3) {
-            countStepsBE = 7;
+            countStepsBE = 6;
         }
         if (countBombs === 5) {
             countStepsBE = 3;
