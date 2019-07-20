@@ -187,6 +187,7 @@ input {
 }
 
 .deposit-count {
+    text-align: center;
     font-size: 1.4em;
     padding: 1px;
 }
@@ -203,9 +204,25 @@ input {
     width: 265px;
 }
 
+.bet_count input {
+    width: 220px;
+}
+
+.bet_value {
+    font-size: 1.1em;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
 .buttons-count {
     align-items: center;
     display: flex;
+}
+
+.topbar-label {
+    font-size: 1.2em;
+    width: 120px;
 }
 
 .activeCount {
@@ -541,16 +558,45 @@ input {
 /* RESPONSIVE */
 
 @media (max-width: 1100px) {
-    #main{
+    #main {
         width: 770px;
     }
+
     #content {
         flex-direction: column-reverse;
         align-items: center;
     }
 }
+
 @media (max-width: 770px) {
-    body{
-        font-size: 0.8em;
+    #main {
+        width: 420px;
     }
+    #topbar {
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 300px;
+    }
+
+    .deposit-block,
+    .deposit-count,
+    .bet_count,
+    .buttons-rate {
+        width: 100%;
+    }
+    #gameBlock {
+        width: 100%;
+    }
+
+    #game-line {
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+    }
+    #userInfo {
+        margin: auto;
+    }
+
 }

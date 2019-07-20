@@ -5,7 +5,7 @@
     </div>
 
     <div class="buttons-rate" @click="sound" :class="{'no-events' : Store.game.isGame}">
-        <div v-for="r in buttonsRate" @click="changeRate(r)" 
+        <div v-for="r in buttonsRate" @click="changeRate(r)"
             class="but hovered bg"
             :class="{'bg-red':r.val < 0, 'bg-green': r.val > 0}">
             {{r.text}}
@@ -13,11 +13,12 @@
     </div>
 
     <div class="bet_count">
-        <input type="number" v-model.number="store.bet" style="width:260px;" :class="className">
+        <span class="txt-yellow bet_value"><span class="topbar-label">Bet:</span> <input type="number" v-model.number="store.bet":class="className"></span>
         <div class="buttons-count" :class="{'no-events' : Store.game.isGame}">
             <div v-for="c in buttonsCountBombs" @click="store.countBombs = c; sound()"
-                :class="{activeCount: store.countBombs === c}" 
+                :class="{activeCount: store.countBombs === c}"
                 class="but hovered bg-blue m1 bg">
+                <i class="fa fa-bomb" aria-hidden="true" style="color: black;"></i>
                 {{c}}
             </div>
         </div>
