@@ -27,6 +27,15 @@ export default Vue.component('login', {
                 });
                 return;
             }
+            if (user.address && (user.address.length < 40 || !user.address.startsWith('Mx'))){
+                this.$notify({
+                    type: 'warn',
+                    group: 'foo',
+                    title: 'Error ' + this.status,
+                    text: 'U minter adress must be Mx345536dsv34344...!'
+                });
+                return;
+            }
             api({
                 action: this.status.toLowerCase(),
                 data: user
