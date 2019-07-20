@@ -13,7 +13,7 @@ export default Vue.component('log-game', {
     },
     computed: {
         logs() {
-            return Store.logs.reverse();
+            return JSON.parse(JSON.stringify(Store.logs)).reverse();
         },
         game() {
             return Store.game;

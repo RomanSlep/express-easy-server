@@ -58,7 +58,6 @@ export default Vue.component('fieldGame', {
 
 function updateGame(game) { // ОТВЕТ ОТ РАНДОМАЙЗЕРА!!!!
     const status = game.steps[game.lastCell].status;
-    Vue.set(Store, 'game', game);
     let event;
     if (status === 'b'){
         event = 'bomb1';
@@ -69,6 +68,7 @@ function updateGame(game) { // ОТВЕТ ОТ РАНДОМАЙЗЕРА!!!!
     }
     $u.sound(event);
     updateLog(game);
+    Vue.set(Store, 'game', game);
 }
 
 function updateLog(game){

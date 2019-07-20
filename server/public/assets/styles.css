@@ -320,7 +320,7 @@ input {
 }
 
 .plot.open {
-    background-image: url(./gif/open.gif);
+    background-image: url(./gif/open_2.gif);
 }
 
 .plot.bomb {
@@ -332,7 +332,7 @@ input {
 }
 
 .plot.score {
-    background-image: url(./gif/score.gif);
+    background-image: url(./gif/score_.gif);
 }
 
 .plot.choice {
