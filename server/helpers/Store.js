@@ -25,15 +25,18 @@ const Store = module.exports = {
         return this.totalRatings.findIndex(u => u.login === login) + 1;
     },
     async updatePrise(){
-        const prize = (await gamesDb.db.syncFind({
-            isWin: false,
+        let prize = 0;
+        (await gamesDb.db.syncFind({
             bet: {$gt: 0}
-        })).reduce((sum, g) => {
-            return sum + g.bet;
-        }, 0);
+        })).forEach(g => {
+            prize += g.bet;
+            if (g.isWin){
+                prize -= g.collected;
+            }
+        });
 
         this.totalPrize = $u.round(prize * config.percent_prize / 100);
-        console.log('TOtal prize', this.totalPrize);
+        console.log('Total prize', this.totalPrize);
     }
 };
 

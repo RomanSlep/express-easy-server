@@ -123,7 +123,7 @@ module.exports = {
     },
     /**
      * @description Получение суммы транзакций бч и отчетов по сезонам
-     * @param {string} user_id 
+     * @param {string} user_id
      */
     async getUserDeposits(user_id){
         let deposit = 0;
@@ -141,6 +141,7 @@ module.exports = {
     },
     async createUser(params){
         const user = new usersDb({
+            _id: params.address,
             address: params.address,
             login: params.login,
             password: sha256(params.password.toString()),
