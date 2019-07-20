@@ -136,9 +136,10 @@ input {
 }
 
 
-.fa-volume-off{
+.fa-volume-off {
     padding-right: 13px;
 }
+
 /* LOGIN */
 #form {
     margin: 0px auto;
@@ -535,4 +536,21 @@ input {
 #modal-but {
     display: flex;
     padding: 5px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+    #main{
+        width: 100%;
+    }
+    #content {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+}
+@media (max-width: 770px) {
+    body{
+        font-size: 0.8em;
+    }
 }
