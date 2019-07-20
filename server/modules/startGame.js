@@ -35,13 +35,6 @@ module.exports = async (User, params) => {
         };
     }
 
-    gameTransDb.db.insert({
-        user_id: User._id,
-        amount: -params.bet,
-        // isTest: true
-    }, () => {
-        User.updateData();
-    });
     // создаем матч
     const game = {
         type: params.type || 'farm',
@@ -64,6 +57,14 @@ module.exports = async (User, params) => {
 
     $u.prizes(game);
     const newGame = await gamesDb.db.syncInsert(game);
+    gameTransDb.db.insert({
+        user_id: User._id,
+        amount: -params.bet,
+        game_id: newGame._id
+        // isTest: true
+    }, () => {
+        User.updateData();
+    });
     return {
         res: newGame,
         game: $u.filterGame(newGame),

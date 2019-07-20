@@ -60,11 +60,16 @@ async function step(game, params, user) {
 };
 
 async function pickUpWinnings(user, game) {
+    if (!game.collected){
+        await gamesDb.db.remove({_id: game._id});
+        await gameTransDb.db.remove({game_id: game._id});
+        await user.updateData();
+        return;
+    }
     game.isGame = false;
     game.isWin = Boolean(game.collected);
     await updateLvl(user, game);
     await game.save();
-
     if (game.isWin) {
         gameTransDb.db.insert({
             user_id: user._id,
