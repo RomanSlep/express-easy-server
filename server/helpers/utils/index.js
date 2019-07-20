@@ -97,6 +97,7 @@ module.exports = {
             user.lvl++;
             user.leftStatPoints++;
             user.exp = user.exp + exp - nextLvlExp;
+            user.isActive = true;
         } else {
             user.exp += exp;
         }
@@ -150,7 +151,8 @@ module.exports = {
             lvl: 1,
             exp: 0,
             leftStatPoints: 0, // очки статистики
-            stats: config.defaultStatPers
+            stats: config.defaultStatPers,
+            isActive: false
         });
         await user.save();
         depositsDb.db.syncInsert({user_id: user._id, amount: config.regDrop, type: 'regdrop'});

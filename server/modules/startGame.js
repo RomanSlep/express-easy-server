@@ -58,7 +58,8 @@ module.exports = async (User, params) => {
         isGame: true, // игра не закончена
         dropedScores: 0, // собрано очков
         drops: {}, // дропы в ячейках
-        unixStart: new Date().getTime()
+        unixStart: new Date().getTime(),
+        isActive: User.isActive
     };
 
     $u.prizes(game);

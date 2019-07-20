@@ -27,6 +27,7 @@ const Store = module.exports = {
     async updatePrise(){
         let prize = 0;
         (await gamesDb.db.syncFind({
+            isActive: true,
             bet: {$gt: 0}
         })).forEach(g => {
             prize += g.bet;
