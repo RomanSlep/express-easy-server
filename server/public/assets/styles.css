@@ -570,6 +570,16 @@ input {
 }
 
 @media (max-width: 770px) {
+    #topline {
+        text-align: center;
+        flex-direction: column;
+        display: flex;
+        justify-content: space-around;
+    }
+    h1{
+        margin: 3px;
+        font-size: 20px;
+    }
     #main {
         width: 420px;
     }
