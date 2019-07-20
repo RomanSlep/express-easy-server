@@ -2,6 +2,7 @@ const {usersDb, gameTransDb, gamesDb, depositsDb, seasonsDb} = require('./DB');
 const $u = require('../helpers/utils');
 const Store = require('../helpers/Store');
 const log = require('../helpers/log');
+const config = require('../helpers/configReader');
 
 module.exports = async () => {
     const users = await usersDb.find({
@@ -30,7 +31,44 @@ module.exports = async () => {
     } else {
         log.warn('Season count rating users < 3: ' + Store.totalRatings.length);
     }
-  
-    gamesDb.db.remove({});
-    gameTransDb.db.remove({});
+
+    gamesDb.db.remove({}, {multi: true}, (a, b)=>{
+        console.log('Remove games ', {a, b});
+    });
+    gameTransDb.db.remove({}, {multi: true}, (a, b)=>{
+        console.log('Remove game txs', {a, b});
+    });
+
+    setTimeout(async ()=>{
+        try {
+            for (let i = 0; i < users.length; i++) {
+                const user = users[i];
+                user.updateData = updateData;
+                await user.updateData();
+            }
+        } catch (e){
+            console.log(e);
+        }
+    }, 3000);
+};
+
+async function updateData(cb) {
+    const user = this;
+    const id = user._id;
+    try {
+        let {deposit, score} = await $u.getGamesDepositAndScore(id);
+        deposit += await $u.getUserDeposits(id);
+        score += await $u.getDropsScores(id);
+        score *= config.scoreMult;
+        deposit = Number(deposit.toFixed(0)) || 0;
+        score = Number(score.toFixed(0)) || 0;
+        if (deposit === NaN || score === NaN) {
+            cb && cb();
+            return;
+        }
+        await user.update({deposit, score}, true);
+        cb && cb();
+    } catch (e) {
+        log.error('updateData ' + e);
+    }
 };
