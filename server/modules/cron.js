@@ -1,6 +1,5 @@
 const cron = require('node-cron');
 const config = require('../helpers/configReader');
-const seasonFinish = require('./seasonFinish');
 const seasonPeriod = config.seasonPeriod || '1d';
 const log = require('../helpers/log');
 log.info('Cron started season period ' + seasonPeriod);

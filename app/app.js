@@ -1,12 +1,5 @@
 import Vue from 'vue/dist/vue.js';
-import './components/topbar/topbar';
-import './components/field/field';
-import './components/login/login';
-import './components/log/logGame';
-import userIcon from './components/userIcon.vue';
-import ratingList from './components/ratingList.vue';
-import game from './components/game.vue';
-import userPage from './components/userPage.vue';
+import login from './components/login.vue';
 import modal from './components/modal.vue';
 import Store from './Store';
 import $u from './core/utils';
@@ -21,11 +14,8 @@ Vue.use(Notifications);
 new Vue({
     el: '#app',
     components: {
-        userPage,
-        userIcon,
-        ratingList,
-        game,
-        modal
+        modal,
+        login
     },
     data: {Store},
     template

@@ -41,13 +41,3 @@ const Store = module.exports = {
     }
 };
 
-setTimeout(()=>{
-    $u = require('./utils');
-    Store.updateTotalRating();
-    Store.updatePrise();
-}, 1000);
-
-setInterval(() => {
-    Store.updatePrise();
-    Store.updateTotalRating();
-}, 60 * 1000);
