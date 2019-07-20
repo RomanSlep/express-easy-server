@@ -55,7 +55,7 @@ export default Vue.component('topBar', {
         addDeposit() {
             Store.modal.show({
                 header: 'Deposit Artifacts',
-                body: `To replenish the game deposit, send to the wallet <i>${config.gameMinterAddress}</i> <b>Artifacts</b>. Within a minute, your account will be .`,
+                body: `To replenish the game deposit, send to the wallet <br><big class="txt-yellow"><i>${config.gameMinterAddress}</i> <b>ARTIFACTS</b></big><br> Within a minute, your account will be .`,
             });
         },
         sound() {
