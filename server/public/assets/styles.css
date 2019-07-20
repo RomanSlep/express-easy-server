@@ -142,7 +142,7 @@ input {
 
 /* LOGIN */
 #form {
-    background: rgba(0,0,0, 0.8);
+    background: rgba(0, 0, 0, 0.8);
     margin: 0px auto;
     position: absolute;
     top: 40%;
@@ -573,6 +573,7 @@ input {
     #main {
         width: 420px;
     }
+
     #topbar {
         margin: auto;
         display: flex;
@@ -587,8 +588,15 @@ input {
     .buttons-rate {
         width: 100%;
     }
+
     #gameBlock {
         width: 100%;
+    }
+
+    #field {
+        margin-top: 5px;
+        width: 415px;
+
     }
 
     #game-line {
@@ -596,6 +604,7 @@ input {
         display: flex;
         align-items: center;
     }
+
     #userInfo {
         margin: auto;
     }
