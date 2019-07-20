@@ -135,6 +135,10 @@ input {
     margin: 5px auto;
 }
 
+
+.fa-volume-off{
+    padding-right: 13px;
+}
 /* LOGIN */
 #form {
     margin: 0px auto;
