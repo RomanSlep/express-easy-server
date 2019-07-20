@@ -43,7 +43,7 @@ module.exports = {
         // const countStepsBE = Math.round(steps * 0.66); // шагов безубытка
         let countStepsBE = 18;
         if (countBombs === 3) {
-            countStepsBE = 5;
+            countStepsBE = 6;
         }
         if (countBombs === 5) {
             countStepsBE = 3;
@@ -97,7 +97,9 @@ module.exports = {
             user.lvl++;
             user.leftStatPoints++;
             user.exp = user.exp + exp - nextLvlExp;
-            user.isActive = true;
+            if (user.lvl > 3){
+                user.isActive = true;
+            }
         } else {
             user.exp += exp;
         }

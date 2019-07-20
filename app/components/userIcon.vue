@@ -7,7 +7,7 @@
             <img src="assets/gif/avatar.gif">
         </div>
         <div class="infoblock">
-            <div class="userlogin" :class="'rating-' + (user.rating - 1)">{{user.login}} #{{user.rating}}</div>
+            <div class="userlogin" :class="'rating-' + (user.rating - 1)">{{user.login}} #{{user.rating}} {{user.isActive ? '' : '(demo)'}}</div>
             <div class="progressbar" :style="progressBarStyle">Exp: {{user.exp}}/{{levels[user.lvl + 1]}}</div>
             <div class="lineinfo">
                 <span class="txt-yellow">{{user.deposit}} <small>ARTS</small> </span>

@@ -14,6 +14,7 @@
                 <div class="line-user-info"><span>Deposit:</span> {{user.deposit}}</div>
                 <div class="line-user-info"><span>Score:</span> {{user.score}}</div>
                 <div class="line-user-info"><span>Rating:</span> {{user.rating}}</div>
+                <div class="line-user-info"><span>Status:</span> {{user.isActive ? 'Active' : 'Demo'}}</div>
             </div>
         </div>
         <div class="statList">
