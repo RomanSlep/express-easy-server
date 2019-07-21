@@ -1,0 +1,11 @@
+body{
+    background: url(./img/bg.jpg) repeat;
+}
+#table{
+    width: 650px;
+    height: 340px;
+    background: black;
+    background: url(./img/table.png) 100% 100% no-repeat;
+    margin: 0px;
+    background-size: cover;
+}

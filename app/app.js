@@ -1,6 +1,8 @@
 import Vue from 'vue/dist/vue.js';
+import './core/clientIo';
 import login from './components/login.vue';
 import modal from './components/modal.vue';
+import gameTable from './components/game-table.vue';
 import Store from './Store';
 import $u from './core/utils';
 // import $u from './core/utils';
@@ -14,6 +16,7 @@ Vue.use(Notifications);
 new Vue({
     el: '#app',
     components: {
+        gameTable,
         modal,
         login
     },

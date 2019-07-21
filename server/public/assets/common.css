@@ -1,10 +1,6 @@
 body {
-    background: black;
     font-family: 'Roboto', serif;
     margin: 0px;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
 }
 
 #paralax {
@@ -16,7 +12,7 @@ body {
 }
 
 .bg {
-    background: url('./img/bg.png') repeat;
+    /* background: url('./img/bg.png') repeat; */
 }
 
 /* #400810 */

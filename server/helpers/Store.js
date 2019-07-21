@@ -1,43 +1,29 @@
-const {usersDb, gamesDb} = require('../modules/DB');
-let $u = {};
-const config = require('../helpers/configReader');
-const Store = module.exports = {
-    totalRatings: [],
-    totalPrize: 0,
-    leftMatchTime: 0,
-    async updateTotalRating() {
-        const Users = await usersDb.db.syncFind();
-        if (Users) {
-            this.totalRatings = Users
-                .filter(u => u.score)
-                .map(u => {
-                    return {
-                        _id: u._id,
-                        score: u.score,
-                        login: u.login,
-                        lvl: u.lvl
-                    };
-                });
-            this.totalRatings.sort((b, a) => a.score - b.score);
-        };
-    },
-    getRatingFromLogin(login) {
-        return this.totalRatings.findIndex(u => u.login === login) + 1;
-    },
-    async updatePrise(){
-        let prize = 0;
-        (await gamesDb.db.syncFind({
-            isActive: true,
-            bet: {$gt: 0}
-        })).forEach(g => {
-            prize += g.bet;
-            if (g.isWin){
-                prize -= g.collected;
-            }
-        });
+const $u = require('../helpers/utils');
 
-        this.totalPrize = $u.round(prize * config.percent_prize / 100);
-        console.log('Total prize', this.totalPrize);
+module.exports = {
+    players: {},
+    rooms: {},
+    removePlayer(player){
+        delete this.rooms[player.room_id].players[player.user.login];
+        delete this.players[player.user.login];
+        console.log('RemovePlayer', this.rooms);
+    },
+    createRoom(){
+        const room_id = $u.unix();
+        const room = {id: room_id, players: {}, game: {}};
+        this.rooms[room_id] = room;
+        // console.log('CreateRoom', this.rooms);
+        return room;
+    },
+    removeRoom(room_id){
+        delete this.rooms[room_id];
+        // console.log('RemoveRoom', this.rooms);
+    },
+    setPlayerToRoom(room_id, player){
+        player.room_id = room_id;
+        this.rooms[room_id].players[player.user.login] = player;
+        console.log('setPlayerToRoom', this.rooms);
     }
 };
+module.exports.createRoom();
 

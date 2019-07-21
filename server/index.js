@@ -5,6 +5,7 @@ const log = require('./helpers/log');
 const DIR_NAME = __dirname + '/public/';
 
 require('./modules/api')(app);
+require('./modules/serverIo');
 // require('./modules/cron');
 // require('./modules/checkerTx');
 

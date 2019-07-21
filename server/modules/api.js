@@ -34,7 +34,6 @@ module.exports = (app) => {
                     error('This login and password not found', res);
                     return;
                 }
-                checkUser.rating = Store.getRatingFromLogin(checkUser.login);
                 success(await assignUser(checkUser), res);
                 break;
 

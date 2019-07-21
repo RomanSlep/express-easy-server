@@ -33,7 +33,9 @@ export default new Vue({
             address: '',
             token: false,
             deposit: 0
-        }
+        },
+        socket: null,
+        match: {}
     },
     methods: {
         updatePublic() {
@@ -54,6 +56,10 @@ export default new Vue({
                 self.user = data;
                 cb && cb();
             }, true);
+        },
+        logOut() {
+            this.user.isLogged = false;
+            this.user.token = false;
         }
     },
     watch: {
