@@ -22,6 +22,7 @@
                 <td>Address</td>
                 <td>Balance</td>
                 <td>Deposit</td>
+                <td>Rating</td>
             </tr>
             <tr v-for="u, i in users">
                 <td>{{i+1}}</td>
@@ -29,6 +30,7 @@
                 <td>{{u.address}}</td>
                 <td>{{u.deposit}}</td>
                 <td>{{u.deposits}}</td>
+                <td>{{u.rating}}</td>
             </tr>
         </table>
     </div>
@@ -54,11 +56,12 @@
                                     d.user_id === u._id
                                 })
                                 .reduce((s, c) => {
-                                    return c + s;
+                                    return c.amount + s;
                                 }, 0);
                             totalDeposit += u.deposits;
                             totalBalances += u.deposit;
                         });
+                        data.users.sort((a,b)=> a.deposit - b.deposit);
                         this.users = data.users;
                         this.totalBalances = totalBalances;
                         this.totalDeposit = totalDeposit;
