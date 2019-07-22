@@ -18,12 +18,12 @@
         <h4>Team Profit {{(totalDeposit - totalBalances).toFixed(0) | numberFormat}}</h4>
         <table>
             <tr>
-                <td>#</td>
-                <td>Login</td>
-                <td>Address</td>
-                <td>Balance</td>
-                <td>Deposit</td>
-                <td>Rating</td>
+                <th>#</th>
+                <th>Login</th>
+                <th>Address</th>
+                <th>Balance</th>
+                <th>Deposit</th>
+                <th>Rating</th>
             </tr>
             <tr v-for="u, i in users">
                 <td>{{i+1}}</td>
@@ -50,7 +50,6 @@
                 }
                 --i;
             }
-            console.log(parts[1]);
             if (parts.length > 1) {
                 output = `${output}.${parts[1]}`;
             }

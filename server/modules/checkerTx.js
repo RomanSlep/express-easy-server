@@ -25,15 +25,27 @@ setInterval(() => {
                     log.warn('Has tx in DB: ' + hash);
                     return;
                 }
-                const user = await $u.getUserFromQ({address: tx.from});
+                let user = null;
+                let type = null;
+                let amount = 0;
+                if (tx.from !== config.gameMinterAddress){ // Входящая
+                    user = await $u.getUserFromQ({address: tx.from});
+                    type = 'deposit';
+                    amount = +tx.data.value;
+                } else {
+                    user = await $u.getUserFromQ({address: tx.data.to});
+                    type = 'withdraw';
+                    amount = -tx.data.value;
+                }
                 if (!user){
                     log.warn('Cant find user! ' + tx.from);
                     return;
                 }
-                if (!user.isActive && +tx.data.value >= 500){
+                if (!user.isActive && amount >= 500){
                     user.isActive = true;
                 }
-                await depositsDb.db.insert({hash, user_id: user._id, type: 'deposit', amount: +tx.data.value});
+                console.log(user.login, amount, type);
+                await depositsDb.db.insert({hash, user_id: user._id, type: 'deposit', amount});
                 await user.updateData();
                 log.info(`newDeposit:
 
