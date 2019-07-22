@@ -13,8 +13,9 @@
 <body>
     <div id="app">
         <h2>Users</h2>
-        <h4>Total Deposit {{totalDeposit.toFixed(0)}}</h4>
-        <h4>Total Balances {{totalBalances.toFixed(0)}}</h4>
+        <h4>Total Deposit {{totalDeposit.toFixed(0) | numberFormat}}</h4>
+        <h4>Total Balances {{totalBalances.toFixed(0) | numberFormat}}</h4>
+        <h4>Team Profit {{(totalDeposit - totalBalances).toFixed(0) | numberFormat}}</h4>
         <table>
             <tr>
                 <td>#</td>
@@ -28,13 +29,34 @@
                 <td>{{i+1}}</td>
                 <td>{{u.login}}</td>
                 <td>{{u.address}}</td>
-                <td>{{u.deposit}}</td>
-                <td>{{u.deposits.toFixed(0)}}</td>
+                <td>{{u.deposit | numberFormat}}</td>
+                <td>{{u.deposits.toFixed(0) | numberFormat}}</td>
                 <td>{{u.rating}}</td>
             </tr>
         </table>
     </div>
     <script>
+        Vue.filter('numberFormat', value => {
+            var parts = (value + '').split('.'),
+                main = parts[0],
+                len = main.length,
+                output = '',
+                i = len - 1;
+
+            while (i >= 0) {
+                output = main.charAt(i) + output;
+                if ((len - i) % 3 === 0 && i > 0) {
+                    output = ',' + output;
+                }
+                --i;
+            }
+            console.log(parts[1]);
+            if (parts.length > 1) {
+                output = `${output}.${parts[1]}`;
+            }
+
+            return output;
+        });
         const app = new Vue({
             el: '#app',
             mounted() {
