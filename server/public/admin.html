@@ -13,8 +13,8 @@
 <body>
     <div id="app">
         <h2>Users</h2>
-        <h4>Total Deposit {{totalDeposit}}</h4>
-        <h4>Total Balances {{totalBalances}}</h4>
+        <h4>Total Deposit {{totalDeposit.toFixed(0)}}</h4>
+        <h4>Total Balances {{totalBalances.toFixed(0)}}</h4>
         <table>
             <tr>
                 <td>#</td>
@@ -29,7 +29,7 @@
                 <td>{{u.login}}</td>
                 <td>{{u.address}}</td>
                 <td>{{u.deposit}}</td>
-                <td>{{u.deposits}}</td>
+                <td>{{u.deposits.toFixed(0)}}</td>
                 <td>{{u.rating}}</td>
             </tr>
         </table>
