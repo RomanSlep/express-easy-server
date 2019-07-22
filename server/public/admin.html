@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ARTS ADMIN</title>
+    <script src="https://ru.vuejs.org/js/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h2>Users</h2>
+        <h4>Total Deposit {{totalDeposit}}</h4>
+        <h4>Total Balances {{totalBalances}}</h4>
+        <table>
+            <tr>
+                <td>#</td>
+                <td>Login</td>
+                <td>Address</td>
+                <td>Balance</td>
+                <td>Deposit</td>
+            </tr>
+            <tr v-for="u, i in users">
+                <td>{{i+1}}</td>
+                <td>{{u.login}}</td>
+                <td>{{u.address}}</td>
+                <td>{{u.deposit}}</td>
+                <td>{{u.deposits}}</td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        const app = new Vue({
+            el: '#app',
+            mounted() {
+                this.getData();
+            },
+            data: {
+                users: [],
+                totalBalances: 0,
+                totalDeposit: 0
+            },
+            methods: {
+                getData() {
+                    $.getJSON('/admin-data').then(data => {
+                        let totalDeposit = 0;
+                        let totalBalances = 0;
+                        data.users.forEach(u => {
+                            u.deposits = data.deposits
+                                .filter(d => {
+                                    d.user_id === u._id
+                                })
+                                .reduce((s, c) => {
+                                    return c + s;
+                                }, 0);
+                            totalDeposit += u.deposits;
+                            totalBalances += u.deposit;
+                        });
+                        this.users = data.users;
+                        this.totalBalances = totalBalances;
+                        this.totalDeposit = totalDeposit;
+                    });
+                }
+            }
+        });
+    </script>
+    <style>
+        table {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th,
+        td:first-child {
+            background: #AFCDE7;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        th,
+        td {
+            border-style: solid;
+            border-width: 0 1px 1px 0;
+            border-color: white;
+        }
+
+        td {
+            background: #D8E6F3;
+        }
+
+        th:first-child,
+        td:first-child {
+            text-align: left;
+        }
+    </style>
+</body>
+
+</html>
