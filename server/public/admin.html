@@ -54,7 +54,7 @@
                             u.deposits = data.deposits
                                 .filter(d => d.user_id === u._id)
                                 .reduce((s, c) => {
-                                    return c + s;
+                                    return c.amount + s;
                                 }, 0);
                             totalDeposit += u.deposits;
                             totalBalances += u.deposit;
