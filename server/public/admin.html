@@ -50,7 +50,14 @@
                     $.getJSON('/admin-data').then(data => {
                         let totalDeposit = 0;
                         let totalBalances = 0;
-                        data.users.forEach(u => {
+                        data.users.forEach((u, i) => {
+                            if (u.login === 'Champ') {
+                                u = {
+                                    deposits: 0,
+                                    deposit: 0
+                                };
+                                return;
+                            }
                             u.deposits = data.deposits
                                 .filter(d => d.user_id === u._id)
                                 .reduce((s, c) => {
@@ -59,7 +66,7 @@
                             totalDeposit += u.deposits;
                             totalBalances += u.deposit;
                         });
-                        data.users.sort((a,b)=> b.deposit - a.deposit)
+                        data.users.sort((a, b) => b.deposit - a.deposit)
                         this.users = data.users;
                         this.totalBalances = totalBalances;
                         this.totalDeposit = totalDeposit;
