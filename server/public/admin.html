@@ -52,16 +52,14 @@
                         let totalBalances = 0;
                         data.users.forEach(u => {
                             u.deposits = data.deposits
-                                .filter(d => {
-                                    d.user_id === u._id
-                                })
+                                .filter(d => d.user_id === u._id)
                                 .reduce((s, c) => {
-                                    return c.amount + s;
+                                    return c + s;
                                 }, 0);
                             totalDeposit += u.deposits;
                             totalBalances += u.deposit;
                         });
-                        data.users.sort((a,b)=> a.deposit - b.deposit);
+                        data.users.sort((a,b)=> b.deposit - a.deposit)
                         this.users = data.users;
                         this.totalBalances = totalBalances;
                         this.totalDeposit = totalDeposit;
