@@ -64,8 +64,8 @@
                             totalDeposit += u.deposits;
                             totalBalances += u.deposit;
                         });
-                        data.users.sort((a, b) => b.deposit - a.deposit) this.users = data
-                            .users;
+                        data.users.sort((a, b) => b.deposit - a.deposit);
+                        this.users = data.users;
                         this.totalBalances = totalBalances;
                         this.totalDeposit = totalDeposit;
                     });
