@@ -1,11 +1,35 @@
 body{
     background: url(./img/bg.jpg) repeat;
 }
+
+ /* СТОЛ */
 #table{
     width: 650px;
     height: 340px;
     background: black;
     background: url(./img/table.png) 100% 100% no-repeat;
-    margin: 0px;
+    margin: 100px;
     background-size: cover;
+}
+
+.player-place{
+    display: flex;
+    width: 130px;
+    height: 100px;
+    position: absolute;
+    border-radius: 5px;
+    border: 2px solid grey;
+}
+.card-place{
+    height: 100px;
+    width: 66px;
+    border-radius: 5px;
+    border: 2px solid grey;
+    margin: 3px;
+}
+#common-cards{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }

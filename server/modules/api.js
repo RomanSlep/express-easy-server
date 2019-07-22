@@ -85,7 +85,7 @@ function success(data, res) {
     try {
         res.json({
             success: true,
-            result: data
+            result: $u.clear(data)
         });
     } catch (e) {
         console.log(e);
@@ -104,5 +104,3 @@ async function assignUser (user){
         console.log('assignUser: ' + e);
     }
 }
-
-

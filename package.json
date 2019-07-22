@@ -20,6 +20,7 @@
         "clone": "^2.1.2",
         "express": "^4.16.4",
         "express-session": "^1.16.1",
+        "mongodb": "^3.3.0-beta2",
         "nedb": "^1.8.0",
         "node-cron": "^2.0.3",
         "request": "^2.88.0",

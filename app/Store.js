@@ -32,7 +32,7 @@ export default new Vue({
             login: '',
             address: '',
             token: false,
-            deposit: 0
+            balance: 0
         },
         socket: null,
         match: {}

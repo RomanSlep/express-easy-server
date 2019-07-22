@@ -380,11 +380,11 @@ POKER.getWinners = function(hands) {
     }
 };
 
-POKER.handToString = function(winner){
+POKER.handToString = function(objCards){
     const suits = this.suitToInt;
     const ranks = this.rankToInt;
     const cards = [];
-    winner.forEach(c=>{
+    objCards.forEach(c=>{
         cards.push(getKeyByValue(ranks, c._rank) + '' + getKeyByValue(suits, c._suit));
     });
     return cards.join(' ');
@@ -434,7 +434,9 @@ if (typeof exports !== 'undefined') {
 //     flush = POKER.handFromString('7s 6s As Ks 3s'),
 //     straight = POKER.handFromString('7s 6s 4c 3h 5s'),
 //     lowStraight = POKER.handFromString('As 2s 4c 3h 5s');
-
+// var a1 = POKER.handFromString('As Ah Ad Ks 3c'),
+// a2 = POKER.handFromString('Ah Ad Ks 3c As');
+// console.log('>>>>>>>>>>>>>>>>>>', POKER.getWinners([a1, a2]).length);
 // var winner = POKER.getWinners([tripAces, flush, straight, lowStraight]);
 // // winner == [flush]
 

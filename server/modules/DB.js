@@ -1,29 +1,18 @@
-const {syncNedb, modelDb} = require('../helpers/syncNedb');
-const Datastore = require('nedb');
+const MongoClient = require("mongodb").MongoClient;
+const mongoClient = new MongoClient("mongodb://localhost:27017/", {
+    useNewUrlParser: true
+});
+const model = require('../helpers/mongoModel');
+const collections = {};
+mongoClient.connect((err, client) => {
+    if (err) {
+        throw (err);
+    }
+    const db = client.db("pockerdb");
+    collections.db = db;
+    collections.usersDb = model(db.collection("users"));
+    collections.depositsDb = model(db.collection("deposits"));
+    console.log('DB success init...');
+});
 
-module.exports = {
-    usersDb: modelDb(syncNedb(new Datastore({
-        filename: 'db_/users',
-        autoload: true
-    }), 10)),
-   
-    gamesDb: modelDb(syncNedb(new Datastore({
-        filename: 'db_/games',
-        autoload: true
-    }), 10)),
-
-    gameTransDb: modelDb(syncNedb(new Datastore({
-        filename: 'db_/gameTrans',
-        autoload: true
-    }))),
-
-    depositsDb: modelDb(syncNedb(new Datastore({
-        filename: 'db_/deposits',
-        autoload: true
-    }))),
-
-    seasonsDb: modelDb(syncNedb(new Datastore({
-        filename: 'db_/seasons',
-        autoload: true
-    }))),
-};
+module.exports = collections;
