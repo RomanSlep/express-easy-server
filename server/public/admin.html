@@ -52,10 +52,8 @@
                         let totalBalances = 0;
                         data.users.forEach((u, i) => {
                             if (u.login === 'Champ') {
-                                u = {
-                                    deposits: 0,
-                                    deposit: 0
-                                };
+                                u.deposits = 0;
+                                u.deposit = 0
                                 return;
                             }
                             u.deposits = data.deposits
@@ -66,8 +64,8 @@
                             totalDeposit += u.deposits;
                             totalBalances += u.deposit;
                         });
-                        data.users.sort((a, b) => b.deposit - a.deposit)
-                        this.users = data.users;
+                        data.users.sort((a, b) => b.deposit - a.deposit) this.users = data
+                            .users;
                         this.totalBalances = totalBalances;
                         this.totalDeposit = totalDeposit;
                     });
