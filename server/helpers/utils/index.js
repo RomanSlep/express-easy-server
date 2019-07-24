@@ -24,7 +24,7 @@ module.exports = {
             password: sha256(params.password.toString()),
             balance: config.regDrop
         });
-      
+
         await user.save();
         new depositsDb({user_id: user._id, amount: config.regDrop, type: 'regdrop'}, true);
 
@@ -52,5 +52,8 @@ module.exports = {
     },
     playersToArray(players){
         return Object.keys(players).map(login => players[login]);
+    },
+    getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
     }
 };

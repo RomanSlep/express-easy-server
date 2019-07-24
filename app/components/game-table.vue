@@ -1,14 +1,31 @@
 <template>
 <div id="table">
-    <div v-for="n in [1, 2, 3, 4, 5, 6]" :key="n" :id="'player' + n" class="player-place" 
-    :class="{hovered: !user.isPlaced && !room.places[n]}">
-        <div v-if="room.places[n]">{{room.places[n]}}
-            <span v-if="room.places[n] === user.login" @click="leavePlace(n)">Leave?</span>
+    <div v-for="n in [1, 2, 3, 4, 5, 6]" :key="n" :id="'player' + n" class="player-place" :class="{hovered: !user.isPlaced && !room.places[n]}">
+        <div v-show="room.places[n]" class="place-taked">
+            <div class="user-wait-action" v-show="game.waitUserAction.login === room.places[n]">
+                <div class="gif"></div>
+                <div class="action txt-yellow">{{game.waitUserAction.text + ' ' +secondsLeft+ 's...'}}</div>
+            </div>
+            <div class="user-place">
+                <div class="user-avatar">
+                    <img src="assets/img/avatar.jpg">
+                </div>
+                <div class="user-info">
+                    <span class="user-name">{{room.places[n]}}</span>
+                </div>
+            </div>
+            <span v-show="room.places[n] === user.login" @click="leavePlace(n)"><i class="hovered txt-yellow fa fa-arrow-circle-up" aria-hidden="true"></i></span>
         </div>
-        <div v-else @click="takePlace(n)">Take place</div>
+
+        <div class="place-free" @click="takePlace(n)" v-show="!user.isPlaced && !room.places[n]"></div>
+        <div class="place-not-taked" v-show="user.isPlaced && !room.places[n]"></div>
+
+        <div class="user-cards" v-show="room.places[n]">
+            <div v-for="n in [0, 1]" :key="n" class="card-place user-card"></div>
+        </div>
     </div>
     <div id="common-cards">
-        <div v-for="n in [1, 2, 3, 4, 5]" :key="n" :id="'card' + n" class="card-place">{{n}}</div>
+        <div v-for="n in [1, 2, 3, 4, 5]" :key="n" :id="'card' + n" class="card-place"></div>
     </div>
 </div>
 </template>
@@ -19,14 +36,22 @@ import api from '../core/api';
 
 export default {
     data() {
-        return {}
+        return {
+            secondsLeft: 0
+        }
     },
     computed: {
         room() {
             return Store.room;
         },
+        game(){
+            return this.room.game;
+        },
         user() {
             return Store.user;
+        },
+        secondsLeft(){
+            return Store.secondsLeft;
         }
     },
     mounted() {
@@ -34,12 +59,19 @@ export default {
     },
     methods: {
         takePlace(place) {
-            Store.socket.emit('takePlace', {token: this.user.token, place, room_id: this.room.id});
+            Store.socket.emit('takePlace', {
+                token: this.user.token,
+                place,
+                room_id: this.room.id
+            });
         },
         leavePlace(place) {
-            Store.socket.emit('leavePlace', {token: this.user.token, place, room_id: this.room.id})
+            Store.socket.emit('leavePlace', {
+                token: this.user.token,
+                place,
+                room_id: this.room.id
+            })
         },
-
     }
 }
 

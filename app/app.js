@@ -1,6 +1,7 @@
 import Vue from 'vue/dist/vue.js';
 import './core/clientIo';
 import login from './components/login.vue';
+import log from './components/log.vue';
 import modal from './components/modal.vue';
 import gameTable from './components/game-table.vue';
 import Store from './Store';
@@ -18,6 +19,7 @@ new Vue({
     components: {
         gameTable,
         modal,
+        log,
         login
     },
     data: {Store},

@@ -36,9 +36,14 @@ export default new Vue({
         },
         socket: null,
         room: {
-            game: {},
+            game: {
+                status: 'wait',
+                waitUserAction: {}
+            },
             places: {}
-        }
+        },
+        log: [],
+        secondsLeft: 0
     },
     methods: {
         updatePublic() {
@@ -63,6 +68,18 @@ export default new Vue({
         logOut() {
             this.user.isLogged = false;
             this.user.token = false;
+        },
+        restartSecondsLeft(){
+            if (this.timerSecondsLeft){
+                clearInterval(this.timerSecondsLeft);
+            }
+            this.secondsLeft = config.waitUserActionSeconds;
+            setInterval(()=>{
+                this.secondsLeft--;
+                if (this.secondsLeft === 0){
+                    clearInterval(this.timerSecondsLeft);
+                }
+            }, 1000);
         }
     },
     computed: {

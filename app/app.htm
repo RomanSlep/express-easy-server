@@ -6,6 +6,7 @@
         <div id="gameBlock" class="bg" v-if="Store.user.isLogged">
                 <h1 @click="Store.logOut">Exit {{Store.user.login}} {{Store.isUserPlaced}} Game:{{Store.room.game.status}}</h1>
             <game-table></game-table>
+            <log></log>
         </div>
         <login v-else></login>
     </div>
