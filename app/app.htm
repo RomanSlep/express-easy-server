@@ -3,8 +3,8 @@
         <h1>Poker Artifacts</h1>
     </div>
     <div id="content">
-        <h1 @click="Store.logOut">Exit</h1>
         <div id="gameBlock" class="bg" v-if="Store.user.isLogged">
+                <h1 @click="Store.logOut">Exit {{Store.user.login}} {{Store.isUserPlaced}} Game:{{Store.room.game.status}}</h1>
             <game-table></game-table>
         </div>
         <login v-else></login>

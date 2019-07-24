@@ -3,7 +3,8 @@ const $u = require('../helpers/utils');
 
 module.exports = function (players) {
     this.players = players;
-    this.cardsTurnedCount = 3;
+    this.status = 'new';
+
     const deck = new POKER.Deck();
     deck.shuffle();
     $u.playersToArray(players).forEach(p=>{
@@ -14,8 +15,8 @@ module.exports = function (players) {
     this.oppenedCards = this.commonCards.splice(0, 3);
 };
 
-module.exports.prototype.setCard = function(){
-
+module.exports.prototype.setCommonCard = function(){
+    this.oppenedCards.push(this.commonCards.splice(0, 1));
 };
 
 module.exports.prototype.getWinners = function(){

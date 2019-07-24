@@ -13,7 +13,6 @@ io.sockets.on('connection', socket => {
             return;
         }
         const player = players[data.login] = {user, socket};
-        console.log('player_connect', data.login);
         const room_id = Object.keys(Store.rooms)[0];
         Store.setPlayerToRoom(room_id, player);
         // const room = Store.rooms[room_id];
@@ -21,11 +20,42 @@ io.sockets.on('connection', socket => {
         // console.log(room.game.getWinners());
     });
     socket.on('player_remove', async data=>{
-        // console.log('player_remove', data.login);
         Store.removePlayer(players[data.login]);
     });
+    socket.on('takePlace', async data=>{
+        console.log('takePlace', data);
+        const player = getPlayer({token: data.token});
+        if (!player){
+            error(socket, 'Player, not found');
+            return;
+        }
+        Store.userTakePlace(player, data.place);
+    });
+    
+    socket.on('leavePlace', async data=>{
+        console.log('leavePlace', data);
+        const player = getPlayer({token: data.token});
+        if (!player){
+            error(socket, 'Player, not found');
+            return;
+        }
+        Store.userLeavePlace(player, data.place);
+    });
+
     socket.on('disconnect', async data=>{
         console.log('disconnect', players[data.login]);
     });
 });
 
+function getPlayer(q) {
+    try {
+        const key = Object.keys(q)[0];
+        return $u.playersToArray(players).find(p => p.user[key] === q[key]);
+    } catch (e) {
+        console.log('get plager', e);
+        return null;
+    }
+}
+function error(s, msg){
+    s.emit('errorApi', {msg});
+}

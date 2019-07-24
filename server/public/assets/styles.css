@@ -4,10 +4,11 @@ body{
 
  /* СТОЛ */
 #table{
-    width: 650px;
-    height: 340px;
+    color: wheat;
+    width: 700px;
+    height: 345px;
     background: black;
-    background: url(./img/table.png) 100% 100% no-repeat;
+    background: url(./img/table_1.png) 100% 100% no-repeat;
     margin: 100px;
     background-size: cover;
 }

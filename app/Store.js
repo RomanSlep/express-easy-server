@@ -35,7 +35,10 @@ export default new Vue({
             balance: 0
         },
         socket: null,
-        match: {}
+        room: {
+            game: {},
+            places: {}
+        }
     },
     methods: {
         updatePublic() {
@@ -60,6 +63,18 @@ export default new Vue({
         logOut() {
             this.user.isLogged = false;
             this.user.token = false;
+        }
+    },
+    computed: {
+        isUserPlaced() {
+            for (let p in this.room.places) {
+                if (this.room.places[p] === this.user.login) {
+                    this.user.isPlaced = true;
+                    return true;
+                }
+            }
+            this.user.isPlaced = false;
+            return false;
         }
     },
     watch: {

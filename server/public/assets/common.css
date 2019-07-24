@@ -61,6 +61,7 @@ h3 {
 }
 
 .hovered {
+    cursor: pointer;
     opacity: 0.8;
     transition: .3s;
 }
