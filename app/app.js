@@ -1,9 +1,12 @@
 import Vue from 'vue/dist/vue.js';
 import './core/clientIo';
+
 import login from './components/login.vue';
 import log from './components/log.vue';
 import modal from './components/modal.vue';
 import gameTable from './components/game-table.vue';
+import userPanel from './components/user-panel.vue';
+
 import Store from './Store';
 import $u from './core/utils';
 // import $u from './core/utils';
@@ -20,7 +23,8 @@ new Vue({
         gameTable,
         modal,
         log,
-        login
+        login,
+        userPanel
     },
     data: {Store},
     template

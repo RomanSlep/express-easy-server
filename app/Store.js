@@ -1,7 +1,5 @@
 import Vue from 'vue/dist/vue.js';
 import api from './core/api';
-import $u from './core/utils';
-import config from '../config';
 
 export default new Vue({
     created() {
@@ -69,18 +67,11 @@ export default new Vue({
             this.user.isLogged = false;
             this.user.token = false;
         },
-        restartSecondsLeft(){
-            if (this.timerSecondsLeft){
-                clearInterval(this.timerSecondsLeft);
-            }
-            this.secondsLeft = config.waitUserActionSeconds;
-            setInterval(()=>{
-                this.secondsLeft--;
-                if (this.secondsLeft === 0){
-                    clearInterval(this.timerSecondsLeft);
-                }
-            }, 1000);
-        }
+        emit(action, data){
+            data.token = this.user.token;
+            this.socket.emit(action, data);
+        },
+        timer: ()=>{}
     },
     computed: {
         isUserPlaced() {

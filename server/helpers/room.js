@@ -6,9 +6,9 @@ const config = require('../helpers/configReader');
 module.exports = {
     createRoom(){
         const room_id = $u.unix();
-        const room = {id: room_id, players: {}, game: {status: 'wait'}, places: {}};
+        const room = {id: room_id, players: {}, places: {}};
         this.rooms[room_id] = room;
-        // console.log('CreateRoom', this.rooms);
+        room.game = new Game(room_id, this);
         return room;
     },
     removeRoom(room_id){
@@ -16,28 +16,40 @@ module.exports = {
     // console.log('RemoveRoom', this.rooms);
     },
     setPlayerToRoom(room_id, player){
-        const room = this.rooms[room_id];
-        player.room_id = room_id;
-        room.players[player.user.login] = player;
-        this.emitUpdateRoom({room});
+        try {
+            const room = this.rooms[room_id];
+            player.room_id = room_id;
+            room.players[player.user.login] = player;
+            this.emitUpdateRoom({room});
+        } catch (e){
+            console.log('Error room.setPlayerToRoom ', e);
+        }
     // console.log('setPlayerToRoom', this.rooms);
     },
     startGameInToRoom(room_id){
-        const room = this.rooms[room_id];
-        room.game = new Game(room_id);
-        this.emitUpdateRoom({room, data: {event: 'newGame', msg: 'Start new game!'}});
+        try {
+            const room = this.rooms[room_id];
+            room.game.start();
+        } catch (e){
+            console.log('Error room.startGameInToRoom ', e);
+        }
     },
     removePlayer(player){
-        const room = this.rooms[player.room_id];
-        const login = player.user.login;
-        delete room.players[login];
-        delete this.players[login];
-        Object.keys(room.places).forEach(place=>{
-            if (room.places[place] === login){
-                room.places[place] = null;
-            }
-        });
-        this.emitUpdateRoom({room});
+        try {
+            const room = this.rooms[player.room_id];
+            const login = player.user.login;
+            room.game.removeGamer(login);
+            delete room.players[login];
+            delete this.players[login];
+            Object.keys(room.places).forEach(place=>{
+                if (room.places[place] === login){
+                    room.places[place] = null;
+                }
+            });
+            this.emitUpdateRoom({room});
+        } catch (e){
+            console.log('Error room.removePlayer ', e);
+        }
         // console.log('RemovePlayer', this.rooms);
     },
     userTakePlace(player, place){ // занимает место
@@ -51,86 +63,127 @@ module.exports = {
                 room.places[place] = player.user.login;
                 player.isPlaced = true;
                 this.emitUpdateRoom({room, data: {event: 'userTakePlace', msg: `${player.user.login} take ${place} place.`}});
-                // Пытаемся начать игру
+                room.game.updateGamers();
                 const countTakedPlaces = Object.keys(this.getRoomGamers(room_id)).length;
                 if (room.game.status === 'wait' && countTakedPlaces >= config.minGamers){
-                    this.startGameInToRoom(room_id);
+                    this.roomStartDelayBeforeGame(room_id);
                 }
             }
         } catch (e){
-            console.log('userTakePlace ' + e);
+            console.log('Error room.userTakePlace ' + e);
         }
     },
-    userLeavePlace(player, place){ // занимает место
+    userLeavePlace(player, place){ // покдает место
         try {
             const {room_id} = player;
             const room = this.rooms[room_id];
             const login = player.user.login;
-            if (room.places[place] === login){ // если свободно
+            if (room.places[place] === login){ // если действительно там сидел
                 room.places[place] = null;
                 player.isPlaced = false;
                 if (player.user.login === login){
                     this.updateDiler(room_id);
                 }
                 this.emitUpdateRoom({room, data: {event: 'userLeavePlace', msg: `${player.user.login} leave place.`, type: 'yellow'}});
+                room.game.removeGamer(login);
+                if (room.game.status === 'waitStartGame'){
+                    this.checkResetGame(room_id);
+                }
             }
         } catch (e){
-            console.log('userLeavePlace ' + e);
+            console.log('Error room.userLeavePlace ' + e);
+        }
+    },
+    checkResetGame(room_id){
+        try {
+            const room = this.rooms[room_id];
+            const countTakedPlaces = Object.keys(this.getRoomGamers(room_id)).length;
+            if (countTakedPlaces < config.minGamers){
+                if (room.timeOutBeforeStartedGame){
+                    clearTimeout(room.timeOutBeforeStartedGame);
+                }
+                room.game = new Game(room_id);
+                this.emitUpdateRoom({room, data: {event: 'reset', msg: `reset...`, type: 'red'}});
+            }
+        } catch (e){
+            console.log('Error room.checkResetGame ', e);
+        }
+    },
+    roomStartDelayBeforeGame(room_id){ // Задержка перед началом игры
+        try {
+            const room = this.rooms[room_id];
+            room.game.status = 'waitStartGame';
+            this.emitUpdateRoom({room, data: {event: 'waitStartGame', msg: `Wait started game...`, type: 'yellow'}});
+            if (room.timeOutBeforeStartedGame){
+                clearTimeout(room.timeOutBeforeStartedGame);
+            }
+            console.log('New timeout start game', room_id);
+            room.timeOutBeforeStartedGame = setTimeout(()=>{
+                this.startGameInToRoom(room_id);
+            }, config.pausedBeforeStartGame * 1000);
+
+        } catch (e){
+            console.log('Error room.roomStartDelayBeforeGame ', e);
         }
     },
     getRoomGamers(room_id){
-        const gamers = {};
-        const room = this.rooms[room_id];
-        for (let login in room.players){
-            if ($u.playersToArray(room.places).includes(login)){
-                gamers[login] = room.players[login];
+        try {
+            const gamers = {};
+            const room = this.rooms[room_id];
+            for (let login in room.players){
+                if ($u.playersToArray(room.places).includes(login)){
+                    gamers[login] = room.players[login];
+                }
             }
+            return gamers;
+        } catch (e){
+            console.log('Error room.getRoomGamers ', e);
         }
-        return gamers;
     },
     updateDiler(room_id){
-        const room = this.rooms[room_id];
-        const gamers = $u.playersToArray(this.getRoomGamers(room_id));
-        const num = _.random(0, gamers.length - 1);
-        room.diler = gamers[num].user.login;
+        try {
+            const room = this.rooms[room_id];
+            const gamers = $u.playersToArray(this.getRoomGamers(room_id));
+            const num = _.random(0, gamers.length - 1);
+            room.diler = gamers[num].user.login;
+        } catch (e){
+            console.log('Error room.updateDiler ', e);
+        }
     },
     emitUpdateRoom(req) {
-        req.data = req.data || {};
-        req.data.room = prepRoom (req.room);
-        setTimeout(() => {
+        try {
+            req.data = req.data || {};
+            req.data.room = prepRoom (req.room);
+            // setTimeout(() => {
             $u.playersToArray(req.room.players).forEach(p => {
                 p.socket.emit('emitRoom', req.data);
             });
-        }, 1000);
-    },
-    getNextGamer(room_id, login){
-        const room = this.rooms[room_id];
-        const place = $u.getKeyByValue(room.places, login);
-        const places = this.getCompactPlaces(room_id);
-        const keysArray = Object.keys(places);
-        const pos = keysArray.findIndex(p=> p === place);
-        let nextUserLogin;
-        if (pos === keysArray.length - 1){
-            nextUserLogin = places[Object.keys(places)[0]];
-        } else {
-            nextUserLogin = places[keysArray[pos + 1]];
+        } catch (e){
+            console.log('Error room.emitUpdateRoom ', e);
         }
-        console.log({place, places, pos, nextUserLogin});
-        return nextUserLogin;
+        // }, 1000);
     },
     getCompactPlaces(room_id){
-        const places = this.rooms[room_id].places;
-        const compact = {};
-        for (let place in places){
-            if (places[place]){
-                compact[place] = places[place];
+        try {
+            const places = this.rooms[room_id].places;
+            const compact = {};
+            for (let place in places){
+                if (places[place]){
+                    compact[place] = places[place];
+                }
             }
+            return compact;
+        } catch (e){
+            console.log('Error room.getCompactPlaces ', e);
         }
-        return compact;
     },
     resetGame(room_id, msg){
-        this.rooms[room_id].game = {status: 'wait'};
-        this.emitUpdateRoom({room: this.rooms[room_id], data: {event: 'resetGame', msg, type: 'yellow'}});
+        try {
+            this.rooms[room_id].game = new Game(room_id);
+            this.emitUpdateRoom({room: this.rooms[room_id], data: {event: 'resetGame', msg, type: 'yellow'}});
+        } catch (e){
+            console.log('Error room.resetGame ', e);
+        }
     }
 };
 
@@ -143,7 +196,13 @@ function prepRoom(room) {
         game: {
             status: game.status,
             oppenedCards: game.oppenedCards,
-            waitUserAction: game.waitUserAction || {}
+            waitUserAction: game.waitUserAction,
+            bblind: game.bblind,
+            sblind: game.sblind,
+            flopped: game.flopped,
+            gamersData: game.gamersData,
+            currentMaximalBet: game.getCurrentMaximalBet(),
+            bank: game.getBank()
         }
     };
     return preped;

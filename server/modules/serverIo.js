@@ -23,7 +23,7 @@ io.sockets.on('connection', socket => {
         Store.removePlayer(players[data.login]);
     });
     socket.on('takePlace', async data=>{
-        console.log('takePlace', data);
+        // console.log('takePlace', data);
         const player = getPlayer({token: data.token});
         if (!player){
             error(socket, 'Player, not found');
@@ -31,9 +31,9 @@ io.sockets.on('connection', socket => {
         }
         Store.userTakePlace(player, data.place);
     });
-    
+
     socket.on('leavePlace', async data=>{
-        console.log('leavePlace', data);
+        // console.log('leavePlace', data);
         const player = getPlayer({token: data.token});
         if (!player){
             error(socket, 'Player, not found');
@@ -42,6 +42,17 @@ io.sockets.on('connection', socket => {
         Store.userLeavePlace(player, data.place);
     });
 
+    socket.on('waitAction', data => {
+        const player = getPlayer({token: data.token});
+        if (!player){
+            error(socket, 'Player, not found');
+            return;
+        }
+        const err = Store.rooms[player.room_id].game.checkUserAction(data, player);
+        if (err){
+            error(socket, err);
+        }
+    });
     socket.on('disconnect', async data=>{
         console.log('disconnect', players[data.login]);
     });

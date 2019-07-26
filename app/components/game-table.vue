@@ -4,7 +4,7 @@
         <div v-show="room.places[n]" class="place-taked">
             <div class="user-wait-action" v-show="game.waitUserAction.login === room.places[n]">
                 <div class="gif"></div>
-                <div class="action txt-yellow">{{game.waitUserAction.text + ' ' +secondsLeft+ 's...'}}</div>
+                <div class="action txt-yellow">{{game.waitUserAction.text + ' ' + timer.secondsLeft + 's...'}}</div>
             </div>
             <div class="user-place">
                 <div class="user-avatar">
@@ -25,6 +25,9 @@
         </div>
     </div>
     <div id="common-cards">
+        <div id="delay-before-start" v-show="game.status === 'waitStartGame'">
+            Game started after {{timer.secondsLeft}}s...
+        </div>
         <div v-for="n in [1, 2, 3, 4, 5]" :key="n" :id="'card' + n" class="card-place"></div>
     </div>
 </div>
@@ -33,11 +36,15 @@
 <script>
 import Store from '../Store';
 import api from '../core/api';
+import config from '../../config';
 
 export default {
     data() {
         return {
-            secondsLeft: 0
+            timer: {
+                secondsLeft: 0,
+                timeOut: null
+            }
         }
     },
     computed: {
@@ -49,29 +56,38 @@ export default {
         },
         user() {
             return Store.user;
-        },
-        secondsLeft(){
-            return Store.secondsLeft;
         }
     },
     mounted() {
         setPositions();
+        Store.timer = (t)=> this.secondsTimerStart(t);
     },
     methods: {
         takePlace(place) {
-            Store.socket.emit('takePlace', {
-                token: this.user.token,
+            Store.emit('takePlace', {
                 place,
                 room_id: this.room.id
             });
         },
         leavePlace(place) {
-            Store.socket.emit('leavePlace', {
-                token: this.user.token,
+            Store.emit('leavePlace', {
                 place,
                 room_id: this.room.id
             })
         },
+        secondsTimerStart(t){
+            const {timer} = this;
+         if (timer.timeOutId){
+                clearInterval(timer.timeOutId);
+            }
+            timer.secondsLeft = t || config.waitUserActionSeconds;
+            timer.timeOutId = setInterval(()=>{
+                timer.secondsLeft--;
+                if (timer.secondsLeft <= 0){
+                    clearInterval(timer.timeOutId);
+                }
+            }, 1000);
+        }
     }
 }
 
@@ -112,8 +128,5 @@ function setPositions() {
 
     player3.style.marginLeft = rightPos + 'px';
     player3.style.marginTop = topPos + 'px';
-
-    // Места для карт
-
 }
 </script>

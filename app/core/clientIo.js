@@ -1,6 +1,7 @@
 
 import io from 'socket.io-client';
 import Store from '../Store';
+import config from '../../config';
 
 const socket = io('http://localhost:3300');
 Store.socket = socket;
@@ -18,6 +19,13 @@ socket.on('emitRoom', data=>{
     if (data.msg){
         Store.log.push({msg: data.msg, type: data.type});
     }
+    if (data.timer){
+        Store.timer(data.timer);
+    }
+    if (data.event === 'waitStartGame') {
+        Store.timer(config.pausedBeforeStartGame);
+    }
+
 });
 
 socket.on('errorApi', data=>{
