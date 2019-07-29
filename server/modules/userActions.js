@@ -6,7 +6,7 @@ module.exports = {
         try {
             const {user} = player;
             const {login} = user;
-            console.log('checkUserAction', data, action.action, data.action.action);
+            // console.log('checkUserAction', data, action.action, data.action.action);
             if (action.login !== login){
                 console.log('Not Valid checkUserAction LOGIN');
                 return 'Not Valid data!';
@@ -16,7 +16,7 @@ module.exports = {
                 console.log('Not Valid checkUserAction ACTION');
                 return 'Not Valid data!';
             }
-            if (data.value && data.value <= 0){
+            if (data.value && data.value <= 0 && user.balance >= data.value){
                 // TODO: Проверка баланса, хватит ли бабла юзеру!!
                 console.log('Not Valid checkUserAction VALUE');
                 return 'Not Valid data!';
@@ -25,36 +25,37 @@ module.exports = {
             if (this.waitNextActionTimeOut) {
                 clearTimeout(this.waitNextActionTimeOut);
             }
-            return this[action.action](data, user);
+            return this[action.action](data, player);
         } catch (e){
             console.log('Error checkUserAction ->', action.action + '->', e);
         }
     },
-    smallBlind(data, user){
-        if (!data.value){
+    smallBlind(data, player){
+        const {user} = player;
+        const userData = this.gamersData[user.login];
+        if (data.value === undefined || user.balance < data.value){
             console.log('Error smallBlind not value data...');
             return;
         }
 
         this.sblind = data.value;
         this.sblindUser = user.login;
-        console.log(user.login, this.gamersData[user.login]);
-        this.gamersData[user.login].totalBet = data.value;
+        userData.totalBet = data.value;
         // TODO: транзакцию юзеру на снятие!
+        user.balance -= data.value;
         // Задаем большой блаинд
         this.waitUserAction = {
             login: this.getNextGamer(user.login),
             action: 'bigBlind',
             text: 'Wait big blind'
         };
-        this.sendUserActionAndWait();
+        this.finalAction(player);
     },
-    bigBlind(data, user){ // Получили ответ по большому блаинду
-        if (!data.value){
+    bigBlind(data, player){ // Получили ответ по большому блаинду
+        const {user} = player;
+        const userData = this.gamersData[user.login];
+        if (data.value === undefined || data.value < this.sblind * 2 || user.balance < data.value){
             console.log('Error bigBlind not value data...');
-            return;
-        }
-        if (data.value < this.sblind){ // попытка наибать
             this.waitUserAction.login = this.getNextGamer();
             this.removeGamer(user.login);
             this.sendUserActionAndWait();
@@ -62,29 +63,117 @@ module.exports = {
         }
         this.bblind = data.value;
         this.bblindUser = user.login;
-        this.gamersData[user.login].totalBet = data.value;
+        userData.totalBet = data.value;
+        user.balance -= data.value;
         // TODO: транзакцию юзеру на снятие!
 
         // Ставки по кругу пока не уровняются...
+        this.waitUserAction = {};
+        // сдаем по 2 карты каждому
+        this.setCards();
+        // Запускаем торги
         this.waitUserAction = {
             login: this.getNextGamer(user.login),
             action: 'bidding',
-            text: 'Wait bidding action'
+            text: 'Wait user bidding'
         };
-        this.sendUserActionAndWait();
+        this.checkNeedFinished();// вдруг игроков 2е и надо выложить карты
+        this.finalAction();
     },
-    bidding(data, user){
-        if (data.move === 'flop'){
-            this.game.flopped.push(user.login);
-            this.gamersData[user.login].isFlopped = true;
+    bidding(data, player){
+        const {user} = player;
+        const userData = this.gamersData[user.login];
+        const currentBet = this.getCurrentMaximalBet().maxBet - userData.totalBet;
+        if (data.move === 'fold'){
+            userData.isFold = true;
         }
         if (data.move === 'call'){
-            this.game.flopped.push(user.login);
-            this.gamersData[user.login].isFlopped = true;
+            const call = currentBet;
+            if (call > user.balance){
+                console.log('Error: balanse < call', {call, b: user.balance});
+                userData.isFold = true;
+            } else {
+                user.balance -= call;
+                userData.totalBet += call;
+            }
+        }
+        if (data.move === 'raise'){
+            const raise = data.value - userData.totalBet;
+            if (raise > user.balance){
+                console.log('Error: balanse < raise', {raise, b: user.balance});
+                userData.isFold = true;
+            } else {
+                console.log({raise});
+                user.balance -= raise;
+                userData.totalBet += raise;
+            }
         }
 
+        if (data.move === 'check'){
+            if (currentBet !== userData.totalBet){
+                console.log('Error CHECK ', {currentBet, userBet: userData.totalBet});
+            }
+        }
 
-        // ПРоверка что все уровнялись или за столом остался один - победитель
-
+        const res = this.checkNeedFinished();
+        if (res) { // Проверка на завершение матча
+            console.log('Finis game!', res);
+            this.winnersBalance();
+            this.nextGame();
+            return;
+        }
+        // крутим дальше
+        this.waitUserAction = {
+            login: this.getNextGamer(user.login),
+            action: 'bidding',
+            text: 'Wait user bidding'
+        };
+        this.finalAction(player);
+    },
+    /**
+     * @description Проверка сотсояний игры
+     */
+    finalAction(player){
+        if (player){
+            console.log('BALANCE', player.user.login, player.user.balance);
+            player.sendUserData(this);
+            this.gamersData[player.user.login].round = this.round;
+        }
+        this.sendUserActionAndWait(false);
+        this.updateGamers();
+    },
+    /**
+     * @description проверка на необходимость завершать матч
+     */
+    checkNeedFinished(){
+        const nextGamer = this.gamersData[this.getNextGamer()];
+        // если круг закончен и все уровнялись
+        if (nextGamer.round === this.round && nextGamer.totalBet === this.getCurrentMaximalBet().maxBet) {
+            this.round++;
+            if (this.commonCards.length === 0){ // все открыли
+                console.log('winners!!!>', this.getWinners());
+                return 'All cards open!';
+            }
+            // общую карту на стол!
+            this.setCommonCard();
+        }
+        const inGame = this.gamersInGame();
+        if (Object.keys(inGame).length < 2){
+            this.winners = [{login: Object.keys(inGame)[0], details: 'Alone'}];
+            return 'Alone gamer!';
+        }
+    },
+    /**
+     * @description раздать выигрыши
+     */
+    winnersBalance(){
+        const countWinners = this.winners.length;
+        const path = this.getBank() / countWinners;
+        this.winners.forEach(w=>{
+            const player = this.room.players[w.login];
+            const {user} = player;
+            user.balance += path;
+            player.sendUserData();
+        });
     }
 };

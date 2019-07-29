@@ -3,35 +3,62 @@ const $u = require('../helpers/utils');
 const _ = require('underscore');
 const config = require('../helpers/configReader');
 const checkUserActionsProto = require('./userActions');
-
 let roomsApi = null;
+
 module.exports = function (room_id, Store) {
     try {
         roomsApi = this.roomsApi = roomsApi || Store;
-        this.room = roomsApi.rooms[room_id];
-        this.waitUserAction = {};
-        this.status = 'wait';
-        this.flopped = []; // вышедшие из игры
-        this.bblind = 0;
-        this.sblind = 0;
-        this.gamersData = {};
+        Object.assign(this, {
+            room: roomsApi.rooms[room_id],
+            waitUserAction: {},
+            status: 'wait',
+            bblind: 0,
+            sblind: 0,
+            round: 0,
+            gamersCards: {},
+            gamersData: {}
+        });
     } catch (e){
         console.log('Error new Game ', e);
     }
 };
 
+/**
+ * @description завершить текущую и начать следующую игру в комнате;
+ */
+
+module.exports.prototype.nextGame = function(){
+    const string = this.winners.reduce((s, w)=>{
+        return `${s} ${w.login} (${w.details})`;
+    }, '');
+
+    this.waitUserAction = {
+        login: string,
+        action: 'winner',
+        text: 'Winners: '
+    };
+    this.sendUserActionAndWait();
+    const {room} = this;
+    const room_id = room.id;
+    room.game = new module.exports(room_id);
+    room.game.updateGamers();
+    const countTakedPlaces = Object.keys(roomsApi.getRoomGamers(room_id)).length;
+    if (room.game.status === 'wait' && countTakedPlaces >= config.minGamers){
+        roomsApi.roomStartDelayBeforeGame(room_id);
+    }
+};
 module.exports.prototype.start = function(){
     try {
         const {room} = this;
-        this.status = 'new';
+        this.status = 'preflop';
         this.updateGamers();
-        if (!this.room.diler){
-            roomsApi.updateDiler(room.id);
+        if (!this.room.dealer){
+            roomsApi.updateDealer(room.id);
         } else {
-            room.diler = this.getNextGamer(room.diler);
+            room.dealer = this.getNextGamer(room.dealer);
         }
         this.waitUserAction = {
-            login: this.getNextGamer(room.diler),
+            login: this.getNextGamer(room.dealer),
             action: 'smallBlind',
             text: 'Wait small blind'
         };
@@ -42,39 +69,60 @@ module.exports.prototype.start = function(){
 };
 
 module.exports.prototype.getBank = function(){
-    return this.sblind + this.bblind;
+    return $u.playersToArray(this.gamers || {}).reduce((s, g) =>{
+        return s + this.gamersData[g].totalBet;
+    }, 0);
 };
+/**
+ * @description возвращает логин следующего игрока
+ * @return {string} 'Vasya'
+ */
 module.exports.prototype.getNextGamer = function(login){
     login = login || this.waitUserAction.login;
     try {
-        const {gamers} = this;
-        const place = $u.getKeyByValue(gamers, login);
-        const keysArray = Object.keys(gamers)
-            .filter(p=> !this.flopped.includes(gamers[p]));
-        const pos = keysArray.findIndex(p=> p === place);
+        const gamers = this.gamersInGame();
+        const logins = Object.keys(gamers);
+        const pos = logins.findIndex(l=> l === login);
         let nextUserLogin;
-        if (pos === keysArray.length - 1){
-            nextUserLogin = gamers[Object.keys(gamers)[0]];
+        if (pos === logins.length - 1){
+            nextUserLogin = logins[0];
         } else {
-            nextUserLogin = gamers[keysArray[pos + 1]];
+            nextUserLogin = logins[pos + 1] || logins[0]; // если последний
         }
-        console.log({place, gamers, pos, nextUserLogin});
+        // console.log({login, place, gamers, pos, nextUserLogin});
         return nextUserLogin;
     } catch (e){
         console.log('Error game.getNextGamer ', e);
     }
 },
+/**
+ * @description игроки за столом и не вышедшие из игры
+ * @return {object} {'Dev': {...}, 'Vasya': {...}
+ */
+module.exports.prototype.gamersInGame = function () {
+    const activeGamers = {};
+    const gamers = this.gamersData;
+    Object.keys(gamers).forEach(login => {
+        if (!gamers[login].isFold){
+            activeGamers[login] = gamers[login];
+        }
+    });
+    return activeGamers;
+},
 module.exports.prototype.setCards = function(){
     try {
+        const gamers = this.gamersInGame();
         const deck = new POKER.Deck();
         deck.shuffle();
-        this.gamers.forEach(p=>{
+        for (let l in gamers){
             const cards = new POKER.Hand(deck.deal(2)).cards;
-            p.cardsString = POKER.handToString(cards).split(' ');
-        });
-
-        this.commonCards = POKER.handToString(new POKER.Hand(deck.deal(5)).cards).split(' ');
-        this.oppenedCards = this.commonCards.splice(0, 3);
+            const cardsString = POKER.handToString(cards).split(' ');
+            this.gamersCards[l] = cardsString;
+            // отдаем юзеру его карты
+            this.room.players[l].socket.emit('uCards', {cards: cardsString});
+        }
+        this.commonCards = POKER.handToString(new POKER.Hand(deck.deal(config.commonCards)).cards).split(' ');
+        this.oppenedCards = [];
     } catch (e){
         console.log('Error game.setCards ', e);
     }
@@ -86,7 +134,7 @@ module.exports.prototype.getCurrentMaximalBet = function () {
     let maxBet = 0;
     let login = '';
     $u.playersToArray(this.gamersData).forEach(g => {
-        if (g.bets > maxBet) {
+        if (g.totalBet > maxBet) {
             maxBet = g.totalBet;
             login = g.login;
         }
@@ -94,41 +142,50 @@ module.exports.prototype.getCurrentMaximalBet = function () {
     return {maxBet, login};
 };
 module.exports.prototype.setCommonCard = function(){
-    this.oppenedCards.push(this.commonCards.splice(0, 1));
+    let count = 1;
+    if (!this.oppenedCards.length){
+        count = config.oppenedCards;
+    }
+    this.oppenedCards = this.oppenedCards.concat(this.commonCards.splice(0, count));
+    console.log(' this.oppenedCards', this.oppenedCards);
 };
 
 
 module.exports.prototype.getWinners = function(){
     try {
-        const hands = $u.playersToArray(this.gamers).map(p =>{
-            const hand = POKER.handFromString((p.cardsString.join(' ') + ' ' + this.oppenedCards.join(' ')).trim());
-            hand.login = p.user.login;
+        console.log('Winners', this.oppenedCards);
+        const hands = Object.keys(this.gamersInGame()).map(l =>{
+            console.log({l});
+            const hand = POKER.handFromString((this.gamersCards[l].join(' ') + ' ' + this.oppenedCards.join(' ')).trim());
+            hand.login = l;
             return hand;
         });
         const winners = POKER.getWinners(hands).map(w=>{
             const details = w.getHandDetails().name;
-            const player = this.gamers[w.login];
-            return {player, details};
+            return {login: w.login, details};
         });
+        console.log({winners});
+        this.winners = winners;
         return winners;
     } catch (e){
         console.log('Error game.getWinners ', e);
     }
 };
-
+/**
+ * @description аплейтит game.usersData (Dev: {...})
+ */
 module.exports.prototype.updateGamers = function () {
     try {
         this.gamers = $u.clone(roomsApi.getCompactPlaces(this.room.id));
-        if (_.isEmpty(this.gamersData)){
-            $u.playersToArray(this.gamers).forEach(g=>{
-                console.log({g});
-                this.gamersData[g] = {
-                    login: g,
-                    totalBet: 0
-                };
-            });
-        }
-        console.log('Update gamers', this.room.places, this.gamers);
+        Object.keys(this.gamers).forEach(place => {
+            const login = this.gamers[place];
+            this.gamersData[login] = this.gamersData[login] || {
+                login,
+                totalBet: 0,
+                round: 0,
+                place
+            };
+        });
     } catch (e){
         console.log('Error game.updateGamers ', e);
     }
@@ -140,7 +197,7 @@ module.exports.prototype.sendUserActionAndWait = function(){
     this.waitNextAction(handler);
 };
 module.exports.prototype.waitNextAction = function (cb) {
-    console.log('waitNextAction', this.waitUserAction);
+    // console.log('waitNextAction', this.waitUserAction);
     try {
         if (this.waitNextActionTimeOut) {
             clearTimeout(this.waitNextActionTimeOut);
@@ -149,7 +206,7 @@ module.exports.prototype.waitNextAction = function (cb) {
         const room_id = room.id;
         const decorator = () => {
             // if (this._waitCounter){
-                this.removeGamer(this.waitUserAction.login);
+            this.removeGamer(this.waitUserAction.login);
             // }
             if (Object.keys(this.gamers).length < config.minGamers){
                 const msg = 'Time out ' + this.waitUserAction.login + ' ' + this.waitUserAction.text;
@@ -157,7 +214,7 @@ module.exports.prototype.waitNextAction = function (cb) {
                 console.log('Reset game!!', msg);
                 return;
             }
-            const nextLogin = this.getNextGamer(this.waitUserAction.login || room.diler);
+            const nextLogin = this.getNextGamer(this.waitUserAction.login || room.dealer);
             this.waitUserAction.login = nextLogin;
             cb();
         };
@@ -176,6 +233,9 @@ module.exports.prototype.waitNextAction = function (cb) {
     }
 };
 
+/**
+ * @description Поднимаем изза стола просравшего очередь.
+ */
 module.exports.prototype.removeGamer = function (login) {
     try {
         if (!this.gamers){
@@ -183,9 +243,10 @@ module.exports.prototype.removeGamer = function (login) {
         }
         const place = $u.getKeyByValue(this.gamers, login); // удаляем просравшего очередь
         this.room.places[place] = null;
-        if (this.room.diler === login){
-            this.room.diler = null;
+        if (this.room.dealer === login){
+            this.room.dealer = null;
         }
+        this.gamersData[login].isFold = true; // считаем выбывшим из игры
         this.room.players[login].isPlaced = false;
         this.updateGamers();
     } catch (e){

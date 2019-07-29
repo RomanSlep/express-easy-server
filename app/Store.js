@@ -35,12 +35,16 @@ export default new Vue({
         socket: null,
         room: {
             game: {
+                oppenedCards: [],
                 status: 'wait',
-                waitUserAction: {}
+                waitUserAction: {},
+                gamersData: {},
+                currentMaximalBet: {}
             },
             places: {}
         },
         log: [],
+        uCards: [],
         secondsLeft: 0
     },
     methods: {

@@ -82,7 +82,7 @@ module.exports = {
                 room.places[place] = null;
                 player.isPlaced = false;
                 if (player.user.login === login){
-                    this.updateDiler(room_id);
+                    this.updateDealer(room_id);
                 }
                 this.emitUpdateRoom({room, data: {event: 'userLeavePlace', msg: `${player.user.login} leave place.`, type: 'yellow'}});
                 room.game.removeGamer(login);
@@ -140,14 +140,14 @@ module.exports = {
             console.log('Error room.getRoomGamers ', e);
         }
     },
-    updateDiler(room_id){
+    updateDealer(room_id){
         try {
             const room = this.rooms[room_id];
             const gamers = $u.playersToArray(this.getRoomGamers(room_id));
             const num = _.random(0, gamers.length - 1);
-            room.diler = gamers[num].user.login;
+            room.dealer = gamers[num].user.login;
         } catch (e){
-            console.log('Error room.updateDiler ', e);
+            console.log('Error room.updateDealer ', e);
         }
     },
     emitUpdateRoom(req) {
@@ -192,18 +192,18 @@ function prepRoom(room) {
     const preped = {
         id: room.id,
         places: room.places,
-        diler: room.diler,
+        dealer: room.dealer,
         game: {
             status: game.status,
-            oppenedCards: game.oppenedCards,
+            oppenedCards: game.oppenedCards || [],
             waitUserAction: game.waitUserAction,
             bblind: game.bblind,
             sblind: game.sblind,
-            flopped: game.flopped,
             gamersData: game.gamersData,
             currentMaximalBet: game.getCurrentMaximalBet(),
             bank: game.getBank()
         }
     };
+    // console.log('game.gamersData', game.gamersData);
     return preped;
 }

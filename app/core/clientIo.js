@@ -24,8 +24,8 @@ socket.on('emitRoom', data=>{
     }
     if (data.event === 'waitStartGame') {
         Store.timer(config.pausedBeforeStartGame);
+        Store.uCards = [];
     }
-
 });
 
 socket.on('errorApi', data=>{
@@ -36,6 +36,15 @@ socket.on('errorApi', data=>{
         text: data.msg
     });
 });
+socket.on('userData', user=>{
+    console.log('userData', user);
+    Object.assign(Store.user, user);
+});
+socket.on('uCards', data=>{
+    // console.log('uCards', data);
+    Store.uCards = data.cards;
+});
+
 
 Store.$watch('user.isLogged', val=>{ // перелогин
     let login = Store.user.login;

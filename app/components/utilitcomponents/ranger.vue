@@ -10,8 +10,6 @@
 import Store from '../Store';
 export default {
     props: ['min', 'max', 'step', 'value'],
-    created() {
-        this.$parent
-    }
+
 }
 </script>

@@ -2,6 +2,13 @@ body {
     background: url(./img/bg.jpg) repeat;
 }
 
+
+.no-clicked .action-button,
+.no-clicked.action-button {
+    pointer-events: none;
+    background-color: #37363a !important;
+}
+
 /* СТОЛ */
 #table {
     color: wheat;
@@ -47,6 +54,7 @@ body {
 }
 
 .user-info {
+    flex-direction: column;
     padding: 1px;
     display: flex;
 }
@@ -76,27 +84,36 @@ body {
     -webkit-box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
     box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
-    height: 100px;
-    width: 66px;
+    height: 92px;
+    width: 70px;
     border-radius: 5px;
     border: 1px solid grey;
     margin: 3px;
+    display: flex;
+    align-items: center;
+    padding-top: 5px;
 }
 
 .user-cards {
+    width: 100%;
     align-items: center;
     display: flex;
+    justify-content: center;
 }
 
 .user-cards .card-place {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.user-card-place,
+.card-place {
+    top: 5px;
+    position: relative;
+}
+
 #common-cards {
     display: flex;
-    align-items: center;
     justify-content: center;
-    height: 100%;
 }
 
 .user-wait-action {
@@ -120,6 +137,36 @@ body {
     position: absolute;
 }
 
+.dialer {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-image: url(./img/dealer.png);
+    background-size: cover;
+    margin-left: -45px;
+}
+
+.play-field {
+padding-top: 33px;
+}
+
+.icon-bank {
+    width: 90px;
+    height: 51px;
+    background-image: url(./img/bank.png);
+    background-size: cover;
+}
+
+.bank {
+    width: 87px;
+    margin: 0 auto -5px;
+    text-align: center;
+}
+
+.total-bank {
+    font-size: 1.1em;
+}
+
 /* LOG */
 #log {
     position: fixed;
@@ -138,7 +185,7 @@ body {
 }
 
 #action-buttons {
-    width: 390px;
+    width: 800px;
     display: flex;
 }
 
@@ -151,14 +198,17 @@ body {
     display: flex;
     width: 250px;
 }
-.ranger-input{
+
+.ranger-input {
     width: 100px
 }
-.runger-but{
+
+.runger-but {
     width: 50px !important;
     font-size: 1.5em;
 }
-#action-buttons-blind{
+
+#action-buttons-blind {
     margin: 5px;
     align-items: center;
     display: flex;

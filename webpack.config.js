@@ -46,7 +46,7 @@ module.exports = {
     }
 };
 
-if (isDev) {
-    ls = exec('nodemon server --watch server --ignore server/public');
-    ls.stdout.on('data', data => console.log('\x1b[35m', 'Server:', data.replace('\n', '')));
-}
+// if (isDev) {
+//     ls = exec('nodemon server --watch server --ignore server/public');
+//     ls.stdout.on('data', data => console.log('\x1b[35m', 'Server:', data.replace('\n', '')));
+// }

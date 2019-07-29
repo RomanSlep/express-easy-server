@@ -12,12 +12,9 @@ io.sockets.on('connection', socket => {
         if (!user){
             return;
         }
-        const player = players[data.login] = {user, socket};
+        const player = players[data.login] = {user, socket, sendUserData};
         const room_id = Object.keys(Store.rooms)[0];
         Store.setPlayerToRoom(room_id, player);
-        // const room = Store.rooms[room_id];
-        // Store.startGameInToRoom(room.id);
-        // console.log(room.game.getWinners());
     });
     socket.on('player_remove', async data=>{
         Store.removePlayer(players[data.login]);
@@ -69,4 +66,13 @@ function getPlayer(q) {
 }
 function error(s, msg){
     s.emit('errorApi', {msg});
+}
+
+function sendUserData(game){
+    const {user} = this;
+    const clearUser = {
+        balance: user.balance
+    };
+    this.socket.emit('userData', clearUser);
+    // user.save();
 }
