@@ -79,7 +79,7 @@ module.exports = {
             const room = this.rooms[room_id];
             const login = player.user.login;
             if (room.places[place] === login){ // если действительно там сидел
-                room.places[place] = null;
+                delete room.places[place];
                 player.isPlaced = false;
                 if (player.user.login === login){
                     this.updateDealer(room_id);
