@@ -434,9 +434,9 @@ if (typeof exports !== 'undefined') {
 //     flush = POKER.handFromString('7s 6s As Ks 3s'),
 //     straight = POKER.handFromString('7s 6s 4c 3h 5s'),
 //     lowStraight = POKER.handFromString('As 2s 4c 3h 5s');
-// var a1 = POKER.handFromString('As Ah Ad Ks 3c'),
-// a2 = POKER.handFromString('Ah Ad Ks 3c As');
-// console.log('>>>>>>>>>>>>>>>>>>', POKER.getWinners([a1, a2]).length);
+// var a1 = POKER.handFromString('7s 6s 5h Qc 5s Jh 7c'),
+//     a2 = POKER.handFromString('7s Js 5h Qc 5s Jh 7c');
+// console.log('>>>>>>>>>>>>>>>>>>', POKER.getWinners([a2, a1])[0]);
 // var winner = POKER.getWinners([tripAces, flush, straight, lowStraight]);
 // // winner == [flush]
 

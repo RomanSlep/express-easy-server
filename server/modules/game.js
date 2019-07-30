@@ -3,6 +3,7 @@ const $u = require('../helpers/utils');
 const _ = require('underscore');
 const config = require('../helpers/configReader');
 const checkUserActionsProto = require('./userActions');
+const Ranker = require('handranker');
 let roomsApi = null;
 
 module.exports = function (room_id, Store) {
@@ -35,12 +36,15 @@ module.exports.prototype.nextGame = function(){
     this.waitUserAction = {
         login: string,
         action: 'winner',
-        text: 'Winners: '
+        text: 'Winners: ',
+        payload: JSON.stringify({winners: this.winners})
     };
     this.sendUserActionAndWait();
     const {room} = this;
     const room_id = room.id;
+    const oppenedCards = this.oppenedCards;
     room.game = new module.exports(room_id);
+    room.game.oppenedCards = oppenedCards;
     room.game.updateGamers();
     const countTakedPlaces = Object.keys(roomsApi.getRoomGamers(room_id)).length;
     if (room.game.status === 'wait' && countTakedPlaces >= config.minGamers){
@@ -49,6 +53,7 @@ module.exports.prototype.nextGame = function(){
 };
 module.exports.prototype.start = function(){
     try {
+        this.oppenedCards = []; // сбрасываем
         const {room} = this;
         this.status = 'preflop';
         this.updateGamers();
@@ -153,19 +158,31 @@ module.exports.prototype.setCommonCard = function(){
 
 module.exports.prototype.getWinners = function(){
     try {
-        console.log('Winners', this.oppenedCards);
-        const hands = Object.keys(this.gamersInGame()).map(l =>{
-            console.log({l});
-            const hand = POKER.handFromString((this.gamersCards[l].join(' ') + ' ' + this.oppenedCards.join(' ')).trim());
-            hand.login = l;
-            return hand;
+        // const hands = Object.keys(this.gamersInGame()).map(l =>{
+        //     console.log(l, this.gamersCards[l].join(' ') + ' ' + this.oppenedCards.join(' '));
+        //     const hand = POKER.handFromString((this.gamersCards[l].join(' ') + ' ' + this.oppenedCards.join(' ')).trim());
+        //     hand.login = l;
+        //     return hand;
+        // });
+        // const winners = POKER.getWinners(hands).map(w=>{
+        //     const details = w.getHandDetails().name;
+        //     return {login: w.login, details, cards: this.gamersCards[w.login]};
+        // });
+        // console.log({winners});
+        // this.winners = winners;
+
+
+        var board = this.oppenedCards;
+        const hands_ = Object.keys(this.gamersInGame()).map(l =>{
+            console.log(l, this.gamersCards[l]);
+            return {cards: this.gamersCards[l], id: l};
         });
-        const winners = POKER.getWinners(hands).map(w=>{
-            const details = w.getHandDetails().name;
-            return {login: w.login, details};
-        });
-        console.log({winners});
+
+        const winner = Ranker.orderHands(hands_, board)[0][0];
+        console.log('>>RT', winner.id, winner.description);
+        const winners = [{login: winner.id, details: winner.description, cards: this.gamersCards[winner.id]}];
         this.winners = winners;
+
         return winners;
     } catch (e){
         console.log('Error game.getWinners ', e);
@@ -225,7 +242,8 @@ module.exports.prototype.waitNextAction = function (cb) {
             data: {
                 event: this.waitUserAction.action,
                 msg: this.waitUserAction.text + ' ' + this.waitUserAction.login,
-                timer: config.waitUserActionSeconds
+                timer: config.waitUserActionSeconds,
+                payload: this.waitUserAction.payload
             }
         });
     } catch (e){

@@ -44,7 +44,8 @@ export default new Vue({
             places: {}
         },
         log: [],
-        uCards: [],
+        uCards: {},
+        detailsWin: {},
         secondsLeft: 0
     },
     methods: {

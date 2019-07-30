@@ -24,7 +24,23 @@ socket.on('emitRoom', data=>{
     }
     if (data.event === 'waitStartGame') {
         Store.timer(config.pausedBeforeStartGame);
-        Store.uCards = [];
+    }
+    if (data.event === 'smallBlind') {
+        console.log('Reset');
+        Store.uCards = {}; // сбрасываем карты
+        Store.detailsWin = {};
+    }
+    if (data.event === 'winner') {
+        try {
+            const info = JSON.parse(data.payload);
+            const winner = info.winners[0];
+            Store.uCards[winner.login] = winner.cards;
+            Store.detailsWin = {login: winner.login, txt: winner.details};
+            Store.room.game.oppenedCards = info.oppenedCards;
+        } catch (e) {
+            Store.uCards = {}; // сбрасываем карты
+            Store.detailsWin = {};
+        }
     }
 });
 
@@ -41,8 +57,7 @@ socket.on('userData', user=>{
     Object.assign(Store.user, user);
 });
 socket.on('uCards', data=>{
-    // console.log('uCards', data);
-    Store.uCards = data.cards;
+    Store.uCards[Store.user.login] = data.cards;
 });
 
 

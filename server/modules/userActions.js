@@ -41,6 +41,7 @@ module.exports = {
         this.sblind = data.value;
         this.sblindUser = user.login;
         userData.totalBet = data.value;
+        userData.lastMove = 'SBlind';
         // TODO: транзакцию юзеру на снятие!
         user.balance -= data.value;
         // Задаем большой блаинд
@@ -64,6 +65,7 @@ module.exports = {
         this.bblind = data.value;
         this.bblindUser = user.login;
         userData.totalBet = data.value;
+        userData.lastMove = 'BBlind';
         user.balance -= data.value;
         // TODO: транзакцию юзеру на снятие!
 
@@ -77,6 +79,7 @@ module.exports = {
             action: 'bidding',
             text: 'Wait user bidding'
         };
+        this.status = 'preflop';
         this.checkNeedFinished();// вдруг игроков 2е и надо выложить карты
         this.finalAction();
     },
@@ -95,6 +98,7 @@ module.exports = {
             } else {
                 user.balance -= call;
                 userData.totalBet += call;
+                userData.lastMove = 'Call';
             }
         }
         if (data.move === 'raise'){
@@ -106,6 +110,7 @@ module.exports = {
                 console.log({raise});
                 user.balance -= raise;
                 userData.totalBet += raise;
+                userData.lastMove = 'Raise';
             }
         }
 
@@ -113,6 +118,7 @@ module.exports = {
             if (currentBet !== userData.totalBet){
                 console.log('Error CHECK ', {currentBet, userBet: userData.totalBet});
             }
+            userData.lastMove = 'Check';
         }
 
         const res = this.checkNeedFinished();
@@ -135,7 +141,6 @@ module.exports = {
      */
     finalAction(player){
         if (player){
-            console.log('BALANCE', player.user.login, player.user.balance);
             player.sendUserData(this);
             this.gamersData[player.user.login].round = this.round;
         }

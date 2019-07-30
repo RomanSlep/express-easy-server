@@ -9,11 +9,15 @@ body {
     background-color: #37363a !important;
 }
 
+#gameBlock {
+    width: 730px;
+}
+
 /* СТОЛ */
 #table {
     color: wheat;
-    width: 700px;
-    height: 345px;
+    width: 600px;
+    height: 293px;
     background: black;
     background: url(./img/table_1.png) 100% 100% no-repeat;
     margin: 100px;
@@ -22,20 +26,20 @@ body {
 
 .player-place {
     display: flex;
-    width: 147px;
-    height: 110px;
+    width: 120px;
+    height: 80px;
     position: absolute;
     border-radius: 5px;
-    border: 2px solid grey;
+    border: 1px solid grey;
 }
 
 .place-taked {
     margin-left: -25%;
     display: flex;
     position: absolute;
-    margin-top: -59px;
+    margin-top: -45px;
     background: rgba(0, 0, 0, 0.5);
-    width: 150%;
+    width: 130%;
 }
 
 .user-avatar {
@@ -45,7 +49,7 @@ body {
 
 .place-taked img {
     margin: auto;
-    width: 50px;
+    width: 40px;
 }
 
 .user-place {
@@ -54,9 +58,18 @@ body {
 }
 
 .user-info {
+    font-size: 0.8em;
     flex-direction: column;
-    padding: 1px;
+    padding: 4px;
     display: flex;
+    margin: auto;
+}
+
+.last-move {
+    padding-bottom: 2px;
+    text-align: center;
+    border-bottom: 1px solid;
+    margin-bottom: 2px;
 }
 
 .place-free {
@@ -73,10 +86,10 @@ body {
 
 .place-not-taked {
     margin: auto;
-    width: 70px;
+    width: 60px;
     background-image: url(./img/notTakedPlace.png);
     background-size: cover;
-    height: 70px;
+    height: 60px;
 }
 
 .card-place {
@@ -84,8 +97,8 @@ body {
     -webkit-box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
     box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
-    height: 92px;
-    width: 70px;
+    height: 74px;
+    width: 59px;
     border-radius: 5px;
     border: 1px solid grey;
     margin: 3px;
@@ -94,11 +107,20 @@ body {
     padding-top: 5px;
 }
 
+.card-img {
+    width: 60px;
+    height: 80px;
+}
+
 .user-cards {
     width: 100%;
     align-items: center;
     display: flex;
     justify-content: center;
+}
+
+.user-card-place {
+    /* height: 78px; */
 }
 
 .user-cards .card-place {
@@ -118,23 +140,33 @@ body {
 
 .user-wait-action {
     position: absolute;
-    margin-top: -37px;
-    width: 100%;
+    margin-top: -30px;
+    font-size: 0.9em;
+    width: 200px;
     display: flex;
     align-items: center;
 }
 
 .user-wait-action .gif {
     margin-right: 3px;
-    width: 30px;
-    height: 30px;
-    background-image: url(./img/gif/wait.gif);
+    width: 27px;
+    height: 27px;
     background-size: cover;
 }
 
+.gif-wait {
+    /* background-image: url(./img/gif/wait.gif); */
+}
+
+.gif-winner {
+    background-image: url(./img/gif/wait.gif);
+}
 #delay-before-start {
+    padding: 3px;
+    margin-top: 33px;
     font-size: 1.5em;
     position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .dialer {
@@ -147,7 +179,7 @@ body {
 }
 
 .play-field {
-padding-top: 33px;
+    padding-top: 33px;
 }
 
 .icon-bank {
@@ -176,21 +208,24 @@ padding-top: 33px;
 
 /* USER PANEL */
 #user-panel {
-    border: 1px solid #1d1f1d;
-    background: radial-gradient(black, transparent);
-    margin-top: 140px;
-    font-size: 1.3em;
+    margin: 0 auto;
+    width: 694px;
+    /* border: 1px solid #1d1f1d; */
+    /* background: radial-gradient(black, transparent); */
     display: flex;
-    padding: 18px;
+    padding: 3px;
 }
 
 #action-buttons {
-    width: 800px;
+    width: 648px;
+    justify-content: center;
     display: flex;
+    margin: 0 auto;
 }
 
 .action-button {
-    width: 110px !important;
+    margin: 0 4px;
+    width: 88px !important;
 }
 
 .ranger {
