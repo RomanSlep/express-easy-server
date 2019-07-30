@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import Store from '../Store';
 import config from '../../config';
 
-const socket = io('http://localhost:3300');
+const socket = io(location.hostname + ':3300');
 Store.socket = socket;
 
 socket.on('connect', function () {
