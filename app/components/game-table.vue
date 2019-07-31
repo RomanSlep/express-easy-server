@@ -3,7 +3,7 @@
         <div v-for="n in [1, 2, 3, 4, 5, 6]" :key="n" :id="'player' + n" class="player-place"
             :class="{hovered: !isUserPlaced && !room.places[n]}">
             <div v-show="room.places[n]" class="place-taked"
-            :class="{'not-in-game': room.places[n] && (!gamersData[room.places[n]] || gamersData[room.places[n]].isFold)}">
+            :class="{'not-in-game': game.status!=='wait' && room.places[n] && (!gamersData[room.places[n]] || gamersData[room.places[n]].isFold)}">
                 <div class="dialer" v-if="room.places[n] === room.dealer"></div>
                 <div class="user-wait-action" v-show="game.waitUserAction.login === room.places[n]">
                     <div class="gif"></div>
