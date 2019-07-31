@@ -35,6 +35,7 @@ socket.on('emitRoom', data=>{
             setTimeout(()=>{
                 Store.uCards = {}; // сбрасываем карты
                 Store.detailsWin = {};
+                Store.room.game.oppenedCards = [];
             }, config.pausedBeforeStartGame * 1000);
             Store.room.game.oppenedCards = info.oppenedCards;
         } catch (e) {
