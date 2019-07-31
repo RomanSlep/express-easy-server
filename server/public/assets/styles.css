@@ -33,7 +33,7 @@ body {
     border: 1px solid grey;
 }
 .not-in-game{
-    opacity: 0.3;
+    opacity: 0.6
 }
 
 .place-taked {
