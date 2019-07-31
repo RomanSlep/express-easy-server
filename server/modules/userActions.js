@@ -22,9 +22,7 @@ module.exports = {
                 return 'Not Valid data!';
             }
             console.log('Valid action', login, action.action);
-            if (this.waitNextActionTimeOut) {
-                clearTimeout(this.waitNextActionTimeOut);
-            }
+            this.clearWaitTimeout();
             return this[action.action](data, player);
         } catch (e){
             console.log('Error checkUserAction ->', action.action + '->', e);
@@ -172,13 +170,38 @@ module.exports = {
      * @description раздать выигрыши
      */
     winnersBalance(){
-        const countWinners = this.winners.length;
-        const path = this.getBank() / countWinners;
-        this.winners.forEach(w=>{
-            const player = this.room.players[w.login];
-            const {user} = player;
-            user.balance += path;
-            player.sendUserData();
-        });
+        try {
+            const countWinners = this.winners.length;
+            const path = this.getBank() / countWinners;
+            this.winners.forEach(w=>{
+                const player = this.room.players[w.login];
+                const {user} = player;
+                user.balance += path;
+                player.sendUserData();
+            });
+
+            const msg = this.winners.reduce((s, w)=>{
+                return `${s} ${w.login} (${w.details})`;
+            }, '');
+
+            this.waitUserAction = {
+                login: msg,
+                action: 'winner',
+                text: 'Winners: ',
+                payload: JSON.stringify({winners: this.winners})
+            };
+
+            this.roomsApi.emitUpdateRoom({
+                room: this.room,
+                data: {
+                    event: this.waitUserAction.action,
+                    msg: this.waitUserAction.text + ' ' + this.waitUserAction.login,
+                    payload: this.waitUserAction.payload
+                }
+            });
+        } catch (e){
+            console.log('Erroro winnersBalance: ', this.winners, e);
+        }
     }
+
 };

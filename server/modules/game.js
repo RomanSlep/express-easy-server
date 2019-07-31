@@ -30,25 +30,15 @@ module.exports = function (room_id, Store) {
  */
 
 module.exports.prototype.nextGame = function(){
-    const string = this.winners.reduce((s, w)=>{
-        return `${s} ${w.login} (${w.details})`;
-    }, '');
-
-    this.waitUserAction = {
-        login: string,
-        action: 'winner',
-        text: 'Winners: ',
-        payload: JSON.stringify({winners: this.winners})
-    };
-    this.sendUserActionAndWait();
+    this.clearWaitTimeout();
     const {room} = this;
     const room_id = room.id;
     const oppenedCards = this.oppenedCards;
-setTimeout (()=>{
-this.oppenedCards=[];
-}, 10*1000)
     room.game = new module.exports(room_id);
     room.game.oppenedCards = oppenedCards;
+    setTimeout(()=>{
+        room.game.oppenedCards = [];
+    }, config.pausedBeforeStartGame * 1000);
     room.game.updateGamers();
     const countTakedPlaces = Object.keys(roomsApi.getRoomGamers(room_id)).length;
     if (room.game.status === 'wait' && countTakedPlaces >= config.minGamers){
@@ -118,6 +108,11 @@ module.exports.prototype.gamersInGame = function () {
     });
     return activeGamers;
 },
+module.exports.prototype.clearWaitTimeout = function(){
+    if (this.waitNextActionTimeOut) {
+        clearTimeout(this.waitNextActionTimeOut);
+    };
+};
 module.exports.prototype.setCards = function(){
     try {
         const gamers = this.gamersInGame();
@@ -203,15 +198,14 @@ module.exports.prototype.sendUserActionAndWait = function(){
     this.waitNextAction(handler);
 };
 module.exports.prototype.waitNextAction = function (cb) {
-    // console.log('waitNextAction', this.waitUserAction);
+    console.log('waitNextAction', this.waitUserAction);
     try {
-        if (this.waitNextActionTimeOut) {
-            clearTimeout(this.waitNextActionTimeOut);
-        }
+        this.clearWaitTimeout();
         const {room} = this;
         const room_id = room.id;
         const decorator = () => {
             // if (this._waitCounter){
+            console.log(this.waitUserAction);
             this.removeGamer(this.waitUserAction.login);
             // }
             if (Object.keys(this.gamers).length < config.minGamers){
@@ -224,6 +218,14 @@ module.exports.prototype.waitNextAction = function (cb) {
             this.waitUserAction.login = nextLogin;
             cb();
         };
+        const inGame = this.gamersInGame();
+        if (Object.keys(inGame).length < 2){
+            console.log('Finish game, Alone!!');
+            this.winners = [{login: Object.keys(inGame)[0], details: 'Alone'}];
+            this.winnersBalance();
+            this.nextGame();
+            return;
+        }
 
         this.waitNextActionTimeOut = setTimeout(decorator, (config.waitUserActionSeconds + 2) * 1000);
         roomsApi.emitUpdateRoom({
@@ -253,11 +255,10 @@ module.exports.prototype.removeGamer = function (login) {
         if (this.room.dealer === login){
             this.room.dealer = null;
         }
-if(room.game.gamersData[login]){
-room.game.gamersData[login].isFold = true;;
-}
+        if (this.gamersData[login]){
+            this.gamersData[login].isFold = true;
+        }
         this.room.players[login].isPlaced = false;
-        this.updateGamers();
     } catch (e){
         console.log('Error game.waitNextAction ', e);
     }

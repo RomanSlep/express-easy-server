@@ -46,7 +46,8 @@ export default new Vue({
         log: [],
         uCards: {},
         detailsWin: {},
-        secondsLeft: 0
+        secondsLeft: 0,
+        gamersPlaces: {} // размещение игроков на начало матча
     },
     methods: {
         updatePublic() {

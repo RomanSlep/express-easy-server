@@ -69,7 +69,7 @@ export default {
         return {
             timer: {
                 secondsLeft: 0,
-                timeOut: null
+                timeOut: null,
             }
         }
     },
@@ -82,9 +82,6 @@ export default {
         },
         user() {
             return Store.user;
-        },
-        isCardsSeted(){
-            return Store.uCards.length;
         },
         uCards(){
             return Store.uCards;
@@ -99,18 +96,18 @@ export default {
             return this.game.gamersData;
         },
         cards() {
-            const {uCards} = Store;
-            const gamers = this.gamersData;
+             console.log('U>',JSON.stringify(Store.uCards));
+            const gamers = Store.gamersPlaces;
             const cards = {};
             Object.keys(gamers).forEach(l => {
                 const {place} = gamers[l]
-                if (uCards[l]) {
-                    cards[place] = uCards[l];
+                if (this.uCards[l]) {
+                    cards[place] = this.uCards[l];
                 } else {
                     cards[place] = ['0_0', '0_0'];
                 }
             });
-           console.log({gamers, cards})
+           console.log('C>>', JSON.stringify(cards));
             return cards;
         },
     },
