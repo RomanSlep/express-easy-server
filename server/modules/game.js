@@ -247,7 +247,7 @@ module.exports.prototype.removeGamer = function (login) {
             return;
         }
         const place = $u.getKeyByValue(this.gamers, login); // удаляем просравшего очередь
-        this.room.places[place] = null;
+        delete this.room.places[place];
         if (this.room.dealer === login){
             this.room.dealer = null;
         }

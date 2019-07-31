@@ -149,6 +149,9 @@ body {
     display: flex;
     align-items: center;
 }
+.winner-line{
+    width: 300px;
+}
 
 .user-wait-action .gif {
     margin-right: 3px;
@@ -158,7 +161,7 @@ body {
 }
 
 .gif-wait {
-    /* background-image: url(./img/gif/wait.gif); */
+    background-image: url(./img/gif/wait.gif);
 }
 
 .gif-winner {

@@ -25,17 +25,17 @@ socket.on('emitRoom', data=>{
     if (data.event === 'waitStartGame') {
         Store.timer(config.pausedBeforeStartGame);
     }
-    if (data.event === 'smallBlind') {
-        console.log('Reset');
-        Store.uCards = {}; // сбрасываем карты
-        Store.detailsWin = {};
-    }
+
     if (data.event === 'winner') {
         try {
             const info = JSON.parse(data.payload);
             const winner = info.winners[0];
             Store.uCards[winner.login] = winner.cards;
             Store.detailsWin = {login: winner.login, txt: winner.details};
+            setTimeout(()=>{
+                Store.uCards = {}; // сбрасываем карты
+                Store.detailsWin = {};
+            }, config.pausedBeforeStartGame * 1000);
             Store.room.game.oppenedCards = info.oppenedCards;
         } catch (e) {
             Store.uCards = {}; // сбрасываем карты
