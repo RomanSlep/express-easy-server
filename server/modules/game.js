@@ -44,6 +44,9 @@ module.exports.prototype.nextGame = function(){
     const {room} = this;
     const room_id = room.id;
     const oppenedCards = this.oppenedCards;
+setTimeout (()=>{
+this.oppenedCards=[];
+}, 10*1000)
     room.game = new module.exports(room_id);
     room.game.oppenedCards = oppenedCards;
     room.game.updateGamers();
@@ -55,7 +58,6 @@ module.exports.prototype.nextGame = function(){
 module.exports.prototype.start = function(){
     try {
         this.gamers = $u.clone(roomsApi.getCompactPlaces(this.room.id));
-        this.oppenedCards = []; // сбрасываем
         const {room} = this;
         this.status = 'preflop';
         this.updateGamers();
