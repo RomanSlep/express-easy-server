@@ -253,6 +253,9 @@ module.exports.prototype.removeGamer = function (login) {
         if (this.room.dealer === login){
             this.room.dealer = null;
         }
+if(room.game.gamersData[login]){
+room.game.gamersData[login].isFold = true;;
+}
         this.room.players[login].isPlaced = false;
         this.updateGamers();
     } catch (e){
