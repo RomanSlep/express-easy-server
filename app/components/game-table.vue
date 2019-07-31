@@ -2,7 +2,8 @@
     <div id="table">
         <div v-for="n in [1, 2, 3, 4, 5, 6]" :key="n" :id="'player' + n" class="player-place"
             :class="{hovered: !isUserPlaced && !room.places[n]}">
-            <div v-show="room.places[n]" class="place-taked">
+            <div v-show="room.places[n]" class="place-taked"
+            :class="{'not-in-game': room.places[n] && (!gamersData[room.places[n]] || gamersData[room.places[n]].isFold)}">
                 <div class="dialer" v-if="room.places[n] === room.dealer"></div>
                 <div class="user-wait-action" v-show="game.waitUserAction.login === room.places[n]">
                     <div class="gif"></div>
@@ -17,11 +18,11 @@
                         <img src="assets/img/avatar.jpg">
                     </div>
                     <div class="user-info">
-                        <div class="last-move">{{game.gamersData[room.places[n]] && game.gamersData[room.places[n]].lastMove || '-'}}</div>
+                        <div class="last-move">{{gamersData[room.places[n]] && gamersData[room.places[n]].lastMove || '-'}}</div>
                         <div>
                             <span class="user-name txt-yellow">{{room.places[n]}}</span>
                             <span class="txt-green">Bet:
-                                {{game.gamersData[room.places[n]] && game.gamersData[room.places[n]].totalBet || 0}}</span>
+                                {{gamersData[room.places[n]] && gamersData[room.places[n]].totalBet || 0}}</span>
                         </div>
                     </div>
                 </div>
@@ -94,9 +95,12 @@ export default {
         detailsWin(){
             return Store.detailsWin
         },
+        gamersData(){
+            return this.game.gamersData;
+        },
         cards() {
             const {uCards} = Store;
-            const gamers = this.game.gamersData;
+            const gamers = this.gamersData;
             const cards = {};
             Object.keys(gamers).forEach(l => {
                 const {place} = gamers[l]
@@ -106,7 +110,7 @@ export default {
                     cards[place] = ['0_0', '0_0'];
                 }
             });
-            // this.$forceUpdate();
+           console.log({gamers, cards})
             return cards;
         },
     },

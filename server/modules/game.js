@@ -16,6 +16,7 @@ module.exports = function (room_id, Store) {
             bblind: 0,
             sblind: 0,
             round: 0,
+            gamers: {},
             gamersCards: {},
             gamersData: {}
         });
@@ -53,6 +54,7 @@ module.exports.prototype.nextGame = function(){
 };
 module.exports.prototype.start = function(){
     try {
+        this.gamers = $u.clone(roomsApi.getCompactPlaces(this.room.id));
         this.oppenedCards = []; // сбрасываем
         const {room} = this;
         this.status = 'preflop';
@@ -158,20 +160,6 @@ module.exports.prototype.setCommonCard = function(){
 
 module.exports.prototype.getWinners = function(){
     try {
-        // const hands = Object.keys(this.gamersInGame()).map(l =>{
-        //     console.log(l, this.gamersCards[l].join(' ') + ' ' + this.oppenedCards.join(' '));
-        //     const hand = POKER.handFromString((this.gamersCards[l].join(' ') + ' ' + this.oppenedCards.join(' ')).trim());
-        //     hand.login = l;
-        //     return hand;
-        // });
-        // const winners = POKER.getWinners(hands).map(w=>{
-        //     const details = w.getHandDetails().name;
-        //     return {login: w.login, details, cards: this.gamersCards[w.login]};
-        // });
-        // console.log({winners});
-        // this.winners = winners;
-
-
         var board = this.oppenedCards;
         const hands_ = Object.keys(this.gamersInGame()).map(l =>{
             console.log(l, this.gamersCards[l]);
@@ -179,7 +167,6 @@ module.exports.prototype.getWinners = function(){
         });
 
         const winner = Ranker.orderHands(hands_, board)[0][0];
-        console.log('>>RT', winner.id, winner.description);
         const winners = [{login: winner.id, details: winner.description, cards: this.gamersCards[winner.id]}];
         this.winners = winners;
 
@@ -193,7 +180,7 @@ module.exports.prototype.getWinners = function(){
  */
 module.exports.prototype.updateGamers = function () {
     try {
-        this.gamers = $u.clone(roomsApi.getCompactPlaces(this.room.id));
+        console.log('Update', this.gamers);
         Object.keys(this.gamers).forEach(place => {
             const login = this.gamers[place];
             this.gamersData[login] = this.gamersData[login] || {
@@ -264,7 +251,6 @@ module.exports.prototype.removeGamer = function (login) {
         if (this.room.dealer === login){
             this.room.dealer = null;
         }
-        this.gamersData[login].isFold = true; // считаем выбывшим из игры
         this.room.players[login].isPlaced = false;
         this.updateGamers();
     } catch (e){

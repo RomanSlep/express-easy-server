@@ -32,6 +32,9 @@ body {
     border-radius: 5px;
     border: 1px solid grey;
 }
+.not-in-game{
+    opacity: 0.3;
+}
 
 .place-taked {
     margin-left: -25%;
