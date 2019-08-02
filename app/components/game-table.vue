@@ -1,70 +1,49 @@
 <template>
-    <div id="table">
-        <div v-for="n in [1, 2, 3, 4, 5, 6]" :key="n" :id="'player' + n" class="player-place"
-            :class="{hovered: !isUserPlaced && !room.places[n]}">
-            <div v-show="room.places[n]" class="place-taked"
-            :class="{'not-in-game': !game.status.includes('wait') && room.places[n] && (!gamersData[room.places[n]] || gamersData[room.places[n]].isFold)}">
-                <div class="dialer" v-if="room.places[n] === room.dealer"></div>
-                <div class="user-wait-action" v-show="game.waitUserAction.login === room.places[n]">
-                    <div class="gif-wait"></div>
-                    <div class="action txt-yellow">{{game.waitUserAction.text + ' ' + timer.secondsLeft + 's...'}}</div>
-                </div>
-                 <div class="user-wait-action winner-line" v-show="detailsWin.login === room.places[n]">
-                    <div class="gif-winner"></div>
-                    <div class="action txt-yellow">WINNER: {{detailsWin.txt}}</div>
-                </div>
-                <div class="user-place">
-                    <div class="user-avatar">
-                        <img src="assets/img/avatar.jpg">
-                    </div>
-                    <div class="user-info">
-                        <div class="last-move">{{gamersData[room.places[n]] && gamersData[room.places[n]].lastMove || '-'}}</div>
-                        <div>
-                            <span class="user-name txt-yellow">{{room.places[n]}}</span>
-                            <span class="txt-green">Bet:
-                                {{gamersData[room.places[n]] && gamersData[room.places[n]].totalBet || 0}}</span>
-                        </div>
-                    </div>
-                </div>
-                <span v-show="room.places[n] === user.login" @click="leavePlace(n)"><i
-                        class="hovered txt-yellow fa fa-arrow-circle-up" aria-hidden="true"></i></span>
-            </div>
+<div id="table">
+    <div v-for="n in [1, 2, 3, 4, 5, 6]" :key="n" :id="'player' + n" class="player-place" :class="{hovered: !isUserPlaced && !room.places[n]}">
+        <user-place :n="n" :room="room" :game="game" :gamers-data="gamersData" :details-win="detailsWin" :user="user" :timer="timer"></user-place>
 
-            <div class="place-free" @click="takePlace(n)" v-show="!isUserPlaced && !room.places[n]"></div>
-            <div class="place-not-taked" v-show="isUserPlaced && !room.places[n]"></div>
+        <div class="place-free" @click="takePlace(n)" v-show="!isUserPlaced && !room.places[n]"></div>
+        <div class="place-free" v-show="isUserPlaced && !room.places[n]"></div>
 
-            <div class="user-cards" v-if="cards[n]">
-                <div v-for="(c, i) in cards[n]" :key="i" class="user-card-place">
-                    <img v-show="Object.keys(uCards).length" class="card-img" :src="'assets/img/cards/' + c +'.png'">
-                </div>
-            </div>
-        </div>
-        <div class="play-field">
-            <div class="bank">
-                <div class="total-bank txt-yellow"><u>{{game.bank || 0}}</u></div>
-                <div>{{game.currentMaximalBet.maxBet || 0}}</div>
-                <div class="icon-bank"></div>
-            </div>
-
-            <div id="common-cards">
-                <div v-for="n in [0, 1, 2, 3, 4]" :key="n" :id="'card' + n" class="card-place">
-                    <img :src="'assets/img/cards/' + game.oppenedCards[n] +'.png'" class="common-card card-img"
-                        v-if="game.oppenedCards[n]">
-                </div>
-                <div id="delay-before-start" v-show="game.status === 'waitStartGame'">
-                    Game started after {{timer.secondsLeft}}s...
-                </div>
+        <div class="user-cards" v-if="cards[n]">
+            <div v-for="(c, i) in cards[n]" :key="i" class="user-card-place">
+                <img v-show="Object.keys(uCards).length" class="card-img" :src="'assets/img/cards/' + c +'.png'">
             </div>
         </div>
     </div>
+
+    <div class="play-field">
+        <div class="bank">
+            <div class="icon-bank"></div>
+            <div class="bets">
+                <div class="total-bank txt-yellow"><u>{{game.bank || 0}}</u></div>
+                <div>{{game.currentMaximalBet.maxBet || 0}}</div>
+            </div>
+        </div>
+
+        <div id="common-cards">
+            <div v-for="n in [0, 1, 2, 3, 4]" :key="n" :id="'card' + n" class="card-place">
+                <img :src="'assets/img/cards/' + game.oppenedCards[n] +'.png'" class="common-card card-img" v-if="game.oppenedCards[n]">
+            </div>
+            <div id="delay-before-start" v-show="game.status === 'waitStartGame'">
+                Game started after {{timer.secondsLeft}}s...
+            </div>
+        </div>
+    </div>
+</div>
 </template>
 
 <script>
 import Store from '../Store';
 import api from '../core/api';
 import config from '../../config';
+import userPlace from './user-place.vue';
 
 export default {
+    components: {
+        userPlace
+    },
     data() {
         return {
             timer: {
@@ -83,31 +62,31 @@ export default {
         user() {
             return Store.user;
         },
-        uCards(){
+        uCards() {
             return Store.uCards;
         },
         isUserPlaced() {
             return JSON.stringify(this.room.places).includes(`"${this.user.login}"`);
         },
-        detailsWin(){
+        detailsWin() {
             return Store.detailsWin
         },
-        gamersData(){
+        gamersData() {
             return this.game.gamersData;
         },
         cards() {
-             console.log('U>',JSON.stringify(Store.uCards));
             const gamers = Store.gamersPlaces;
             const cards = {};
             Object.keys(gamers).forEach(l => {
-                const {place} = gamers[l]
+                const {
+                    place
+                } = gamers[l]
                 if (this.uCards[l]) {
                     cards[place] = this.uCards[l];
                 } else {
                     cards[place] = ['0_0', '0_0'];
                 }
             });
-           console.log('C>>', JSON.stringify(cards));
             return cards;
         },
     },

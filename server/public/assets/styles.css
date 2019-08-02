@@ -29,20 +29,22 @@ body {
     width: 120px;
     height: 80px;
     position: absolute;
-    border-radius: 5px;
-    border: 1px solid grey;
 }
 .not-in-game{
     opacity: 0.6
 }
 
 .place-taked {
+    border-radius: 50px;
     margin-left: -25%;
     display: flex;
     position: absolute;
     margin-top: -45px;
     background: rgba(0, 0, 0, 0.5);
     width: 130%;
+}
+.place-taked.wait{
+    background:rgba(152, 45, 45, 0.7);
 }
 
 .user-avatar {
@@ -77,14 +79,34 @@ body {
 
 .place-free {
     margin: auto;
-    width: 36px;
-    height: 40px;
-    background-image: url(./img/taked-place.png);
+    width: 77px;
+    height: 69px;
+    background-image: url(./img/free.png);
     background-size: cover;
 }
 
 .player-place:hover .place-free {
-    background-image: url(./img/gif/taked-place.gif);
+   
+}
+
+/* ПОВОРОТЫ */
+#player1 .place-free{
+    transform: rotate(180deg);
+}
+
+#player2 .place-free{
+    transform: rotate(213deg);
+}
+
+#player3 .place-free{
+    transform: rotate(326deg);
+}
+
+#player5 .place-free{
+    transform: rotate(30deg);
+}
+#player6 .place-free{
+    transform: rotate(147deg);
 }
 
 .place-not-taked {
@@ -96,14 +118,14 @@ body {
 }
 
 .card-place {
-    background-color: rgba(0, 0, 0, 0.2);
+    /* background-color: rgba(0, 0, 0, 0.2);
     -webkit-box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
-    box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
+    box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75); */
     height: 74px;
     width: 59px;
     border-radius: 5px;
-    border: 1px solid grey;
+    /* border: 1px solid grey; */
     margin: 3px;
     display: flex;
     align-items: center;
@@ -168,11 +190,13 @@ body {
     background-image: url(./img/gif/wait.gif);
 }
 #delay-before-start {
+    width: 275px;
     padding: 3px;
     margin-top: 33px;
     font-size: 1.5em;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
 }
 
 .dialer {
@@ -189,20 +213,25 @@ body {
 }
 
 .icon-bank {
-    width: 90px;
-    height: 51px;
+    width: 64px;
+    height: 37px;
     background-image: url(./img/bank.png);
     background-size: cover;
 }
 
 .bank {
-    width: 87px;
-    margin: 0 auto -5px;
+    justify-content: center;
+    width: 130px;
+    margin: 15px auto -5px;
     text-align: center;
+    display: flex;
 }
 
 .total-bank {
     font-size: 1.1em;
+}
+.bets{
+    margin-left: 10px;
 }
 
 /* LOG */

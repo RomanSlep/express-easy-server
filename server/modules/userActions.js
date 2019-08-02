@@ -40,6 +40,7 @@ module.exports = {
         this.sblindUser = user.login;
         userData.totalBet = data.value;
         userData.lastMove = 'SBlind';
+        userData.lastBet = data.value;
         // TODO: транзакцию юзеру на снятие!
         user.balance -= data.value;
         // Задаем большой блаинд
@@ -64,6 +65,7 @@ module.exports = {
         this.bblindUser = user.login;
         userData.totalBet = data.value;
         userData.lastMove = 'BBlind';
+        userData.lastBet = data.value;
         user.balance -= data.value;
         // TODO: транзакцию юзеру на снятие!
 
@@ -97,6 +99,7 @@ module.exports = {
                 user.balance -= call;
                 userData.totalBet += call;
                 userData.lastMove = 'Call';
+                userData.lastBet = call;
             }
         }
         if (data.move === 'raise'){
@@ -109,6 +112,7 @@ module.exports = {
                 user.balance -= raise;
                 userData.totalBet += raise;
                 userData.lastMove = 'Raise';
+                userData.lastBet = data.value;
             }
         }
 
