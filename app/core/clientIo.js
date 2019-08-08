@@ -13,9 +13,12 @@ socket.on('connect', function () {
         socket.emit('player_connect', {login});
     }
 });
+socket.on('log', data=>{
+    Store.log.push({msg: data.msg, type: data.type});
+});
 socket.on('emitRoom', data=>{
     Store.room = data.room;
-    // console.log('emitRoom', data); // TODO: писать в лог события
+    console.log('emitRoom', data); // TODO: писать в лог события
     if (data.msg){
         Store.log.push({msg: data.msg, type: data.type});
     }

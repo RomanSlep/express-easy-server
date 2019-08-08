@@ -50,6 +50,7 @@ module.exports = {
             action: 'bigBlind',
             text: 'Wait big blind'
         };
+        socketLog(this.room, `${user.login} set small blind ${data.value} Arts`);
         this.finalAction(player);
     },
     bigBlind(data, player){ // Получили ответ по большому блаинду
@@ -82,6 +83,7 @@ module.exports = {
         };
         this.status = 'preflop';
         this.checkNeedFinished();// вдруг игроков 2е и надо выложить карты
+        socketLog(this.room, `${user.login} set big blind ${data.value} Arts`);
         this.finalAction();
     },
     bidding(data, player){
@@ -90,6 +92,7 @@ module.exports = {
         const currentBet = this.getCurrentMaximalBet().maxBet - userData.totalBet;
         if (data.move === 'fold'){
             userData.isFold = true;
+            socketLog(this.room, `${user.login} FOLD!`, 'red');
         }
         if (data.move === 'call'){
             const call = currentBet;
@@ -101,6 +104,7 @@ module.exports = {
                 userData.totalBet += call;
                 userData.lastMove = 'Call';
                 userData.lastBet = call;
+                socketLog(this.room, `${user.login} CALL ${call} Arts`);
             }
         }
         if (data.move === 'raise'){
@@ -114,6 +118,7 @@ module.exports = {
                 userData.totalBet += raise;
                 userData.lastMove = 'Raise';
                 userData.lastBet = data.value;
+                socketLog(this.room, `${user.login} RAISE ${raise} Arts`);
             }
         }
 
@@ -122,6 +127,7 @@ module.exports = {
                 console.log('Error CHECK ', {currentBet, userBet: userData.totalBet});
             }
             userData.lastMove = 'Check';
+            socketLog(this.room, `${user.login} CHECK!`);
         }
 
         const res = this.checkNeedFinished();
@@ -209,5 +215,8 @@ module.exports = {
             console.log('Erroro winnersBalance: ', this.winners, e);
         }
     }
-
 };
+
+function socketLog(room, msg, type = 'yellow'){
+    roomsApi.emitUpdateRoom({room, data: {event: 'log', msg, type}});
+}

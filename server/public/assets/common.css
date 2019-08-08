@@ -91,7 +91,7 @@ h3 {
 }
 
 .bg-blue {
-    background-color: #0e2e41;
+    background-color: #206a96;
 }
 
 .txt-grey {
@@ -111,15 +111,15 @@ h3 {
 }
 
 .txt-blue {
-    color: #0e2e41;
+    color: #206a96;
 }
 
 input {
-    border-radius: 5px;
+    border-radius: 16px;
     border: 1px solid #492828;
     text-align: center;
     color: white;
-    background: rgba(1, 1, 1, 0.7);
+    background: rgba(1, 1, 1, 0.5);
     font-size: 1.1em;
     margin: 1px;
 }

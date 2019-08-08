@@ -6,7 +6,7 @@ body {
 .no-clicked .action-button,
 .no-clicked.action-button {
     pointer-events: none;
-    background-color: #37363a !important;
+    color: darkgray !important;
 }
 
 #gameBlock {
@@ -40,7 +40,7 @@ body {
     display: flex;
     position: absolute;
     margin-top: 17px;
-    background: rgb(43, 42, 42);
+    background: rgba(0, 0, 0, 0.4);
     width: 130%;
 }
 .place-taked.wait{
@@ -79,7 +79,7 @@ body {
 
 .place-free {
     margin: auto;
-    width: 77px;
+    width: 82px;
     height: 69px;
     background-image: url(./img/free.png);
     background-size: cover;
@@ -115,23 +115,23 @@ body {
 }
 
 #player2 .user-last-bet{
-    top: 70px;
+    top: 80px;
     left: -8px;
 }
 #player3 .user-last-bet{
-    top: -45px;
+    top: -55px;
     left: -8px;
 }
 #player4 .user-last-bet{
-    left: 70px;
+    left: 80px;
     top: -80px;
 }
 #player5 .user-last-bet{
-    top: -45px;
+    top: -55px;
     left: 140px;
 }
 #player6 .user-last-bet{
-    top: 70px;
+    top: 80px;
     left: 140px;
 }
 
@@ -245,7 +245,7 @@ body {
 }
 
 .play-field {
-    padding-top: 60px;
+    padding-top: 70px;
 }
 
 .icon-bank {
@@ -321,4 +321,22 @@ body {
     margin: 5px;
     align-items: center;
     display: flex;
+}
+
+#user-panel button{
+    background-color: rgba(0,0,0,0.5) !important;
+    border-radius: 20px;
+    border: 1px solid;
+}
+.but-check{
+    border-color: #206a96;
+}
+.but-call{
+    border-color: #9ca233;
+}
+.but-fold{
+    border-color: #d03249;
+}
+.but-raise{
+    border-color: #44a02d;
 }
