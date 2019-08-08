@@ -1,3 +1,4 @@
+const $u = require('../helpers/utils');
 let roomsApi;
 module.exports = {
     checkUserAction: function (data, player) {
@@ -163,6 +164,7 @@ module.exports = {
             }
             // общую карту на стол!
             this.setCommonCard();
+            $u.playersToArray(this.gamersData).forEach(g=> g.lastBet = 0);// сбрасываем ставку раунда
         }
         const inGame = this.gamersInGame();
         if (Object.keys(inGame).length < 2){

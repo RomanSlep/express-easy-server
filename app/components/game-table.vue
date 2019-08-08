@@ -15,10 +15,8 @@
 
     <div class="play-field">
         <div class="bank">
-            <div class="icon-bank"></div>
             <div class="bets">
-                <div class="total-bank txt-yellow"><u>{{game.bank || 0}}</u></div>
-                <div>{{game.currentMaximalBet.maxBet || 0}}</div>
+                <div class="total-bank">Pot: {{game.bank || 0}}</div>
             </div>
         </div>
 

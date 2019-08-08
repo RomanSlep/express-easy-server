@@ -6,5 +6,5 @@ export default {
     waitUserActionSeconds: 30,
     pausedBeforeStartGame: 15,
     oppenedCards: 3,
-    commonCards: 5
+    commonCards: 5 
 };

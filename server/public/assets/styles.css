@@ -39,8 +39,8 @@ body {
     margin-left: -25%;
     display: flex;
     position: absolute;
-    margin-top: -45px;
-    background: rgba(0, 0, 0, 0.5);
+    margin-top: 17px;
+    background: rgb(43, 42, 42);
     width: 130%;
 }
 .place-taked.wait{
@@ -109,6 +109,33 @@ body {
     transform: rotate(147deg);
 }
 
+#player1 .user-last-bet{
+    left: 70px;
+    top: 105px;
+}
+
+#player2 .user-last-bet{
+    top: 70px;
+    left: -8px;
+}
+#player3 .user-last-bet{
+    top: -45px;
+    left: -8px;
+}
+#player4 .user-last-bet{
+    left: 70px;
+    top: -80px;
+}
+#player5 .user-last-bet{
+    top: -45px;
+    left: 140px;
+}
+#player6 .user-last-bet{
+    top: 70px;
+    left: 140px;
+}
+
+
 .place-not-taked {
     margin: auto;
     width: 60px;
@@ -123,7 +150,7 @@ body {
     -moz-box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75);
     box-shadow: -5px 4px 5px 0px rgba(50, 50, 50, 0.75); */
     height: 74px;
-    width: 59px;
+    width: 40px;
     border-radius: 5px;
     /* border: 1px solid grey; */
     margin: 3px;
@@ -133,15 +160,17 @@ body {
 }
 
 .card-img {
-    width: 60px;
-    height: 80px;
+    width: 43px;
+    height: 58px;
 }
 
 .user-cards {
+    top: -43px;
     width: 100%;
     align-items: center;
     display: flex;
     justify-content: center;
+    position: absolute;
 }
 
 .user-card-place {
@@ -165,7 +194,7 @@ body {
 
 .user-wait-action {
     position: absolute;
-    margin-top: -30px;
+    top: 50px;
     font-size: 0.9em;
     width: 200px;
     display: flex;
@@ -181,7 +210,14 @@ body {
     height: 27px;
     background-size: cover;
 }
-
+.user-last-bet{
+    background-color: rgba(0,0,0,0.5);
+    position: absolute;
+    padding: 3px;
+    border-radius: 10px;
+    min-width: 28px;
+    text-align: center;
+}
 .gif-wait {
     background-image: url(./img/gif/wait.gif);
 }
@@ -209,7 +245,7 @@ body {
 }
 
 .play-field {
-    padding-top: 33px;
+    padding-top: 60px;
 }
 
 .icon-bank {
@@ -231,7 +267,10 @@ body {
     font-size: 1.1em;
 }
 .bets{
-    margin-left: 10px;
+    background: rgba(0,0,0, 0.3);
+    border-radius: 20px;
+    min-width: 100px;
+    padding: 4px;
 }
 
 /* LOG */

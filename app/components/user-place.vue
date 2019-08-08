@@ -18,13 +18,14 @@
                     <div class="user-info">
                         <div class="last-move">
                             {{gamersData[room.places[n]] && gamersData[room.places[n]].lastMove || '-'}}
-                            {{gamersData[room.places[n]] && gamersData[room.places[n]].lastBet || ''}}
                         </div>
                         <div>
                             <span class="user-name txt-yellow">{{room.places[n]}}</span>
-                            <span class="txt-green">Bet:
-                                {{gamersData[room.places[n]] && gamersData[room.places[n]].totalBet || 0}}</span>
+                            <span class="txt-green"> 
+                                {{gamersData[room.places[n]] && gamersData[room.places[n]].totalBet || 0}} <strike>A</strike>
+                            </span>
                         </div>
+                        <div class="user-last-bet">{{gamersData[room.places[n]] && gamersData[room.places[n]].lastBet || 0}}</div>
                     </div>
                 </div>
                 <span v-show="room.places[n] === user.login" @click="$parent.leavePlace(n)"><i

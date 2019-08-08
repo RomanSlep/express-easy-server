@@ -3,15 +3,16 @@ const Store = require('../helpers/Store');
 const io = require('socket.io').listen(3300);
 
 const players = Store.players = {};
-
+const timers = {};
 io.sockets.on('connection', socket => {
-    console.log('CONNECT USER');
+    console.log('CONNECT USER');    
     let user;
     socket.on('player_connect', async data=>{
         user = await $u.getUserFromQ({login: data.login});
         if (!user){
             return;
         }
+        clearTimeout(timers[data.login]);
         const player = players[data.login] = {user, socket, sendUserData};
         const room_id = Object.keys(Store.rooms)[0];
         Store.setPlayerToRoom(room_id, player);
@@ -51,7 +52,13 @@ io.sockets.on('connection', socket => {
         }
     });
     socket.on('disconnect', async data=>{
-        console.log('disconnect', players[data.login]);
+        const {login} = user;
+        timers[login] = setTimeout(()=>{
+            console.log('Выкинули ' + user.login);
+            Store.removePlayer(players[user.login]); // удаляем если вышел и не зашел
+            delete players[user.login];
+        }, 60 * 1000);
+        console.log('disconnect', user.login);
     });
 });
 
