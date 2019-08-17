@@ -1,10 +1,10 @@
 export default {
     min_bet: 10,
     max_bet: 10000,
-    minGamers: 2,
+    minGamers: 3,
     regDrop: 1000,
     waitUserActionSeconds: 30,
-    pausedBeforeStartGame: 15,
+    pausedBeforeStartGame: 5,
     oppenedCards: 3,
-    commonCards: 5 
+    commonCards: 5
 };

@@ -189,9 +189,11 @@ input {
 }
 
 #modal-header .title {
+    font-size: 1.3em;
     width: 369px;
     display: inline-block;
     text-align: center;
+    color: wheat;
 }
 
 #modal-body {
@@ -203,3 +205,45 @@ input {
     display: flex;
     padding: 5px;
 }
+.modal-text{
+    font-size: 1.2em;
+    margin: 6px auto;
+}
+.modal-input{
+    padding: 4px 2px;
+    width: 100px;
+}
+
+/* SCROLL BAR */
+::-webkit-scrollbar-button { 
+    background-image:url(''); 
+    background-repeat:no-repeat; 
+    width:6px; 
+    height:0px 
+    } 
+    
+    ::-webkit-scrollbar-track { 
+    background-color:#32312e; 
+    box-shadow:0px 0px 3px #000 inset; 
+    } 
+    
+    ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 5px; 
+    border-radius: 5px; 
+    background-color:#a89c70;
+    box-shadow:0px 1px 1px #fff inset; 
+    background-image:url('https://yraaa.ru/_pu/24/59610063.png'); 
+    background-position:center; 
+    background-repeat:no-repeat; 
+    } 
+    
+    ::-webkit-resizer{ 
+    background-image:url(''); 
+    background-repeat:no-repeat; 
+    width:7px; 
+    height:0px 
+    } 
+    
+    ::-webkit-scrollbar{ 
+    width: 11px; 
+    }

@@ -56,12 +56,40 @@ module.exports.prototype.start = function(){
         } else {
             room.dealer = this.getNextGamer(room.dealer);
         }
+
+        // авто SBLIND
+        const sBlindLogin = this.getNextGamer(room.dealer);
+        const sBlindGamerData = this.gamersData[sBlindLogin];
+        const blind = room.blind;
+        this.sblind = blind / 2;
+        this.sblindUser = sBlindLogin;
+        sBlindGamerData.totalBet = this.sblind;
+        sBlindGamerData.lastMove = 'SBlind';
+        sBlindGamerData.lastBet = this.sblind;
+        this.room.players[sBlindLogin].updateArts(-this.sblind);
+        // sBlindGamerData.round = 0;
+
+        // авто BBLIND
+        const bBlindLogin = this.getNextGamer(sBlindLogin);
+        const bBlindGamerData = this.gamersData[bBlindLogin];
+        this.bblind = blind;
+        this.sblindUser = bBlindLogin;
+        bBlindGamerData.totalBet = blind;
+        bBlindGamerData.lastMove = 'BBlind';
+        bBlindGamerData.lastBet = blind;
+        this.room.players[bBlindLogin].updateArts(-this.bblind);
+        // bBlindGamerData.round = 0;
+        // Сдаем по 2 в руки
+        this.setCards();
+        // Запускаем торги
         this.waitUserAction = {
-            login: this.getNextGamer(room.dealer),
-            action: 'smallBlind',
-            text: 'Wait small blind'
+            login: this.getNextGamer(bBlindLogin),
+            action: 'bidding',
+            text: 'Wait user bidding'
         };
-        this.sendUserActionAndWait();
+        this.status = 'preflop';
+        this.checkNeedFinished();// вдруг игроков 2е и надо выложить карты
+        this.finalAction();
     } catch (e){
         console.log('Error Create game ' + e);
     }
@@ -114,6 +142,7 @@ module.exports.prototype.clearWaitTimeout = function(){
     };
 };
 module.exports.prototype.setCards = function(){
+    // console.log('SET CARDS')
     try {
         const gamers = this.gamersInGame();
         const deck = new POKER.Deck();
@@ -122,8 +151,10 @@ module.exports.prototype.setCards = function(){
             const cards = new POKER.Hand(deck.deal(2)).cards;
             const cardsString = POKER.handToString(cards).split(' ');
             this.gamersCards[l] = cardsString;
+
             // отдаем юзеру его карты
-            this.room.players[l].socket.emit('uCards', {cards: cardsString});
+            // console.log({cardsString});
+            this.room.players[l].sendUserData(this);
         }
         this.commonCards = POKER.handToString(new POKER.Hand(deck.deal(config.commonCards)).cards).split(' ');
         this.oppenedCards = [];

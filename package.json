@@ -6,7 +6,7 @@
     "scripts": {
         "prod": "webpack --mode production",
         "dev": "webpack --mode development --watch",
-        "serv": "nodemon server --watch server --ignore server/public vue"
+        "serve": "nodemon server --watch server --ignore server/public vue"
     },
     "author": "",
     "license": "ISC",

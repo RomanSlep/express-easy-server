@@ -51,34 +51,21 @@ export default {
         }
     },
     computed: {
-        room() {
-            return Store.room;
-        },
-        game() {
-            return this.room.game;
-        },
-        user() {
-            return Store.user;
-        },
-        uCards() {
-            return Store.uCards;
-        },
+        room: ()=> Store.room,
+        game: ()=>  Store.room.game,
+        user: ()=> Store.user,
+        uCards: ()=> Store.uCards,
+        detailsWin: ()=> Store.detailsWin,
+        gamersData: ()=>  Store.room.game.gamersData,
+
         isUserPlaced() {
-            return JSON.stringify(this.room.places).includes(`"${this.user.login}"`);
-        },
-        detailsWin() {
-            return Store.detailsWin
-        },
-        gamersData() {
-            return this.game.gamersData;
+            return JSON.stringify(this.room.places).includes(this.user.login);
         },
         cards() {
             const gamers = Store.gamersPlaces;
             const cards = {};
             Object.keys(gamers).forEach(l => {
-                const {
-                    place
-                } = gamers[l]
+                const {place} = gamers[l]
                 if (this.uCards[l]) {
                     cards[place] = this.uCards[l];
                 } else {
@@ -94,10 +81,27 @@ export default {
     },
     methods: {
         takePlace(place) {
-            Store.emit('takePlace', {
-                place,
-                room_id: this.room.id
-            });
+            const {minDeposit} = Store.room;
+            if(this.user.balance < minDeposit){
+                this.$notify({
+                    type: 'error',
+                    group: 'foo',
+                    title: 'Deposit',
+                    text: `Minimal deposit ${minDeposit} Arts`
+                });
+                return;
+            }
+            const {modal} = Store;
+            modal.show({
+                header: 'Take to the table Arts?',
+                cb: () => {
+                    Store.emit('takePlace', {
+                        place,
+                        room_id: this.room.id,
+                        deposit: modal.param1
+                    });
+                }
+            }, 'getTheTable');
         },
         leavePlace(place) {
             Store.emit('leavePlace', {
@@ -106,9 +110,7 @@ export default {
             })
         },
         secondsTimerStart(t) {
-            const {
-                timer
-            } = this;
+            const {timer} = this;
             if (timer.timeOutId) {
                 clearInterval(timer.timeOutId);
             }

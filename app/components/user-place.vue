@@ -1,5 +1,5 @@
 <template>
-      <div v-show="room.places[n]" 
+      <div v-show="room.places[n]"
             class="place-taked"
             :class="{wait: game.waitUserAction.login === room.places[n],'not-in-game': !game.status.includes('wait') && room.places[n] && (!gamersData[room.places[n]] || gamersData[room.places[n]].isFold)}">
                 <div class="dialer" v-if="room.places[n] === room.dealer"></div>
@@ -21,8 +21,8 @@
                         </div>
                         <div>
                             <span class="user-name txt-yellow">{{room.places[n]}}</span>
-                            <span class="txt-green"> 
-                                {{gamersData[room.places[n]] && gamersData[room.places[n]].totalBet || 0}} <strike>A</strike>
+                            <span class="txt-green">
+                                {{room.deposits && room.deposits[room.places[n]] || 0}} <strike>A</strike>
                             </span>
                         </div>
                         <div class="user-last-bet">{{gamersData[room.places[n]] && gamersData[room.places[n]].lastBet || 0}}</div>
@@ -40,7 +40,7 @@ export default {
     "n",
     "room",
     "game",
-    "gamersData", 
+    "gamersData",
     "detailsWin",
     "user",
     "timer"],

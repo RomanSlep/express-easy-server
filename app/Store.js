@@ -14,7 +14,7 @@ export default new Vue({
         } else {
             this.isLoad = true;
         }
-        this.updatePublic();
+        // this.updatePublic();
         setInterval(() => {
             this.updatePublic();
         }, 60 * 1000);
@@ -44,20 +44,13 @@ export default new Vue({
             places: {}
         },
         log: [],
+        chat: [],
         uCards: {},
         detailsWin: {},
         secondsLeft: 0,
         gamersPlaces: {} // размещение игроков на начало матча
     },
     methods: {
-        updatePublic() {
-            // api({
-            //     action: 'getPublic'
-            // }, (data) => {
-            //     this.totalRatings = data.totalRatings;
-            //     this.totalPrize = data.totalPrize;
-            // }, true, 'public');
-        },
         updateUser(cb = false) {
             this.isLoad = true;
             const self = this;

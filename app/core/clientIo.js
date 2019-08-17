@@ -13,22 +13,27 @@ socket.on('connect', function () {
         socket.emit('player_connect', {login});
     }
 });
-socket.on('log', data=>{
-    Store.log.push({msg: data.msg, type: data.type});
-});
+
+socket.on('log', data=> Store.log.push({msg: data.msg, type: data.type}));
+socket.on('chatMsg', data=> Store.chat.push(data));
+
 socket.on('emitRoom', data=>{
     Store.room = data.room;
-    console.log('emitRoom', data); // TODO: писать в лог события
     if (data.msg){
         Store.log.push({msg: data.msg, type: data.type});
     }
     if (data.timer){
         Store.timer(data.timer);
     }
+    // Если не авто блинды
     if (data.event === 'waitStartGame') {
         Store.timer(config.pausedBeforeStartGame);
     }
     if (data.event === 'smallBlind') {
+        Store.gamersPlaces = data.room.game.gamersData;
+    }
+
+    if (data.event === 'bidding') {
         Store.gamersPlaces = data.room.game.gamersData;
     }
 
@@ -62,13 +67,10 @@ socket.on('errorApi', data=>{
 });
 socket.on('userData', user=>{
     console.log('userData', user);
+    Store.gamersPlaces = Store.room.game.gamersData || {};
     Object.assign(Store.user, user);
+    Store.uCards[Store.user.login] = user.cards;
 });
-socket.on('uCards', data=>{
-    console.log('Socket', data.cards);
-    Vue.set(Store.uCards, Store.user.login, data.cards);
-});
-
 
 Store.$watch('user.isLogged', val=>{ // перелогин
     let login = Store.user.login;

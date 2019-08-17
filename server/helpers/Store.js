@@ -4,5 +4,9 @@ module.exports = {
     rooms: {}
 };
 Object.assign(module.exports, room);
-module.exports.createRoom();
+module.exports.createRoom({
+    blind: 2,
+    minDeposit: 1 * 10,
+    maxDeposit: 1 * 10000,
+});
 

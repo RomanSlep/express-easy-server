@@ -4,10 +4,11 @@ const _ = require('underscore');
 const config = require('../helpers/configReader');
 
 module.exports = {
-    createRoom(){
+    createRoom(opt = {}){
         const room_id = $u.unix();
         const room = {id: room_id, players: {}, places: {}};
         this.rooms[room_id] = room;
+        Object.assign(room, opt);
         room.game = new Game(room_id, this);
         return room;
     },
@@ -189,10 +190,19 @@ module.exports = {
 
 function prepRoom(room) {
     const game = room.game;
+    const deposits = {};
+    $u.playersToArray(room.players).forEach(p=>{
+        const {login} = p.user; 
+        deposits[login] = p.deposit;
+    });
     const preped = {
         id: room.id,
         places: room.places,
         dealer: room.dealer,
+        blind: room.blind,
+        minDeposit: room.minDeposit,
+        maxDeposit: room.maxDeposit,
+        deposits,
         game: {
             status: game.status,
             oppenedCards: game.oppenedCards || [],
@@ -200,6 +210,7 @@ function prepRoom(room) {
             bblind: game.bblind,
             sblind: game.sblind,
             gamersData: game.gamersData,
+            round: game.round,
             currentMaximalBet: game.getCurrentMaximalBet(),
             bank: game.getBank()
         }

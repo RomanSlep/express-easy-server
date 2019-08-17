@@ -4,13 +4,16 @@
     </div>
     <div id="content">
         <div id="gameBlock" class="bg" v-if="Store.user.isLogged">
-                <h3 @click="Store.logOut">Exit {{Store.user.login}}
-                    Balance: {{Store.user.balance}}
-                    Game:{{Store.room.game.status}}
-                </h3>
+            <h3 @click="Store.logOut">Exit {{Store.user.login}}
+                Balance: {{Store.user.balance}}
+                Status: {{Store.room.game.status}}
+            </h3>
             <game-table></game-table>
             <user-panel></user-panel>
-            <log></log>
+            <div class="bottom-line">
+                <log></log>
+                <chat></chat>
+            </div>
         </div>
         <login v-else></login>
     </div>

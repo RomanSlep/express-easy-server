@@ -3,6 +3,7 @@ import './core/clientIo';
 
 import login from './components/login.vue';
 import log from './components/log.vue';
+import chat from './components/chat.vue';
 import modal from './components/modal.vue';
 import gameTable from './components/game-table.vue';
 import userPanel from './components/user-panel.vue';
@@ -23,6 +24,7 @@ new Vue({
         gameTable,
         modal,
         log,
+        chat,
         login,
         userPanel
     },

@@ -1,5 +1,5 @@
 <template>
-<div id="user-panel">
+<div id="user-panel" v-show="game.status !== 'wait'">
     <div id="action-buttons-blind" v-if="action.login === user.login && action.action.includes('Blind')">
         <button class="hovered but txt-yellow action-button but-call" @click="setBlind">Set&nbsp;{{action.action === 'smallBlind' ? 'S' : 'B'}}.&nbsp;Blind {{blind}}
         </button>

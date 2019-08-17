@@ -17,7 +17,7 @@ module.exports = {
                 console.log('Not Valid checkUserAction ACTION');
                 return 'Not Valid data!';
             }
-            if (data.value && data.value <= 0 && user.balance >= data.value){
+            if (data.value && data.value <= 0 && player.deposit >= data.value){
                 // TODO: Проверка баланса, хватит ли бабла юзеру!!
                 console.log('Not Valid checkUserAction VALUE');
                 return 'Not Valid data!';
@@ -32,7 +32,7 @@ module.exports = {
     smallBlind(data, player){
         const {user} = player;
         const userData = this.gamersData[user.login];
-        if (data.value === undefined || user.balance < data.value){
+        if (data.value === undefined || player.deposit < data.value){
             console.log('Error smallBlind not value data...');
             return;
         }
@@ -43,7 +43,7 @@ module.exports = {
         userData.lastMove = 'SBlind';
         userData.lastBet = data.value;
         // TODO: транзакцию юзеру на снятие!
-        user.balance -= data.value;
+        player.updateArts(-data.value);
         // Задаем большой блаинд
         this.waitUserAction = {
             login: this.getNextGamer(user.login),
@@ -56,7 +56,7 @@ module.exports = {
     bigBlind(data, player){ // Получили ответ по большому блаинду
         const {user} = player;
         const userData = this.gamersData[user.login];
-        if (data.value === undefined || data.value < this.sblind * 2 || user.balance < data.value){
+        if (data.value === undefined || data.value < this.sblind * 2 || player.deposit < data.value){
             console.log('Error bigBlind not value data...');
             this.waitUserAction.login = this.getNextGamer();
             this.removeGamer(user.login);
@@ -68,7 +68,7 @@ module.exports = {
         userData.totalBet = data.value;
         userData.lastMove = 'BBlind';
         userData.lastBet = data.value;
-        user.balance -= data.value;
+        player.updateArts(-data.value);
         // TODO: транзакцию юзеру на снятие!
 
         // Ставки по кругу пока не уровняются...
@@ -96,11 +96,11 @@ module.exports = {
         }
         if (data.move === 'call'){
             const call = currentBet;
-            if (call > user.balance){
-                console.log('Error: balanse < call', {call, b: user.balance});
+            if (call > player.deposit){
+                console.log('Error: deposit < call', {call, b: player.deposit});
                 userData.isFold = true;
             } else {
-                user.balance -= call;
+                player.updateArts(-call);
                 userData.totalBet += call;
                 userData.lastMove = 'Call';
                 userData.lastBet = call;
@@ -109,12 +109,11 @@ module.exports = {
         }
         if (data.move === 'raise'){
             const raise = data.value - userData.totalBet;
-            if (raise > user.balance){
-                console.log('Error: balanse < raise', {raise, b: user.balance});
+            if (raise > player.deposit){
+                console.log('Error: balanse < raise', {raise, b: player.deposit});
                 userData.isFold = true;
             } else {
-                console.log({raise});
-                user.balance -= raise;
+                player.updateArts(-raise);
                 userData.totalBet += raise;
                 userData.lastMove = 'Raise';
                 userData.lastBet = data.value;
@@ -124,12 +123,12 @@ module.exports = {
 
         if (data.move === 'check'){
             if (currentBet !== userData.totalBet){
-                console.log('Error CHECK ', {currentBet, userBet: userData.totalBet});
+                console.log('Warn CHECK ', {currentBet, userBet: userData.totalBet});
             }
             userData.lastMove = 'Check';
             socketLog(this.room, `${user.login} CHECK!`);
         }
-
+        userData.round = this.round;
         const res = this.checkNeedFinished();
         if (res) { // Проверка на завершение матча
             console.log('Finis game!', res);
@@ -151,7 +150,6 @@ module.exports = {
     finalAction(player){
         if (player){
             player.sendUserData(this);
-            this.gamersData[player.user.login].round = this.round;
         }
         this.sendUserActionAndWait(false);
         this.updateGamers();
@@ -161,15 +159,20 @@ module.exports = {
      */
     checkNeedFinished(){
         const nextGamer = this.gamersData[this.getNextGamer()];
+        const currentGamer = this.gamersData[this.waitUserAction.login];
         // если круг закончен и все уровнялись
-        if (nextGamer.round === this.round && nextGamer.totalBet === this.getCurrentMaximalBet().maxBet) {
+        // console.log(nextGamer.round === this.round, nextGamer.lastMove, this.round);
+        if (currentGamer.login === this.room.dealer && currentGamer.totalBet === this.getCurrentMaximalBet().maxBet) {
+        // if (nextGamer.round === this.round && nextGamer.totalBet === this.getCurrentMaximalBet().maxBet) {
             this.round++;
+            this.setStatusByRound();
             if (this.commonCards.length === 0){ // все открыли
                 console.log('winners!!!>', this.getWinners());
                 return 'All cards open!';
             }
-            // общую карту на стол!
-            this.setCommonCard();
+            if (this.round > 1){ // общую карту на стол!
+                this.setCommonCard();
+            }
             $u.playersToArray(this.gamersData).forEach(g=> g.lastBet = 0);// сбрасываем ставку раунда
         }
         const inGame = this.gamersInGame();
@@ -187,9 +190,8 @@ module.exports = {
             const path = this.getBank() / countWinners;
             this.winners.forEach(w=>{
                 const player = this.room.players[w.login];
-                const {user} = player;
-                user.balance += path;
-                player.sendUserData();
+                player.updateArts(path);
+                player.sendUserData(this);
             });
 
             const msg = this.winners.reduce((s, w)=>{
@@ -213,6 +215,20 @@ module.exports = {
             });
         } catch (e){
             console.log('Erroro winnersBalance: ', this.winners, e);
+        }
+    },
+    setStatusByRound(){
+        console.log('Round:', this.round);
+        switch (this.round){
+        case (2):
+            this.status = 'flop';
+            break;
+        case (3):
+            this.status = 'tern';
+            break;
+        case (4):
+            this.status = 'river';
+            break;
         }
     }
 };
