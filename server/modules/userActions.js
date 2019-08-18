@@ -161,7 +161,7 @@ module.exports = {
         const nextGamer = this.gamersData[this.getNextGamer()];
         const currentGamer = this.gamersData[this.waitUserAction.login];
         // если круг закончен и все уровнялись
-        // console.log(nextGamer.round === this.round, nextGamer.lastMove, this.round);
+        console.log(currentGamer.login === this.room.dealer, currentGamer.totalBet === this.getCurrentMaximalBet().maxBet);
         if (currentGamer.login === this.room.dealer && currentGamer.totalBet === this.getCurrentMaximalBet().maxBet) {
         // if (nextGamer.round === this.round && nextGamer.totalBet === this.getCurrentMaximalBet().maxBet) {
             this.round++;
@@ -170,7 +170,7 @@ module.exports = {
                 console.log('winners!!!>', this.getWinners());
                 return 'All cards open!';
             }
-            if (this.round > 1){ // общую карту на стол!
+            if (this.round > 0){ // общую карту на стол!
                 this.setCommonCard();
             }
             $u.playersToArray(this.gamersData).forEach(g=> g.lastBet = 0);// сбрасываем ставку раунда

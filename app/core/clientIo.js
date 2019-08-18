@@ -18,6 +18,7 @@ socket.on('log', data=> Store.log.push({msg: data.msg, type: data.type}));
 socket.on('chatMsg', data=> Store.chat.push(data));
 
 socket.on('emitRoom', data=>{
+    console.log('emitRoom', data);
     Store.room = data.room;
     if (data.msg){
         Store.log.push({msg: data.msg, type: data.type});

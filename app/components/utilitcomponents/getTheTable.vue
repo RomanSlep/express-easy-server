@@ -17,6 +17,7 @@ export default {
         },
         mounted(){
               this.deposit = this.min;
+              this.$emit('input', this.deposit);
         },
         computed: {
             min: () => Store.room.minDeposit,
@@ -26,17 +27,12 @@ export default {
         validate() {
             const {deposit, min, max} = this;
             this.className = 'green';
-            if (deposit < min) {
-                this.deposit = min;
+            if (deposit < min || deposit > max) {
                 this.className = 'red';
             }
             else if(deposit > Store.user.balance){
                 this.className = 'red';
                 this.deposit = Store.user.balance;
-            }
-            else if(deposit > max){
-                this.className = 'red';
-                this.deposit = max;
             }
             this.$emit('input', this.deposit);
         }

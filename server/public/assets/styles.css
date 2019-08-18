@@ -6,7 +6,7 @@ body {
 .no-clicked .action-button,
 .no-clicked.action-button {
     pointer-events: none;
-    color: darkgray !important;
+    color: rgba(0, 0, 0, 0) !important;
 }
 
 #gameBlock {
@@ -86,7 +86,7 @@ body {
 }
 
 .player-place:hover .place-free {
-   
+
 }
 
 /* ПОВОРОТЫ */
@@ -367,7 +367,9 @@ body {
     align-items: center;
     display: flex;
 }
-
+/* #action-buttons.no-clicked button{
+    color: rgba(0,0,0,0) !important;
+} */
 #user-panel button{
     background-color: rgba(0,0,0,0.5) !important;
     border-radius: 20px;

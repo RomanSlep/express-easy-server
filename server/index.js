@@ -8,7 +8,7 @@ function init() {
     const log = require('./helpers/log');
     const DIR_NAME = __dirname + '/public/';
     const $u = require('./helpers/utils');
-    
+
     require('./modules/api')(app);
     require('./modules/serverIo');
     // require('./modules/cron');

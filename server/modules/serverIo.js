@@ -38,6 +38,10 @@ io.sockets.on('connection', socket => {
             error(socket, 'Have not deposit!');
             return;
         }
+        if (deposit < room.minDeposit || deposit > room.maxDeposit){
+            error(socket, 'Deposit is not to range!');
+            return;
+        }
         player.deposit = deposit;
         Store.userTakePlace(player, data.place);
     });

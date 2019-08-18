@@ -25,7 +25,7 @@
                                 {{room.deposits && room.deposits[room.places[n]] || 0}} <strike>A</strike>
                             </span>
                         </div>
-                        <div class="user-last-bet">{{gamersData[room.places[n]] && gamersData[room.places[n]].lastBet || 0}}</div>
+                        <div class="user-last-bet">{{gamersData[room.places[n]] && gamersData[room.places[n]].totalBet || 0}}</div>
                     </div>
                 </div>
                 <span v-show="room.places[n] === user.login" @click="$parent.leavePlace(n)"><i
