@@ -126,6 +126,8 @@ Game.prototype.start = function(){
     if (this.isGame){
         return;
     }
+    this.width = this.canvas.offsetWidth;
+    this.height = this.canvas.offsetHeight;
     Store.isGame = true;
     speed(FPS_DEFAULT);
     this.isGame = true;
