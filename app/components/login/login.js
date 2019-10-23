@@ -47,8 +47,6 @@ export default Vue.component('login', {
                     title: 'Success ' + this.status,
                     text: 'Ready!'
                 });
-                Store.rout(Store.router || '#game');
-                Store.getNoFinished();
                 Store.user.isLogged = true;
             });
         }

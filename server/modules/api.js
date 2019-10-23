@@ -1,8 +1,6 @@
 const log = require('../helpers/log');
 const sha256 = require('sha256');
 const {usersDb} = require('./DB');
-const startGame = require('./startGame');
-const checkGame = require('./checkGame');
 const $u = require('../helpers/utils');
 const publicApi = require('./publicApi');
 const Store = require('../helpers/Store');
@@ -12,7 +10,6 @@ module.exports = (app) => {
     app.get('/api', async (req, res) => {
         let checkUser;
         try {
-            // console.log(req.query);
             const action = req.query.action;
             const GET = JSON.parse(req.query.data);
             const User = await $u.getUserFromQ({token: GET.token});
@@ -36,7 +33,6 @@ module.exports = (app) => {
                     error('This login and password not found', res);
                     return;
                 }
-                checkUser.rating = Store.getRatingFromLogin(checkUser.login);
                 success(await assignUser(checkUser), res);
                 break;
 
@@ -58,61 +54,13 @@ module.exports = (app) => {
                 success(await assignUser(newUser), res);
                 break;
 
-            case ('getNoFinished'):
-                success($u.filterGame(await $u.getNofinishGame(User)), res);
-                break;
-
-            case ('updateStat'):
-                if (!User.leftStatPoints){
-                    error('You have not points!', res);
-                    return;
-                }
-                User.stats[GET.param] += config.stepStat;
-                User.stats[GET.param] = +(User.stats[GET.param]).toFixed(1);
-                User.leftStatPoints--;
-                await User.save();
-                success('Pers success upgraded!', res);
-                break;
-
             case ('startGame'):
-                const start = await startGame(User, GET);
-                if (start.res) {
-                    success($u.filterGame(start.game), res);
-                } else {
-                    error(start.msg, res);
-                }
-                break;
 
-            case ('choice'):
-                GET.isStep = true;
-                const check = await checkGame(User, GET);
-                if (check.res) {
-                    success(check.game, res);
-                } else {
-                    error(check.msg, res);
-                }
-                break;
-
-            case ('pickUpWinnings'):
-                GET.isPickUpWinnings = true;
-                const checkg = await checkGame(User, GET);
-                if (checkg.res) {
-                    success(checkg.game, res);
-                } else {
-                    error(checkg.msg, res);
-                }
                 break;
 
             default:
                 error('error endpoint', res);
                 break;
-                // case ('testDeposit'):
-                //     console.log('Test deposit');
-                //     await depositsDb.db.syncInsert({user_id: User._id, amount: 1, type: 'deposit'});
-                //     User.updateData(()=>{
-                //         success('Success add!', res);
-                //     });
-                //     break;
             }
 
         } catch (e) {

@@ -1,28 +1,13 @@
 <div id="main" v-if="Store.isLoad">
-    <div id="topline">
-        <h1>Lost Artifacts </h1>
-        <h1><i class="rating-0">
-                <span class="sound_button hovered but" :class="'txt-' + (Store.isSoundOn ? 'green' : 'red')"
-                    @click="Store.isSoundOn = !Store.isSoundOn">
-                    <small><i :class="'fa fa-volume-' + (Store.isSoundOn ? 'up' : 'off')"
-                            aria-hidden="true"></i></small>
-                </span>
-                Total Prize: {{Store.totalPrize | numFormat}} <small>ARTS</small></i></h1>
-    </div>
     <div id="content">
-        <rating-list v-show="Store.user.isLogged"></rating-list>
-        <div id="gameBlock" class="bg">
-            <span v-if="Store.user.isLogged">
-                <user-icon></user-icon>
-                <game v-show="Store.router === '#game'"></game>
-                <user-page v-show="Store.router === '#userpage'"></user-page>
-                <span v-show="!['#game', '#userpage'].includes(Store.router)">
+        <span v-if="Store.user.isLogged">
+            <h1>Game {{Store.user.login}} <span class="txt-red" @click="Store.defaultUser()">Exit</span></h1>
+            <!-- <span v-show="!['#game', '#userpage'].includes(Store.router)">
                     <h1 class="txt-red">Error 404!</h1>
                     <h1 class="txt-red">Page not found!</h1>
-                </span>
-            </span>
-            <login v-else></login>
-        </div>
+                </span> -->
+        </span>
+        <login v-else></login>
     </div>
     <modal></modal>
     <notifications group="foo" />
