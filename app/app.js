@@ -3,12 +3,10 @@ import './components/login/login';
 import modal from './components/modal.vue';
 import Store from './Store';
 import $u from './core/utils';
-// import $u from './core/utils';
+import './core/filters';
 import template from './app.htm';
 import Notifications from 'vue-notification';
-import numFormat from 'vue-filter-number-format';
-
-Vue.filter('numFormat', numFormat);
+import game from './core/game';
 Vue.use(Notifications);
 
 new Vue({
@@ -17,7 +15,13 @@ new Vue({
         modal
     },
     data: {Store},
-    template
+    template,
+    methods: {
+        startGame(){
+            // TODO: апи!
+            game.start();
+        }
+    }
 });
 
 Vue.prototype.rout = function(hash){

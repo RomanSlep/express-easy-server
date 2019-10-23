@@ -4,21 +4,5 @@ const configJson = fs.readFileSync(__dirname + '/../../config.js')
     .replace('export default', '')
     .replace(';', '');
 const config = eval('(' + configJson + ')');
-config.levels = mathLvl(config.levelsOpt);
 
-function mathLvl(opts) {
-    const lvls = {
-        2: opts.first
-    };
-    for (let i = 3; i <= opts.maxLvl; i++) {
-        let res = Math.floor(lvls[i - 1] + opts.martin * i);
-        lvls[i] = res;
-    };
-    for (let l in lvls){
-        lvls[l] *= 100;
-    }
-    return lvls;
-};
-
-// console.log('LVLV', config.levels);
 module.exports = config;

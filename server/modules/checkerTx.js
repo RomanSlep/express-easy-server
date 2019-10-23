@@ -30,13 +30,11 @@ setInterval(() => {
                     log.warn('Cant find user! ' + tx.from);
                     return;
                 }
-                if (!user.isActive && +tx.data.value >= 500){
-                    user.isActive = true;
-                }
-                await depositsDb.db.insert({hash, user_id: user._id, type: 'deposit', amount: +tx.data.value});
-                await user.updateData();
+                const amount = +tx.data.value;
+                await depositsDb.db.insert({hash, user_id: user._id, type: 'deposit', amount});
+                user.deposit += amount;
+                user.save();
                 log.info(`newDeposit:
-
                 hash: ${hash}
                 user_id: ${user._id}
                 amount: ${+tx.data.value}`);

@@ -24,7 +24,7 @@ module.exports = {
             address: params.address,
             login: params.login,
             password: sha256(params.password.toString()),
-            deposit: config.regDrop
+            deposit: config.regDrop || 0
         });
         await user.save();
         depositsDb.db.syncInsert({user_id: user._id, amount: config.regDrop, type: 'regdrop'});

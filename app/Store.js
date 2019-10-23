@@ -4,6 +4,15 @@ import $u from './core/utils';
 import config from '../config';
 
 export default new Vue({
+    data: {
+        isLoad: false,
+        user: {},
+        isGame: false,
+        isGameOver: false,
+        rout: '',
+        modal: {},
+        config
+    },
     created() {
         this.defaultUser();
         this.user.token = localStorage.getItem('wstoken') || false;
@@ -16,12 +25,6 @@ export default new Vue({
         setInterval(() => {
             this.updatePublic();
         }, 60 * 1000);
-    },
-    data: {
-        isLoad: false,
-        user: {},
-        rout: '',
-        modal: {}
     },
     methods: {
         defaultUser(){
