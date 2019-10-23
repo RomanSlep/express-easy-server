@@ -1,19 +1,19 @@
 #top {
     pointer-events: none;
-    background: #84c3cf;
+    background: #ffffff;
 }
 #top img {
     width: 80%;
     margin-left: 10%;
 }
 #flappy {
-    border-top: 1px solid #8ab4bd;
-    border-bottom: 1px solid #7cc886;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
 }
 #main{}
 
 body {
-    background: #96e282;
+    /* background: #; */
     margin: 0;
 }
 

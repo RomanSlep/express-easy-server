@@ -236,7 +236,7 @@ Game.prototype.display = function(){
         }
     }
 
-    this.ctx.fillStyle = "white";
+    this.ctx.fillStyle = "black";
     this.ctx.font = "20px Oswald, sans-serif";
     this.ctx.fillText("Score : " + this.score, 10, 25);
     this.ctx.fillText("Prise Score : 2000", 10, 50);
@@ -248,12 +248,13 @@ Game.prototype.display = function(){
     });
 };
 
+let src = 'img2';
 window.onload = function(){
     var sprites = {
-        bird: "assets/img/bird.png",
-        background: "assets/img/background.png",
-        pipetop: "assets/img/pipetop.png",
-        pipebottom: "assets/img/pipebottom.png"
+        bird: 'assets/' + src + '/bird.png',
+        background: 'assets/' + src + '/background.png',
+        pipetop: 'assets/' + src + '/pipetop.png',
+        pipebottom: 'assets/' + src + '/pipebottom.png'
     };
 
     var start = function(){

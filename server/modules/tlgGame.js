@@ -10,7 +10,7 @@ const bot = new TelegramBot(token, {polling: true});
 let url = 'http://swbot.info:36669';
 
 // название игры (то, что указывали в BotFather)
-const gameName = 'MinterFlappyBird';
+const gameName = 'minterFlappyBird';
 
 // Matches /start
 bot.onText(/\/start/, function onPhotoText(msg) {
