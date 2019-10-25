@@ -14,6 +14,9 @@ new Vue({
     components: {
         modal
     },
+    mounted(){
+        game.init();
+    },
     data: {Store},
     template,
     methods: {

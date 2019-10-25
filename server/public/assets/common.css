@@ -1,5 +1,5 @@
 body {
-    background: black;
+    background: white;
     font-family: 'Oswald', serif;
     background-image: url(./gif/bg1.gif);
     margin: 0px;
@@ -125,7 +125,6 @@ input {
     text-align: center;
     color: white;
     background: rgba(1, 1, 1, 0.7);
-    font-size: 1.3em;
     margin: 1px;
 }
 
@@ -137,7 +136,7 @@ input {
 #form {
     background: rgba(0, 0, 0, 0.3);
     margin: 0px auto;
-    position: absolute;
+    position: fixed;
     top: 40%;
     width: 300px;
     left: 50%;
