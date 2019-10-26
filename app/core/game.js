@@ -2,6 +2,7 @@ import Store from '../Store';
 import $u from '../core/utils';
 let game;
 let status = 0;
+let src = 'img2';
 function init(){
     let KOEF;
     var FPS_DEFAULT = 70;
@@ -253,7 +254,6 @@ function init(){
     // debag({KOEF});
     document.querySelector('#canvas-container').innerHTML = '<canvas id="flappy" width="' + width + '" height="' + height + '"></canvas>';
     
-    let src = 'img';
     window.onload = function(){
         var sprites = {
             bird: 'assets/' + src + '/bird.png',
