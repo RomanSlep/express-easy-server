@@ -3,6 +3,7 @@ import $u from '../core/utils';
 let game;
 let status = 0;
 let src = 'img2';
+
 function init(){
     let KOEF;
     var FPS_DEFAULT = 70;
