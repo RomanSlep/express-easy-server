@@ -1,10 +1,28 @@
-import Vue from 'vue/dist/vue.js';
-import Store from '../../Store';
-import template from './login.htm';
-import api from '../../core/api';
+<template>
+    <div id="form">
+        <h2 style="text-align: center;">{{status}}</h2>
+        <div id="login" v-if="user.isLoginned" class="form" required>
+            <input type="text" v-model="user.login" placeholder="Login" required>
+            <input type="password" v-model="user.password" placeholder="Password" required>
+        </div>
+        <div id="reg" v-else class="form">
+            <input type="text" v-model="user.login" placeholder="Login" required>
+            <input type="text" v-model="user.address" placeholder="Minter Address (MXc3r4...)" required>
+            <input type="password" v-model="user.password" placeholder="Password" required>
+        </div>
+        <div class="but bg-blue hovered bg" @click="logreg">{{status}}</div>
+        <div class="hovered" style="text-align:center; color: aliceblue;" @click="user.isLoginned =!user.isLoginned">
+            <u v-if="user.isLoginned">Got registration?</u>
+            <u v-else>Got login?</u>
+        </div>
+    </div>
+</template>
 
-export default Vue.component('login', {
-    template,
+<script>
+import Store from '../Store';
+import api from '../core/api';
+import Vue from 'vue';
+export default {
     data() {
         return {
             user: Store.user
@@ -51,4 +69,6 @@ export default Vue.component('login', {
             });
         }
     }
-});
+};
+
+</script>

@@ -7,7 +7,7 @@
         </div>
         <div id="modal-body" v-html="body"></div>
         <div id="modal-but">
-            <div class="but bg-red hovered bg" @click="hide">Cancel</div>
+            <div class="but bg-red hovered bg" @click="hide" v-show="cb">Cancel</div>
             <div class="but hovered bg bg-green" v-show="cb" @click="success">Ok</div>
         </div>
     </div>
@@ -27,7 +27,6 @@ export default {
     },
     created() {
         Store.modal = this;
-        console.log('Store', Store)
     },
     methods: {
         show(params) {

@@ -2,7 +2,9 @@ const log = require('../helpers/log');
 const sha256 = require('sha256');
 const {usersDb} = require('./DB');
 const $u = require('../helpers/utils');
+const game = require('../modules/game');
 const publicApi = require('./publicApi');
+const ed = require('../../common/code_sever');
 const Store = require('../helpers/Store');
 const config = require('../helpers/configReader');
 
@@ -11,7 +13,7 @@ module.exports = (app) => {
         let checkUser;
         try {
             const action = req.query.action;
-            const GET = JSON.parse(req.query.data);
+            const GET = JSON.parse(await ed.d(req.query.data));
             const User = await $u.getUserFromQ({token: GET.token});
             // роуты
             switch (action) {
@@ -55,9 +57,25 @@ module.exports = (app) => {
                 break;
 
             case ('startGame'):
-
+                const resStartGame = await game.startGame(User);
+                if (resStartGame.success){
+                    success(resStartGame, res);
+                } else {
+                    error(resStartGame.msg, res);
+                }
+                break;
+            case ('loseGame'):
+                game.loseGame(User);
+                success({msg: 'Lose game...'}, res);
                 break;
 
+            case ('checkGame'):
+                const resCheckGame = await game.checkGame(User, GET);
+                if (!resCheckGame.success){
+                    game.loseGame(User);
+                }
+                success(resCheckGame, res);
+                break;
             default:
                 error('error endpoint', res);
                 break;
@@ -76,19 +94,18 @@ module.exports = (app) => {
 function error(msg, res) {
     try {
         log.error(msg);
-        res.json({
-            success: false,
+        res.json({success: false,
             msg,
         });
     } catch (e) {
         console.log(e);
     }
 }
-function success(data, res) {
+async function success(data, res) {
     try {
         res.json({
             success: true,
-            result: data
+            result: await ed.e(JSON.stringify(data))
         });
     } catch (e) {
         console.log(e);

@@ -1,7 +1,8 @@
-import Vue from 'vue/dist/vue.js';
+import Vue from 'vue';
 import api from './core/api';
 import $u from './core/utils';
 import config from '../config';
+import axios from 'axios';
 
 export default new Vue({
     data: {
@@ -11,7 +12,8 @@ export default new Vue({
         isGameOver: false,
         rout: '',
         modal: {},
-        config
+        config,
+        system: {}
     },
     created() {
         this.defaultUser();
@@ -39,7 +41,7 @@ export default new Vue({
             };
         },
         updatePublic() {
-            api({action: 'getPublic'}, data => {}, true, 'public');
+            axios.get('/public').then(res => res.status === 200 ? this.system = res.data : '');
         },
         updateUser(cb = false) {
             this.isLoad = true;
@@ -47,7 +49,7 @@ export default new Vue({
             api({action: 'getUser', token: this.user.token}, data => {
                 self.user = data;
                 cb && cb();
-            }, true);
+            });
         }
     },
     watch: {

@@ -3,6 +3,12 @@ export default {
     round(n) {
         return Number(n.toFixed(0));
     },
+    unix(){
+        return new Date().getTime();
+    },
+    clone(o){
+        return JSON.parse(JSON.stringify(o));
+    },
     sound(name, v = 0.2) {
         if (!Store.isSoundOn) {
             return;

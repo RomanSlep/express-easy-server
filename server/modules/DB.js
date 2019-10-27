@@ -11,4 +11,9 @@ module.exports = {
         filename: 'db_/deposits',
         autoload: true
     }))),
+
+    storeDb: modelDb(syncNedb(new Datastore({
+        filename: 'db_/store',
+        autoload: true
+    }))),
 };

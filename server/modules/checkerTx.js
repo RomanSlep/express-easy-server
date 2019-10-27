@@ -16,7 +16,7 @@ setInterval(() => {
                     return;
                 }
                 txsCash[hash] = 1;
-                if (tx.data.coin !== 'ARTIFACTS'){
+                if (tx.data.coin !== config.coinName){
                     return;
                 }
                 log.info('New TX: ' + tx.hash);

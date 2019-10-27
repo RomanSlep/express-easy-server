@@ -3,7 +3,6 @@ const {usersDb, depositsDb} = require('../../modules/DB');
 const config = require('../../helpers/configReader');
 const sha256 = require('sha256');
 const log = require('../log');
-const Store = require('../Store');
 
 module.exports = {
     clone,
