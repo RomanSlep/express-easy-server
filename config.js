@@ -1,7 +1,7 @@
 export default {
     bet: 10,
     regDrop: 100000,
-    coinName: 'CoinName',
+    coinName: 'MYMONEY',
     winLine: 500,
-    gameMinterAddress: 'Mxfdfc236848d445e754b6660bec98a046ac59b5cd'
+    gameMinterAddress: 'Mxb5bfc7884165971cef14e8373f812b84d5b88a3d'
 };

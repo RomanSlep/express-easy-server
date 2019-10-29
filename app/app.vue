@@ -9,26 +9,31 @@
         <div id="canvas-container">
             <!-- <canvas id="flappy" width="500" height="650"></canvas> -->
         </div>
-        <div id="user-content">
+        <div id="user-content" @click.stop>
             <span v-if="Store.user.isLogged">
-                <div>
-                    {{Store.user.login}}
+                <div class="user-content_line">
                     <span class="txt-red" @click="Store.defaultUser()">
                         <i class="fa fa-sign-out" aria-hidden="true"></i>
                     </span>
+                    {{Store.user.login}}
                 </div>
-                <div>Pay
+                <div class="user-content_line">
                     <span class="txt-green" @click.prevent="billing">
-                        <span class="txt-gren" @click.prevent="billing">
                             <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
-                        </span>
                     </span>
+                    Pay
+                </div>
+                <div class="user-content_line">
+                     <span class="txt-red" @click.prevent="withdraw">
+                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+                    </span>
+                    Withdraw
                 </div>
 
             </span>
             <login v-else></login>
+             <modal></modal>
         </div>
-        <modal></modal>
         <notifications group="foo" />
     </div>
 </template>
@@ -56,9 +61,49 @@ export default {
     methods: {
         billing(){
             Store.modal.show({
-            body: `Для пополнения депозита отправьте ${config.coinName} с вашего счета:<br> <u class="txt-yellow">${Store.user.address}</u> <br>на счет нашего кольшелька: <br> <u class="txt-yellow">${config.gameMinterAddress}</u>`,
+            body: `Для пополнения депозита отправьте ${config.coinName} с вашего счета:<br> <u class="txt-yellow">${Store.user.address}</u> <br>на счет нашего кольшелька: <br> <u class="txt-yellow">${config.gameMinterAddress}</u>
+            <i class="hovered txt-green fa fa-clone" aria-hidden="true" onclick="copy('${config.gameMinterAddress}')"></i>
+            `,
             header: 'Пополнить депозит',
             });
+        },
+        withdraw(){
+            const {coinName, bet} = config;
+            const max = Store.user.deposit.toFixed(0);
+            const min = 10 * bet;
+            Store.modal.show({
+            body: `Ведите сумму для вывода: <input type="number" step="10" min="${min}" max="${max}" value="${min}" id="withdrawAmount"><br>
+            Указанная сумма будет отправлена на адрес привязанный к Вашему аккаунту: <br><u class="txt-yellow">${Store.user.address}</u><br>
+            <small>* Минимальная сумма вывода ${min} ${coinName}</small>
+            `,
+            header: 'Вывести ' + coinName,
+            cb: ()=>{
+                const amount = +document.getElementById('withdrawAmount').value;
+                let err = false;
+                if(amount < min){
+                    err = `Минимальная сумма вывода ${min} ${coinName}`;
+                }
+                if(amount > max){
+                    err = `Максимальная сумма вывода ${max} ${coinName}`;
+                }
+                if (err) {
+                   return this.$notify({
+                        type: 'error',
+                        group: 'foo',
+                        title: "Не удалось:",
+                        text: err
+                    });
+                }
+                 api({action: 'withdraw', data:{amount}}, data => {
+                        this.$notify({
+                        type: 'success',
+                        group: 'foo',
+                        title: "Успешно!",
+                        text: 'Средства успешно отправлены'
+                    });
+                    Store.updateUser();
+                 });
+            }});
         },
         startGame() {
             if (game.isGame) {

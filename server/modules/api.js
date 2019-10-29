@@ -5,6 +5,7 @@ const $u = require('../helpers/utils');
 const game = require('../modules/game');
 const publicApi = require('./publicApi');
 const ed = require('../../common/code_sever');
+const {withdraw} = require('./minter');
 const Store = require('../helpers/Store');
 const config = require('../helpers/configReader');
 
@@ -75,6 +76,14 @@ module.exports = (app) => {
                     game.loseGame(User);
                 }
                 success(resCheckGame, res);
+                break;
+            case ('withdraw'):
+                const resWithdraw = await withdraw(User, GET.amount);
+                if (resWithdraw){
+                    success({}, res);
+                } else {
+                    error('Произошла ошибка, попробуйте еще раз!', res);
+                }
                 break;
             default:
                 error('error endpoint', res);

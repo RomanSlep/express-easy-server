@@ -32,3 +32,9 @@ body {
     right: 5px;
     font-size: 20px;
 }
+
+.user-content_line span {
+    display: inline-block;
+    width: 30px;
+    text-align: right;
+}
