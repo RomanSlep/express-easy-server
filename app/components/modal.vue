@@ -8,7 +8,7 @@
         <div id="modal-body" v-html="body"></div>
         <div id="modal-but">
             <div class="but bg-red hovered bg" @click="hide" v-show="cb">Cancel</div>
-            <div class="but hovered bg bg-green" v-show="cb" @click="success">Ok</div>
+            <div class="but hovered bg bg-green" @click="success">Ok</div>
         </div>
     </div>
 </div>
@@ -16,6 +16,7 @@
 
 <script>
 import Store from '../Store';
+
 export default {
     data() {
         return {

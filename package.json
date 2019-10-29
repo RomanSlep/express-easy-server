@@ -52,6 +52,7 @@
         "babel-plugin-transform-runtime": "^6.23.0",
         "babel-preset-env": "^1.7.0",
         "html-loader": "^0.5.5",
+        "javascript-obfuscator": "^0.18.1",
         "nodemon": "^1.19.0",
         "vue-loader": "^15.7.0",
         "vue-template-compiler": "^2.6.10",
