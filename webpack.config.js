@@ -51,18 +51,18 @@ if (isDev) {
     // ls.stdout.on('data', data => console.log('\x1b[35m', 'Server:', data.replace('\n', '')));
 } else {
     setTimeout(()=>{
-        console.log('Start JavaScriptObfuscator');
-        const fs = require('fs');
-        const fileName = Dist + '/build.js';
-        const code = fs.readFileSync(fileName, 'utf8');
-        const JavaScriptObfuscator = require('javascript-obfuscator');
-        const obfuscationResult = JavaScriptObfuscator.obfuscate(code, {
-            compact: true,
-            controlFlowFlattening: true
-        });
+        // console.log('Start JavaScriptObfuscator');
+        // const fs = require('fs');
+        // const fileName = Dist + '/build.js';
+        // const code = fs.readFileSync(fileName, 'utf8');
+        // const JavaScriptObfuscator = require('javascript-obfuscator');
+        // const obfuscationResult = JavaScriptObfuscator.obfuscate(code, {
+        //     compact: true,
+        //     controlFlowFlattening: true
+        // });
 
-        const newCode = obfuscationResult.getObfuscatedCode();
-        fs.writeFileSync(fileName, newCode);
-        console.log('done;');
+        // const newCode = obfuscationResult.getObfuscatedCode();
+        // fs.writeFileSync(fileName, newCode);
+        // console.log('done;');
     }, 25000);
 }
