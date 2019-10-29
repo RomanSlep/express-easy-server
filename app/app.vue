@@ -17,14 +17,14 @@
                     </span>
                     {{Store.user.login}}
                 </div>
-                <div class="user-content_line">
-                    <span class="txt-green" @click.prevent="billing">
+                <div class="user-content_line" @click="billing">
+                    <span class="txt-green">
                             <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
                     </span>
                     Pay
                 </div>
-                <div class="user-content_line">
-                     <span class="txt-red" @click.prevent="withdraw">
+                <div class="user-content_line" @click="withdraw">
+                     <span class="txt-red">
                             <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
                     </span>
                     Withdraw
