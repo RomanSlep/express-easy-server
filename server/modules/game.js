@@ -12,10 +12,11 @@ module.exports = {
             return {success: false, msg: `Не достаточно средств. Ставка ${config.bet} ${config.coinName}!`};
         }
         const game = await Store.createGame(user);
-
+		console.log('StartGame', user._id);
         return {success: true, t: game.t, id: game.id};
     },
     loseGame(user, data){
+		console.log('loseGame>', user._id);
         Store.removeGame(user._id);
     },
     async checkGame(user, data){
@@ -24,7 +25,8 @@ module.exports = {
             const game = await Store.getGameByUserId(user._id);
             if (!game){
                 log.error('checkGame: checkGameCode 2');
-                return {success: false, msg: 'Возможно у Вас проблемы с интернетом!'};
+				console.log(user._id, Store.games);
+                return {success: false, msg: 'Возможно у вас проблема с интернетом!'};
             }
 
             if (game.t !== data.t){

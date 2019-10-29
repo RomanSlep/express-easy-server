@@ -54,7 +54,7 @@ function init(){
     var FPS = FPS_DEFAULT;
     var MULT_SPEED = 5; // увеличение скорости на
     var MAX_SPEED = 150; // Максимальная скорость
-    var STEP_SCORE_SPEED = 200; // Шаг увеличения скорости
+    var STEP_SCORE_SPEED = 500; // Шаг увеличения скорости
 
     var images = {};
 
@@ -171,6 +171,7 @@ function init(){
         if (this.isGame){
             return;
         }
+		Store.updatePublic();
         c = $u.clone(c_default);
         c.t = data.t;
         c.id = data.id;
@@ -178,8 +179,8 @@ function init(){
         this.width = this.canvas.clientWidth;
         this.height = this.canvas.clientHeight;
         Store.isGame = true;
-        speed(FPS_DEFAULT);
         this.isGame = true;
+		speed(FPS_DEFAULT);
         this.nextUpSpeed = STEP_SCORE_SPEED;
         this.interval = 0;
         this.score = 0;
@@ -187,26 +188,30 @@ function init(){
         this.bird = new Bird();
     };
     Game.prototype.stop = function(){
+		if(!this.isGame){
+			return;
+		}
         this.bird.alive = false;
         this.isGame = false;
         Store.isGame = false;
         Store.isGameOver = true;
-        api({action: 'loseGame', data: c});
         Store.updatePublic();
         setTimeout(()=>{
             Store.isGameOver = false;
         }, 3000);
     };
+	
     Game.prototype.update = function(){
         this.backgroundx += this.backgroundSpeed;
         const {bird} = this;
-        if (bird.alive){
+        if (bird.alive && this.isGame){
             bird.update();
             if (bird.isDead(this.height, this.pipes)){
                 bird.alive = false;
                 this.alives--;
                 if (this.isItEnd()){
                     this.stop();
+					api({action: 'loseGame', data: c});
                 }
             }
         }

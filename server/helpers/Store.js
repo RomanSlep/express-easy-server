@@ -23,7 +23,8 @@ module.exports = {
     clearOldGames(){
         const t = $u.unix();
         this.games.forEach((g, i) => {
-            if (t - g.start > 10 * 1000){
+        	console.log((t - g.t)/1000)
+            if (t - g.t > 10 * 1000){
                 this.games[i] = null;
             }
         });
@@ -51,6 +52,9 @@ module.exports = {
     removeGame(userId){
         const i = this.games.findIndex(g=> g.userId === userId);
         this.games.splice(i, 1);
+		const {system} = this;
+		system.nextWinLine--;
+		system.save();
     }
 };
 
