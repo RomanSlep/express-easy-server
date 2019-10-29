@@ -13,7 +13,7 @@ const c_default = {
     id: null
 };
 function init(){
-    function checkGame(cb) {
+    function checkGame() {
         c.tLastSend = $u.unix();
         api({action: 'checkGame', data: c}, data => {
             if (!data.success){
@@ -28,7 +28,6 @@ function init(){
             }
 
             if (data.isWin){
-                console.log(data)
                 game.stop();
                 Store.$notify({
                     type: 'success',
@@ -46,11 +45,11 @@ function init(){
                     return;
                 }
                 checkGame();
-            }, 1000);
+            }, 3000);
         });
     };
     let KOEF;
-    var FPS_DEFAULT = 70;
+    var FPS_DEFAULT = 60;
     var FPS = FPS_DEFAULT;
     var MULT_SPEED = 5; // увеличение скорости на
     var MAX_SPEED = 150; // Максимальная скорость
@@ -200,7 +199,7 @@ function init(){
             Store.isGameOver = false;
         }, 3000);
     };
-	
+
     Game.prototype.update = function(){
         this.backgroundx += this.backgroundSpeed;
         const {bird} = this;
