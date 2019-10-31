@@ -17,13 +17,18 @@ module.exports = {
         autoload: true
     }), 10)),
 
-    sellDepth: modelDb(syncNedb(new Datastore({
+    sellDepthDb: modelDb(syncNedb(new Datastore({
         filename: 'db_/sellDepth',
         autoload: true
     }), 10)),
 
-    buyDepth: modelDb(syncNedb(new Datastore({
+    buyDepthDb: modelDb(syncNedb(new Datastore({
         filename: 'db_/buyDepth',
+        autoload: true
+    }), 10)),
+
+    closedOrdersDb: modelDb(syncNedb(new Datastore({
+        filename: 'db_/closedOrders',
         autoload: true
     }), 10))
 };

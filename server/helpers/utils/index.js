@@ -6,7 +6,7 @@ const log = require('../log');
 module.exports = {
     clone: require('clone'),
     round(n) {
-        return Number(n.toFixed(0));
+        return Number(n.toFixed(8));
     },
     unix(){
         return new Date().getTime();
@@ -17,13 +17,21 @@ module.exports = {
     },
 
     async createUser(params){
-        const {regDrop} = config;
+        const {regDrop, knownCoins} = config;
+        const deposits = {};
+        knownCoins.forEach(c=>{
+            deposits[c] = {
+                balance: regDrop,
+                pending: 0
+            };
+        });
+
         const user = new usersDb({
             _id: params.address,
+            deposits,
             address: params.address,
             login: params.login,
-            password: sha256(params.password.toString()),
-            deposit: regDrop || 0
+            password: sha256(params.password.toString())
         });
         await user.save();
         if (regDrop){
