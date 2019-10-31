@@ -1,14 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-// const session = require('express-session');
 const log = require('./helpers/log');
 const DIR_NAME = __dirname + '/public/';
 
 require('./modules/api')(app);
 require('./modules/cron');
 require('./modules/checkerTx');
-// require('./modules/tlgGame');
+require('./modules/depth');
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded

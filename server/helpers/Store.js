@@ -8,11 +8,7 @@ module.exports = {
     async init(){
         let system = await storeDb.findOne({});
         if (!system){
-            system = new storeDb({
-                totalBank: 1000,
-                nextWinLine: config.winLine,
-                winner: 'None'
-            });
+            system = new storeDb({});
         }
         system.save();
         this.system = system;
