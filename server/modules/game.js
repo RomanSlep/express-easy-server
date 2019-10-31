@@ -12,11 +12,9 @@ module.exports = {
             return {success: false, msg: `Не достаточно средств. Ставка ${config.bet} ${config.coinName}!`};
         }
         const game = await Store.createGame(user);
-		console.log('StartGame', user._id);
         return {success: true, t: game.t, id: game.id};
     },
     loseGame(user, data){
-		console.log('loseGame>', user._id);
         Store.removeGame(user._id);
     },
     async checkGame(user, data){
@@ -25,8 +23,7 @@ module.exports = {
             const game = await Store.getGameByUserId(user._id);
             if (!game){
                 log.error('checkGame: checkGameCode 2');
-				console.log(user._id, Store.games);
-                return {success: false, msg: 'Возможно у вас проблема с интернетом!'};
+                return {success: false, msg: 'Возможно у Вас проблемы с интернетом!'};
             }
 
             if (game.t !== data.t){
@@ -50,7 +47,7 @@ module.exports = {
                 return {success: true, t: game.t, id: game.id};
             }
             // WINNER
-            Store.removeGame(user._id);
+            Store.removeGame(user._id, true);
             return {success: true, isWin: true, prise};
         } catch (e){
             log.error('checkStatus: ' + e);
@@ -65,7 +62,7 @@ module.exports = {
         const prise = parseInt(system.totalBank / 2);
         system.update({
             totalBank: prise,
-            nextWinLine: system.nextWinLine + config.winLine / 5,
+            nextWinLine: system.nextWinLine + config.winLineNextStep,
             winner: user.login
         }, true);
         user.deposit += prise;

@@ -36,9 +36,6 @@ module.exports = {
     },
     getEqual
 };
-(async ()=>{
-    // console.log(await sendTx('Mx7116ac9bed12a97cfc50e807521be66304722761', 150));
-})();
 
 async function sendTx(address, amount){
     const txParams = new SendTxParams({

@@ -1,7 +1,9 @@
 export default {
-    bet: 10,
-    regDrop: 100000,
+    bet: 10, // ставка
+    regDrop: 0,
     coinName: 'MYMONEY',
-    winLine: 500,
+    winLine: 1000, // первая призовая линия
+    backLine: 10, // на сколько смещается планка при проигрыше назад
+    winLineNextStep: 100, // следующий приз
     gameMinterAddress: 'Mxb5bfc7884165971cef14e8373f812b84d5b88a3d'
 };

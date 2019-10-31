@@ -16,6 +16,7 @@ module.exports = {
         }
         system.save();
         this.system = system;
+
         setInterval(() => {
             this.clearOldGames();
         }, 15 * 1000);
@@ -23,7 +24,7 @@ module.exports = {
     clearOldGames(){
         const t = $u.unix();
         this.games.forEach((g, i) => {
-        	console.log((t - g.t)/1000)
+        	console.log((t - g.t) / 1000);
             if (t - g.t > 10 * 1000){
                 this.games[i] = null;
             }
@@ -49,12 +50,14 @@ module.exports = {
         this.games.push(game);
         return game;
     },
-    removeGame(userId){
+    removeGame(userId, isNotChangeWinLine){
         const i = this.games.findIndex(g=> g.userId === userId);
         this.games.splice(i, 1);
-		const {system} = this;
-		system.nextWinLine--;
-		system.save();
+        const {system} = this;
+        if (!isNotChangeWinLine){
+            system.nextWinLine -= config.backLine;
+        }
+        system.save();
     }
 };
 
