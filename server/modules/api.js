@@ -2,10 +2,8 @@ const log = require('../helpers/log');
 const sha256 = require('sha256');
 const {usersDb} = require('./DB');
 const $u = require('../helpers/utils');
-const game = require('../modules/game');
 const publicApi = require('./publicApi');
 const ed = require('../../common/code_sever');
-const {withdraw} = require('./minter');
 const Store = require('../helpers/Store');
 const config = require('../helpers/configReader');
 
@@ -57,34 +55,6 @@ module.exports = (app) => {
                 success(await assignUser(newUser), res);
                 break;
 
-            case ('startGame'):
-                const resStartGame = await game.startGame(User);
-                if (resStartGame.success){
-                    success(resStartGame, res);
-                } else {
-                    error(resStartGame.msg, res);
-                }
-                break;
-            case ('loseGame'):
-                game.loseGame(User);
-                success({msg: 'Lose game...'}, res);
-                break;
-
-            case ('checkGame'):
-                const resCheckGame = await game.checkGame(User, GET);
-                if (!resCheckGame.success){
-                    game.loseGame(User);
-                }
-                success(resCheckGame, res);
-                break;
-            case ('withdraw'):
-                const resWithdraw = await withdraw(User, GET.amount);
-                if (resWithdraw){
-                    success({}, res);
-                } else {
-                    error('Произошла ошибка, попробуйте еще раз!', res);
-                }
-                break;
             default:
                 error('error endpoint', res);
                 break;

@@ -16,7 +16,7 @@ export default new Vue({
         system: {}
     },
     created() {
-        this.defaultUser();
+        this.logOut();
         this.user.token = localStorage.getItem('wstoken') || false;
         if (this.user.token) {
             this.updateUser();
@@ -29,7 +29,7 @@ export default new Vue({
         }, 60 * 1000);
     },
     methods: {
-        defaultUser(){
+        logOut(){
             this.user = {
                 isLogged: false,
                 isLoginned: true, // хочет логиниться / регаться

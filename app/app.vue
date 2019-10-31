@@ -1,36 +1,14 @@
 <template>
-    <div id="main" v-if="Store.isLoad" @click="Store.user.isLogged && !Store.isGameOver && startGame()">
-        <div id="top" class="line">
-            <!-- <img src="/assets/img2/logo_fb.png"> -->
-            <img class="getReady" src="/assets/img2/get_ready.png"
-                v-if="!Store.isGameOver && Store.user.deposit >= Store.config.bet && !Store.isGame">
-            <img class="getReady" src="/assets/img2/game_over.png" v-if="Store.isGameOver">
-        </div>
-        <div id="canvas-container">
-            <!-- <canvas id="flappy" width="500" height="650"></canvas> -->
-        </div>
-        <div id="user-content" @click.stop>
-            <span v-if="Store.user.isLogged">
-                <div class="user-content_line">
-                    <span class="txt-red" @click="Store.defaultUser()">
+    <div id="main" v-if="Store.isLoad">
+        <div id="user-content">
+            <div v-if="Store.user.isLogged">
+                    <div class="user-content_line">
+                    <span class="txt-red" @click="Store.logOut()">
                         <i class="fa fa-sign-out" aria-hidden="true"></i>
                     </span>
                     {{Store.user.login}}
                 </div>
-                <div class="user-content_line" @click="billing">
-                    <span class="txt-green">
-                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
-                    </span>
-                    Pay
-                </div>
-                <div class="user-content_line" @click="withdraw">
-                     <span class="txt-red">
-                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
-                    </span>
-                    Withdraw
-                </div>
-
-            </span>
+            </div>
             <login v-else></login>
              <modal></modal>
         </div>
@@ -44,7 +22,6 @@ import login from './components/login.vue';
 import config from '../config';
 import Store from './Store';
 import $u from './core/utils';
-import game from './core/game';
 import api from './core/api';
 
 export default {
@@ -52,68 +29,10 @@ export default {
         modal,
         login
     },
-    mounted() {
-        game.init();
-    },
     data() {
         return {Store}
     },
     methods: {
-        billing(){
-            Store.modal.show({
-            body: `Для пополнения депозита отправьте ${config.coinName} с вашего счета:<br> <u class="txt-yellow">${Store.user.address}</u> <br>на счет нашего кольшелька: <br> <u class="txt-yellow">${config.gameMinterAddress}</u>
-            <i class="hovered txt-green fa fa-clone" aria-hidden="true" onclick="copy('${config.gameMinterAddress}')"></i>
-            `,
-            header: 'Пополнить депозит',
-            });
-        },
-        withdraw(){
-            const {coinName, bet} = config;
-            const max = Store.user.deposit.toFixed(0);
-            const min = 10 * bet;
-            Store.modal.show({
-            body: `Ведите сумму для вывода: <input type="number" step="10" min="${min}" max="${max}" value="${min}" id="withdrawAmount"><br>
-            Указанная сумма будет отправлена на адрес привязанный к Вашему аккаунту: <br><u class="txt-yellow">${Store.user.address}</u><br>
-            <small>* Минимальная сумма вывода ${min} ${coinName}</small>
-            `,
-            header: 'Вывести ' + coinName,
-            cb: ()=>{
-                const amount = +document.getElementById('withdrawAmount').value;
-                let err = false;
-                if(amount < min){
-                    err = `Минимальная сумма вывода ${min} ${coinName}`;
-                }
-                if(amount > max){
-                    err = `Максимальная сумма вывода ${max} ${coinName}`;
-                }
-                if (err) {
-                   return this.$notify({
-                        type: 'error',
-                        group: 'foo',
-                        title: "Не удалось:",
-                        text: err
-                    });
-                }
-                 api({action: 'withdraw', data:{amount}}, data => {
-                        this.$notify({
-                        type: 'success',
-                        group: 'foo',
-                        title: "Успешно!",
-                        text: 'Средства успешно отправлены'
-                    });
-                    Store.updateUser();
-                 });
-            }});
-        },
-        startGame() {
-            if (game.isGame) {
-                return;
-            }
-            api({action: 'startGame'}, data => {
-                game.start(data);
-                Store.updateUser();
-            });
-        }
     }
 };
 

@@ -1,11 +1,10 @@
-const clone = require('clone');
 const {usersDb, depositsDb} = require('../../modules/DB');
 const config = require('../../helpers/configReader');
 const sha256 = require('sha256');
 const log = require('../log');
 
 module.exports = {
-    clone,
+    clone: require('clone'),
     round(n) {
         return Number(n.toFixed(0));
     },
@@ -18,15 +17,18 @@ module.exports = {
     },
 
     async createUser(params){
+        const {regDrop} = config;
         const user = new usersDb({
             _id: params.address,
             address: params.address,
             login: params.login,
             password: sha256(params.password.toString()),
-            deposit: config.regDrop || 0
+            deposit: regDrop || 0
         });
         await user.save();
-        depositsDb.db.syncInsert({user_id: user._id, amount: config.regDrop, type: 'regdrop'});
+        if (regDrop){
+            depositsDb.db.syncInsert({user_id: user._id, amount: regDrop, type: 'regdrop'});
+        }
         return user;
     }
 };

@@ -16,45 +16,6 @@ module.exports = {
         }
         system.save();
         this.system = system;
-        setInterval(() => {
-            this.clearOldGames();
-        }, 15 * 1000);
-    },
-    clearOldGames(){
-        const t = $u.unix();
-        this.games.forEach((g, i) => {
-        	console.log((t - g.t)/1000)
-            if (t - g.t > 10 * 1000){
-                this.games[i] = null;
-            }
-        });
-        this.games = _.compact(this.games);
-    },
-    getGameByUserId(userId){
-        return this.games.find(g=>g.userId === userId);
-    },
-    createGame(user){
-        const {bet} = config;
-        user.deposit -= bet;
-        this.system.totalBank += bet;
-        this.system.save();
-        user.save();
-        const game = {
-            id: $u.unix(),
-            start: $u.unix(),
-            userId: user._id,
-            t: $u.unix(),
-            predScore: 0
-        };
-        this.games.push(game);
-        return game;
-    },
-    removeGame(userId){
-        const i = this.games.findIndex(g=> g.userId === userId);
-        this.games.splice(i, 1);
-		const {system} = this;
-		system.nextWinLine--;
-		system.save();
     }
 };
 
