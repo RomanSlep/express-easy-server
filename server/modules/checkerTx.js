@@ -43,6 +43,7 @@ setInterval(() => {
                     amount = amountTx;
                 };
                 if (amount > 0){
+                    amount *= 1 - config.comission;
                     depositsDb.db.insert({hash, user_id: user._id, type: 'deposit', amount});
                     user.deposit += amount;
                     user.save();

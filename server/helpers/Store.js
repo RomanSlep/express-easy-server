@@ -24,7 +24,6 @@ module.exports = {
     clearOldGames(){
         const t = $u.unix();
         this.games.forEach((g, i) => {
-        	console.log((t - g.t) / 1000);
             if (t - g.t > 10 * 1000){
                 this.games[i] = null;
             }
@@ -54,8 +53,9 @@ module.exports = {
         const i = this.games.findIndex(g=> g.userId === userId);
         this.games.splice(i, 1);
         const {system} = this;
-        if (!isNotChangeWinLine){
+        if (!isNotChangeWinLine && config.winLine < system.nextWinLine){
             system.nextWinLine -= config.backLine;
+            system.nextWinLine = Math.max(config.winLine, system.nextWinLine);
         }
         system.save();
     }
