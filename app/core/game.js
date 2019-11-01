@@ -2,6 +2,7 @@ import Store from '../Store';
 import $u from '../core/utils';
 import api from '../core/api';
 import config from '../../config';
+import _ from 'underscore';
 
 let game;
 let c = {};
@@ -49,7 +50,10 @@ function init(){
         });
     };
     let KOEF;
-    var FPS_DEFAULT = 50;
+    let fpsKoef = 1;
+    var FPS_DEFAULT = 45;
+    var FPS_ETALON = FPS_DEFAULT;
+    var realFps = '-';
     var FPS = FPS_DEFAULT;
     var MULT_SPEED = 0; // увеличение скорости на
     var MAX_SPEED = 150; // Максимальная скорость
@@ -103,8 +107,8 @@ function init(){
     };
 
     Bird.prototype.update = function(){
-        this.gravity += this.velocity;
-        this.y += this.gravity;
+        this.gravity += this.velocity * fpsKoef;
+        this.y += this.gravity * fpsKoef;
     };
 
     Bird.prototype.isDead = function(height, pipes){
@@ -140,7 +144,7 @@ function init(){
     };
 
     Pipe.prototype.update = function(){
-        this.x -= this.speed;
+        this.x -= this.speed * fpsKoef;
     };
 
     Pipe.prototype.isOut = function(){
@@ -179,7 +183,6 @@ function init(){
         this.height = this.canvas.clientHeight;
         Store.isGame = true;
         this.isGame = true;
-        speed(FPS_DEFAULT);
         this.nextUpSpeed = STEP_SCORE_SPEED;
         this.interval = 0;
         this.score = 0;
@@ -201,6 +204,7 @@ function init(){
     };
 
     Game.prototype.update = function(){
+        realFps = countFPS();
         this.backgroundx += this.backgroundSpeed;
         const {bird} = this;
         if (bird.alive && this.isGame){
@@ -297,11 +301,12 @@ function init(){
 
         this.ctx.fillStyle = 'black';
         this.ctx.font = '21px Oswald, sans-serif';
-        this.ctx.fillText('Prise :' + $u.thousandSeparator(Store.system.totalBank / 2) + ' ' + config.coinName, 10, 25);
-        this.ctx.fillText('Score :' + Store.system.nextWinLine, 10, 50);
+        this.ctx.fillText('Jackpot :' + $u.thousandSeparator(Store.system.totalBank / 2) + ' ' + config.coinName, 10, 25);
+        this.ctx.fillText('Hight Score :' + Store.system.nextWinLine, 10, 50);
         this.ctx.font = '20px Oswald, sans-serif';
-        this.ctx.fillText('Your score : ' + this.score, 10, 75);
-        this.ctx.fillText('Your deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
+        this.ctx.fillText('Score : ' + this.score, 10, 75);
+        this.ctx.fillText('Deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
+        this.ctx.fillText('Fps : ' + realFps + '/' + fpsKoef.toFixed(2), 10, 120);
 
         var self = this;
         requestAnimationFrame(function(){
@@ -345,6 +350,36 @@ function init(){
             game.bird.flap();
         }
     }
+    const correctFps = _.throttle((fps)=>{
+        const deff = FPS_ETALON - fps;
+        if (deff > 0){
+            speed(FPS_ETALON + 1);
+        } else {
+            speed(FPS_ETALON - 1);
+        }
+        realFps = fps;
+        fpsKoef = FPS_ETALON / realFps;
+    }, 1000);
+
+    const countFPS = (function () {
+        var lastLoop = (new Date()).getMilliseconds();
+        var count = 1;
+        var fps = 0;
+      
+        return function () {
+            var currentLoop = (new Date()).getMilliseconds();
+            if (lastLoop > currentLoop) {
+                fps = count;
+                count = 1;
+            } else {
+                count += 1;
+            }
+            lastLoop = currentLoop;
+            correctFps(fps);
+            return fps;
+        };
+    }());
+    
 }
 
 export default {
@@ -365,3 +400,5 @@ window.debag = (str)=>{
     el.innerHTML = str;
     debagEl.appendChild(el);
 };
+
+
