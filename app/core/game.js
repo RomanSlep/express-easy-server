@@ -359,7 +359,7 @@ function init(){
         }
         realFps = fps;
         fpsKoef = FPS_ETALON / realFps;
-    }, 200);
+    }, 1000);
 
     const countFPS = (function () {
         var lastLoop = (new Date()).getMilliseconds();
