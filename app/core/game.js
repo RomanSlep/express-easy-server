@@ -358,7 +358,7 @@ function init(){
         realFps = (fps + realFps) / 2;
         fpsKoef = FPS_ETALON / realFps;
         // gameFps = (game.score / (new Date().getTime() - timeStart) * 1000).toFixed(0);
-    }, 100);
+    }, 500);
 
     const countFPS = (function () {
         var lastLoop = (new Date()).getMilliseconds();
