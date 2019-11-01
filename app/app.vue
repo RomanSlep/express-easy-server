@@ -2,13 +2,17 @@
     <div id="main" v-if="Store.isLoad" @click="Store.user.isLogged && !Store.isGameOver && startGame()">
         
         <div id="top" class="line">
-            <!-- <img src="/assets/img2/logo_fb.png"> -->
             <img class="getReady" src="/assets/img2/get_ready.png"
                 v-if="!Store.isGameOver && Store.user.deposit >= Store.config.bet && !Store.isGame">
             <img class="getReady" src="/assets/img2/game_over.png" v-if="Store.isGameOver">
             <div id="blink2" class="warningDepositMsg" v-if="Store.user.deposit < Store.config.bet">Insert coin to start winning!</div>
         </div>
-
+        <div id="preloader">
+            <div class="preloader_container">
+                <img src="/assets/img2/bird.png" class="preloaderImg">
+                <img src="/assets/img2/logo_fb.png" class="preloaderLogo">
+            </div>
+        </div>
         <div id="user-content" @click.stop>
             <span v-if="Store.user.isLogged">
                 <div class="user-content_line">

@@ -62,3 +62,46 @@ body {
     width: 30px;
     text-align: right;
 }
+
+
+/* PRELOADER */
+#preloader{
+    transition: .5s;
+    z-index: 100;
+    top: 0;
+    position: fixed;
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+.hidePreloader{
+    opacity: 0;
+}
+.preloader_container{
+    position: absolute;
+    top: 40%;
+}
+
+.preloaderLogo{
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+}
+.preloaderImg{
+    display: block;
+    width: 15%;
+    margin: 0 auto;
+    animation-name: rotation;
+	animation-duration: .5s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes rotation {
+    0% {
+        transform:rotate(0deg);
+    }
+    100% {
+        transform:rotate(360deg);
+    }
+}

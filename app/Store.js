@@ -50,11 +50,23 @@ export default new Vue({
                 self.user = data;
                 cb && cb();
             });
+        },
+        hidePreloader(){
+            setTimeout(()=>{
+                const preloader = document.getElementById('preloader');
+                preloader.classList.add('hidePreloader');
+                setTimeout(()=>{
+                    preloader.style.display = 'none';
+                }, 1000);
+            }, 1500);
         }
     },
     watch: {
         'user.token'() {
             localStorage.setItem('wstoken', this.user.token);
+        },
+        isLoad(){
+            this.hidePreloader();
         }
     }
 });
