@@ -170,7 +170,7 @@ function init(){
         if (this.isGame){
             return;
         }
-		Store.updatePublic();
+        Store.updatePublic();
         c = $u.clone(c_default);
         c.t = data.t;
         c.id = data.id;
@@ -179,7 +179,7 @@ function init(){
         this.height = this.canvas.clientHeight;
         Store.isGame = true;
         this.isGame = true;
-		speed(FPS_DEFAULT);
+        speed(FPS_DEFAULT);
         this.nextUpSpeed = STEP_SCORE_SPEED;
         this.interval = 0;
         this.score = 0;
@@ -187,9 +187,9 @@ function init(){
         this.bird = new Bird();
     };
     Game.prototype.stop = function(){
-		if(!this.isGame){
-			return;
-		}
+        if (!this.isGame){
+            return;
+        }
         this.bird.alive = false;
         this.isGame = false;
         Store.isGame = false;
@@ -210,7 +210,7 @@ function init(){
                 this.alives--;
                 if (this.isItEnd()){
                     this.stop();
-					api({action: 'loseGame', data: c});
+                    api({action: 'loseGame', data: c});
                 }
             }
         }
