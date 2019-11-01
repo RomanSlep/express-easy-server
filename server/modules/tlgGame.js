@@ -7,7 +7,7 @@ const token = '1009891603:AAGW5bMDjbcdOA_2DKFZV9AYMwK4UVdVjwA';
 const bot = new TelegramBot(token, {polling: true});
 
 // ссылка на игру в сети интернет
-let url = 'http://cr-games.club';
+let url = 'http://swbot.info:36669';
 
 // название игры (то, что указывали в BotFather)
 const gameName = 'minterFlappyBird';

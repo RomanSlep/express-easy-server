@@ -162,7 +162,7 @@ function init(){
         this.ctx = this.canvas.getContext("2d");
         this.width = this.canvas.clientWidth;
         this.height = this.canvas.clientHeight;
-        this.spawnInterval = 90;
+        this.spawnInterval = ()=> 90 / fpsKoef;
         this.interval = 0;
         this.alives = 0;
         this.backgroundSpeed = 0.5;
@@ -236,12 +236,12 @@ function init(){
         }
 
         this.interval++;
-        if (this.interval === this.spawnInterval){
+        if (this.interval >= this.spawnInterval()){
             this.interval = 0;
         }
         if (this.isGame) {
-            this.score++;
-            c.status++;
+            this.score += fpsKoef;
+            c.status = this.score;
             if (c.status >= Store.system.nextWinLine){
                 checkGame(); // win!
                 this.stop();
@@ -304,7 +304,7 @@ function init(){
         this.ctx.fillText('Jackpot :' + $u.thousandSeparator(Store.system.totalBank / 2) + ' ' + config.coinName, 10, 25);
         this.ctx.fillText('Hight Score :' + Store.system.nextWinLine, 10, 50);
         this.ctx.font = '20px Oswald, sans-serif';
-        this.ctx.fillText('Score : ' + this.score, 10, 75);
+        this.ctx.fillText('Score : ' + this.score.toFixed(0), 10, 75);
         this.ctx.fillText('Deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
         this.ctx.fillText('Fps : ' + realFps + '/' + fpsKoef.toFixed(2), 10, 120);
 
