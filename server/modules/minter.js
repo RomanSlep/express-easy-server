@@ -45,7 +45,7 @@ async function sendTx(address, amount){
         address,
         amount,
         coinSymbol: COIN,
-        message: 'flappy!'
+        message: 'Escaped money!'
     });
     try {
         return await minter.postTx(txParams);
