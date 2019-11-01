@@ -15,5 +15,5 @@ module.exports = {
     storeDb: modelDb(syncNedb(new Datastore({
         filename: 'db_/store',
         autoload: true
-    }))),
+    }), 10)),
 };

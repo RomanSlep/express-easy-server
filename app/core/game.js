@@ -49,9 +49,9 @@ function init(){
         });
     };
     let KOEF;
-    var FPS_DEFAULT = 60;
+    var FPS_DEFAULT = 50;
     var FPS = FPS_DEFAULT;
-    var MULT_SPEED = 5; // увеличение скорости на
+    var MULT_SPEED = 0; // увеличение скорости на
     var MAX_SPEED = 150; // Максимальная скорость
     var STEP_SCORE_SPEED = 500; // Шаг увеличения скорости
 
@@ -328,8 +328,11 @@ function init(){
             game = new Game();
             game.update();
             game.display();
-            game.canvas.addEventListener('mousedown', ()=>{
-                flap();
+            game.canvas.addEventListener('mousedown', flap);
+			game.canvas.addEventListener('keypress', ()=>{
+                if (e.keyCode === 0 || e.keyCode === 32) {
+					flap();
+				}
             });
         };
         loadImages(sprites, function(imgs){
