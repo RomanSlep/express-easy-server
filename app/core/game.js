@@ -301,16 +301,16 @@ function init(){
             this.ctx.restore();
         }
 
-        this.ctx.fillStyle = 'black';
-        this.ctx.font = '21px Oswald, sans-serif';
-        this.ctx.fillText('Jackpot :' + $u.thousandSeparator(Store.system.totalBank / 2) + ' ' + config.coinName, 10, 25);
-        this.ctx.fillText('Hight Score :' + Store.system.nextWinLine, 10, 50);
-        this.ctx.font = '20px Oswald, sans-serif';
-        this.ctx.fillText('Score : ' + this.score.toFixed(0), 10, 75);
-        this.ctx.fillText('Deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
-        this.ctx.font = '15px Oswald, sans-serif';
-        this.ctx.fillStyle = 'grey';
-        this.ctx.fillText('Fps (real/game): ' + realFps + '/' + gameFps, 10, 115);
+        // this.ctx.fillStyle = 'black';
+        // this.ctx.font = '21px Oswald, sans-serif';
+        // this.ctx.fillText('Jackpot :' + $u.thousandSeparator(Store.system.totalBank / 2) + ' ' + config.coinName, 10, 25);
+        // this.ctx.fillText('Hight Score :' + Store.system.nextWinLine, 10, 50);
+        // this.ctx.font = '20px Oswald, sans-serif';
+        // this.ctx.fillText('Score : ' + this.score.toFixed(0), 10, 75);
+        // this.ctx.fillText('Deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
+        // this.ctx.font = '15px Oswald, sans-serif';
+        // this.ctx.fillStyle = 'grey';
+        // this.ctx.fillText('Fps (real/game): ' + realFps + '/' + gameFps, 10, 115);
 
         var self = this;
         requestAnimationFrame(function(){
@@ -357,7 +357,7 @@ function init(){
     const correctFps = _.throttle(fps=>{
         realFps = (fps + realFps) / 2;
         fpsKoef = FPS_ETALON / realFps;
-        gameFps = (game.score / (new Date().getTime() - timeStart) * 1000).toFixed(0);
+        // gameFps = (game.score / (new Date().getTime() - timeStart) * 1000).toFixed(0);
     }, 100);
 
     const countFPS = (function () {
