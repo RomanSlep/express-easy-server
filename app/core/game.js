@@ -297,7 +297,7 @@ function init(){
 
         this.ctx.fillStyle = 'black';
         this.ctx.font = '21px Oswald, sans-serif';
-        this.ctx.fillText('Prise :' + $u.thousandSeparator(Store.system.totalBank / 2) + config.coinName, 10, 25);
+        this.ctx.fillText('Prise :' + $u.thousandSeparator(Store.system.totalBank / 2) + ' ' + config.coinName, 10, 25);
         this.ctx.fillText('Score :' + Store.system.nextWinLine, 10, 50);
         this.ctx.font = '20px Oswald, sans-serif';
         this.ctx.fillText('Your score : ' + this.score, 10, 75);
