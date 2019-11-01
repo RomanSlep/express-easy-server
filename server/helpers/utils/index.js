@@ -26,7 +26,9 @@ module.exports = {
             deposit: config.regDrop || 0
         });
         await user.save();
-        depositsDb.db.syncInsert({user_id: user._id, amount: config.regDrop, type: 'regdrop'});
+        if (config.regDrop > 0){
+            depositsDb.db.syncInsert({user_id: user._id, amount: config.regDrop, type: 'regdrop'});
+        }
         return user;
     }
 };
