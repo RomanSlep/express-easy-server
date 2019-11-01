@@ -55,8 +55,8 @@ function init(){
     var FPS_ETALON = 45;
     var realFps = '-';
     var FPS = FPS_DEFAULT;
-    var MULT_SPEED = 0; // увеличение скорости на
-    var MAX_SPEED = 150; // Максимальная скорость
+    // var MULT_SPEED = 0; // увеличение скорости на
+    // var MAX_SPEED = 150; // Максимальная скорость
     var STEP_SCORE_SPEED = 500; // Шаг увеличения скорости
     let gameFps = 0;
     let timeStart = 0;
