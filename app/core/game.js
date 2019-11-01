@@ -113,8 +113,8 @@ function init(){
         }
         for (var i in pipes){
             if (!(
-                this.x > pipes[i].x + pipes[i].width ||
-                this.x + this.width < pipes[i].x ||
+                this.x - 2 > pipes[i].x + pipes[i].width ||
+                this.x - 2 + this.width < pipes[i].x ||
                 this.y > pipes[i].y + pipes[i].height ||
                 this.y + this.height < pipes[i].y
             )){
@@ -329,10 +329,10 @@ function init(){
             game.update();
             game.display();
             game.canvas.addEventListener('mousedown', flap);
-			game.canvas.addEventListener('keypress', ()=>{
+            document.addEventListener('keypress', e=>{
                 if (e.keyCode === 0 || e.keyCode === 32) {
-					flap();
-				}
+                    flap();
+                }
             });
         };
         loadImages(sprites, function(imgs){
