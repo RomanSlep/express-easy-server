@@ -58,7 +58,8 @@ function init(){
     var MULT_SPEED = 0; // увеличение скорости на
     var MAX_SPEED = 150; // Максимальная скорость
     var STEP_SCORE_SPEED = 500; // Шаг увеличения скорости
-
+    let gameFps = 0;
+    let timeStart = 0;
     var images = {};
 
     var speed = function(fps){
@@ -174,6 +175,7 @@ function init(){
         if (this.isGame){
             return;
         }
+        timeStart = new Date().getTime();
         Store.updatePublic();
         c = $u.clone(c_default);
         c.t = data.t;
@@ -306,7 +308,9 @@ function init(){
         this.ctx.font = '20px Oswald, sans-serif';
         this.ctx.fillText('Score : ' + this.score.toFixed(0), 10, 75);
         this.ctx.fillText('Deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
-        this.ctx.fillText('Fps : ' + realFps + '/' + fpsKoef.toFixed(2), 10, 120);
+        this.ctx.font = '15px Oswald, sans-serif';
+        this.ctx.fillStyle = 'grey';
+        this.ctx.fillText('Fps (real/game): ' + realFps + '/' + gameFps, 10, 115);
 
         var self = this;
         requestAnimationFrame(function(){
@@ -351,15 +355,9 @@ function init(){
         }
     }
     const correctFps = _.throttle(fps=>{
-        const deff = FPS_ETALON - fps;
-        // let currentFps
-        // if (deff > 0){
-        // speed(FPS_ETALON + 1);
-        // } else {
-        // speed(FPS_ETALON - 1);
-        // }
         realFps = (fps + realFps) / 2;
         fpsKoef = FPS_ETALON / realFps;
+        gameFps = (game.score / (new Date().getTime() - timeStart) * 1000).toFixed(0);
     }, 100);
 
     const countFPS = (function () {
