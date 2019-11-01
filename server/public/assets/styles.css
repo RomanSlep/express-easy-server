@@ -26,9 +26,32 @@ body {
     margin: 0 !important;
 }
 
+.warningDepositMsg{
+    display: block;
+    position: absolute;
+    top: 35%;
+    width: 70%;
+    left: 15%;
+    text-align: center;
+    font-size: 35px;
+    color: black;
+    line-height: 1.1;
+}
+
+
+#blink2 {
+    -webkit-animation: blink2 1s linear infinite;
+    animation: blink2 1s linear infinite;
+  }
+  @-webkit-keyframes blink2 {
+    100% { color: rgba(34, 34, 34, 0); }
+  }
+  @keyframes blink2 {
+    100% { color: rgba(34, 34, 34, 0); }
+  }
+
 #user-content{
     position: fixed;
-    top: 10px;
     right: 5px;
     font-size: 20px;
 }
