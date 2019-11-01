@@ -9,7 +9,7 @@ module.exports = {
         let system = await storeDb.findOne({});
         if (!system){
             system = new storeDb({
-                totalBank: 1000,
+                totalBank: config.totalBank,
                 nextWinLine: config.winLine,
                 winner: 'None'
             });

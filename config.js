@@ -2,6 +2,7 @@ export default {
     bet: 10, // ставка
     regDrop: 0,
     coinName: 'ESCAPE',
+    totalBank: 3333, // стартовый банк
     winLine: 333, // первая призовая линия
     backLine: 10, // на сколько смещается планка при проигрыше назад
     winLineNextStep: 111, // следующий приз
