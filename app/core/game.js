@@ -310,7 +310,7 @@ function init(){
     };
 
 
-    const width = document.body.clientWidth;
+    const width = document.getElementById('main').offsetWidth;
     KOEF = width / 500;
     const height = KOEF * 650;
     // debag({KOEF});

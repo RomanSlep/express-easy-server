@@ -10,7 +10,9 @@
     border-top: 1px solid grey;
     border-bottom: 1px solid grey;
 }
-#main{}
+#main{
+    max-width: 500px;
+}
 
 body {
     /* background: #; */

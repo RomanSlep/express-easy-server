@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import api from './core/api';
-import $u from './core/utils';
 import config from '../config';
 import axios from 'axios';
 
