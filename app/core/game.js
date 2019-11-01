@@ -51,8 +51,8 @@ function init(){
     };
     let KOEF;
     let fpsKoef = 1;
-    var FPS_DEFAULT = 45;
-    var FPS_ETALON = FPS_DEFAULT;
+    var FPS_DEFAULT = 55;
+    var FPS_ETALON = 45;
     var realFps = '-';
     var FPS = FPS_DEFAULT;
     var MULT_SPEED = 0; // увеличение скорости на
@@ -352,14 +352,15 @@ function init(){
     }
     const correctFps = _.throttle(fps=>{
         const deff = FPS_ETALON - fps;
-        if (deff > 0){
-            speed(FPS_ETALON + 1);
-        } else {
-            speed(FPS_ETALON - 1);
-        }
-        realFps = fps;
+		// let currentFps
+        // if (deff > 0){
+            // speed(FPS_ETALON + 1);
+        // } else {
+            // speed(FPS_ETALON - 1);
+        // }
+        realFps = (fps + realFps) / 2;
         fpsKoef = FPS_ETALON / realFps;
-    }, 200);
+    }, 100);
 
     const countFPS = (function () {
         var lastLoop = (new Date()).getMilliseconds();
