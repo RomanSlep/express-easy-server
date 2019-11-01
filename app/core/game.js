@@ -246,14 +246,14 @@ function init(){
                 checkGame(); // win!
                 this.stop();
             }
-            this.maxScore = (this.score > this.maxScore) ? this.score : this.maxScore;
-            if (this.nextUpSpeed <= this.score){
-                this.nextUpSpeed += STEP_SCORE_SPEED;
-                if (FPS < MAX_SPEED){
-                    speed(FPS + MULT_SPEED);
-                }
+            // this.maxScore = (this.score > this.maxScore) ? this.score : this.maxScore;
+            // if (this.nextUpSpeed <= this.score){
+            //     this.nextUpSpeed += STEP_SCORE_SPEED;
+            //     if (FPS < MAX_SPEED){
+            //         speed(FPS + MULT_SPEED);
+            //     }
 
-            }
+            // }
         }
         var self = this;
 
@@ -350,7 +350,7 @@ function init(){
             game.bird.flap();
         }
     }
-    const correctFps = _.throttle((fps)=>{
+    const correctFps = _.throttle(fps=>{
         const deff = FPS_ETALON - fps;
         if (deff > 0){
             speed(FPS_ETALON + 1);
@@ -359,7 +359,7 @@ function init(){
         }
         realFps = fps;
         fpsKoef = FPS_ETALON / realFps;
-    }, 1000);
+    }, 200);
 
     const countFPS = (function () {
         var lastLoop = (new Date()).getMilliseconds();
