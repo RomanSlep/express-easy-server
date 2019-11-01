@@ -1,8 +1,6 @@
 /node_modules
 package-lock.json
+config.js
 /logs
 /db_
 server/public/dist
-config.js
-config.js
-
