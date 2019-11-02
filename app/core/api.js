@@ -15,7 +15,7 @@ export default async (obj, cb = () => {}, silent, type = 'api') => {
                 cb(JSON.parse(await ed.d(data.result)));
                 return;
             }
-            console.warn(obj.action + ' error: ', data);
+            // console.warn(obj.action + ' error: ', data);
             if (!silent) {
                 Store.$notify({
                     type: 'error',

@@ -9,6 +9,7 @@ export default new Vue({
         user: {},
         isGame: false,
         isGameOver: false,
+        isSoundOn: true,
         rout: '',
         modal: {},
         config,
