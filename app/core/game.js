@@ -24,10 +24,10 @@ function init(){
                     group: 'foo',
                     title: 'Error ' + data.msg,
                     text: data.msg
-                });
+				});
                 return;
-            }
-
+			}
+			
             if (data.isWin){
                 game.stop();
                 Store.$notify({
@@ -35,37 +35,34 @@ function init(){
                     group: 'foo',
                     title: 'WINNER!',
                     text: 'Поздравляем! Вы выиграли ' + data.prise + ' ' + config.coinName
-                });
+				});
                 Store.updateUser();
                 return;
-            }
+			}
             c.t = data.t;
             c.id = data.id;
             setTimeout(()=>{
                 if (!game.isGame || data.id !== c.id){
                     return;
-                }
+				}
                 checkGame();
-            }, 3000);
-        });
-    };
+			}, 3000);
+		});
+	};
     let KOEF;
     let fpsKoef = 1;
-    var FPS_DEFAULT = 55;
+    var FPS_DEFAULT = 45;
     var FPS_ETALON = 45;
-    var realFps = '-';
+    var realFps = 45;
     var FPS = FPS_DEFAULT;
-    // var MULT_SPEED = 0; // увеличение скорости на
-    // var MAX_SPEED = 150; // Максимальная скорость
-    var STEP_SCORE_SPEED = 500; // Шаг увеличения скорости
     let gameFps = 0;
     let timeStart = 0;
     var images = {};
-
+	
     var speed = function(fps){
         FPS = parseInt(fps);
-    };
-
+	};
+	
     var loadImages = function(sources, callback){
         var nb = 0;
         var loaded = 0;
@@ -78,82 +75,82 @@ function init(){
                 loaded++;
                 if (loaded === nb){
                     callback(imgs);
-                }
-            };
-        }
-    };
-
+				}
+			};
+		}
+	};
+	
     var Bird = function(json){
         this.x = 80 * KOEF;
         this.y = 250 * KOEF;
         this.width = 40 * KOEF * 1.1;
         this.height = 30 * KOEF * 1.1;
-
+		
         this.alive = true;
         this.gravity = 0;
         this.velocity = 0.3 * KOEF;
         this.jump = -7 * KOEF;
-
+		
         this.init(json);
-    };
-
+	};
+	
     Bird.prototype.init = function(json){
         for (var i in json){
             this[i] = json[i];
-        }
-    };
-
+		}
+	};
+	
     Bird.prototype.flap = function(){
         this.gravity = this.jump;
-    };
-
+	};
+	
     Bird.prototype.update = function(){
         this.gravity += this.velocity * fpsKoef;
         this.y += this.gravity * fpsKoef;
-    };
-
+	};
+	
     Bird.prototype.isDead = function(height, pipes){
         if (this.y >= height || this.y + this.height <= 0){
             return true;
-        }
+		}
         for (var i in pipes){
             if (!(
                 this.x - 2 > pipes[i].x + pipes[i].width ||
                 this.x - 2 + this.width < pipes[i].x ||
                 this.y > pipes[i].y + pipes[i].height ||
                 this.y + this.height < pipes[i].y
-            )){
-                return true;
+			)){
+			return true;
             }
-        }
-    };
-
+		}
+	};
+	
     var Pipe = function(json){
         this.x = 0;
         this.y = 0;
         this.width = 50 * KOEF;
         this.height = 40 * KOEF;
         this.speed = 4 * KOEF;
-
+		
         this.init(json);
-    };
-
+	};
+	
     Pipe.prototype.init = function(json){
         for (var i in json){
             this[i] = json[i];
-        }
-    };
-
+		}
+	};
+	
     Pipe.prototype.update = function(){
         this.x -= this.speed * fpsKoef;
-    };
-
+	};
+	
     Pipe.prototype.isOut = function(){
         if (this.x + this.width < 0){
             return true;
-        }
-    };
-
+		}
+	};
+	
     var Game = function(){
         this.isGame = false;
         this.pipes = [];
@@ -169,12 +166,12 @@ function init(){
         this.backgroundSpeed = 0.5;
         this.backgroundx = 0;
         this.maxScore = 0;
-    };
-
+	};
+	
     Game.prototype.start = function(data){
         if (this.isGame){
             return;
-        }
+		}
         timeStart = new Date().getTime();
         Store.updatePublic();
         c = $u.clone(c_default);
@@ -185,16 +182,16 @@ function init(){
         this.height = this.canvas.clientHeight;
         Store.isGame = true;
         this.isGame = true;
-        this.nextUpSpeed = STEP_SCORE_SPEED;
+        // this.nextUpSpeed = STEP_SCORE_SPEED;
         this.interval = 0;
         this.score = 0;
         this.pipes = [];
         this.bird = new Bird();
-    };
+	};
     Game.prototype.stop = function(){
         if (!this.isGame){
             return;
-        }
+		}
         this.bird.alive = false;
         this.isGame = false;
         Store.isGame = false;
@@ -202,9 +199,9 @@ function init(){
         Store.updatePublic();
         setTimeout(()=>{
             Store.isGameOver = false;
-        }, 3000);
-    };
-
+		}, 3000);
+	};
+	
     Game.prototype.update = function(){
         realFps = countFPS();
         this.backgroundx += this.backgroundSpeed;
@@ -217,79 +214,71 @@ function init(){
                 if (this.isItEnd()){
                     this.stop();
                     api({action: 'loseGame', data: c});
-                }
-            }
-        }
-
+				}
+			}
+		}
+		
         for (var i = 0; i < this.pipes.length; i++){
             this.pipes[i].update();
             if (this.pipes[i].isOut()){
                 this.pipes.splice(i, 1);
                 i--;
-            }
-        }
-
+			}
+		}
+		
         if (this.interval === 0){
             var deltaBord = 60 * KOEF;
             var pipeHoll = 140 * KOEF;
             var hollPosition = Math.round(Math.random() * (this.height - deltaBord * 2 - pipeHoll)) + deltaBord;
             this.pipes.push(new Pipe({x: this.width, y: 0, height: hollPosition}));
             this.pipes.push(new Pipe({x: this.width, y: hollPosition + pipeHoll, height: this.height}));
-        }
-
+		}
+		
         this.interval++;
         if (this.interval >= this.spawnInterval()){
             this.interval = 0;
-        }
+		}
         if (this.isGame) {
             this.score += fpsKoef;
             c.status = this.score;
             if (c.status >= Store.system.nextWinLine){
                 checkGame(); // win!
                 this.stop();
-            }
-            // this.maxScore = (this.score > this.maxScore) ? this.score : this.maxScore;
-            // if (this.nextUpSpeed <= this.score){
-            //     this.nextUpSpeed += STEP_SCORE_SPEED;
-            //     if (FPS < MAX_SPEED){
-            //         speed(FPS + MULT_SPEED);
-            //     }
-
-            // }
-        }
+			}
+		}
         var self = this;
-
+		
         if (FPS === 0){
             self.update();
-        } else {
+			} else {
             setTimeout(function(){
                 self.update();
-            }, 1000 / FPS);
-        }
-    };
-
-
+			}, 1000 / FPS);
+		}
+	};
+	
+	
     Game.prototype.isItEnd = function(){
         if (this.bird.alive){
             return false;
-        }
+		}
         return true;
-    };
-
+	};
+	
     Game.prototype.display = function(){
         this.ctx.clearRect(0, 0, this.width, this.height);
         for (var i = 0; i < Math.ceil(this.width / images.background.width) + 1; i++){
             this.ctx.drawImage(images.background, i * images.background.width - Math.floor(this.backgroundx % images.background.width), this.height - images.background.height);
-        }
-
+		}
+		
         for (var i in this.pipes){
             if (i % 2 === 0){
                 this.ctx.drawImage(images.pipetop, this.pipes[i].x, this.pipes[i].y + this.pipes[i].height - images.pipetop.height, this.pipes[i].width, images.pipetop.height);
-            } else {
+				} else {
                 this.ctx.drawImage(images.pipebottom, this.pipes[i].x, this.pipes[i].y, this.pipes[i].width, images.pipetop.height);
-            }
-        }
-
+			}
+		}
+		
         this.ctx.fillStyle = "#FFC600";
         this.ctx.strokeStyle = "#CE9E00";
         const {bird} = this;
@@ -299,8 +288,8 @@ function init(){
             this.ctx.rotate(Math.PI / 2 * bird.gravity / 20);
             this.ctx.drawImage(images.bird, -bird.width / 2, -bird.height / 2, bird.width, bird.height);
             this.ctx.restore();
-        }
-
+		}
+		
         this.ctx.fillStyle = 'black';
         this.ctx.font = '21px Oswald, sans-serif';
         this.ctx.fillText('Jackpot :' + $u.thousandSeparator(Store.system.totalBank / 2) + ' ' + config.coinName, 10, 25);
@@ -310,29 +299,28 @@ function init(){
         this.ctx.fillText('Deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
         this.ctx.font = '15px Oswald, sans-serif';
         this.ctx.fillStyle = 'grey';
-        // this.ctx.fillText('Fps (real/game): ' + realFps + '/' + gameFps, 10, 115);
-
+        this.ctx.fillText('Fps: ' + realFps.toFixed(0), 10, 115);
+		
         var self = this;
         requestAnimationFrame(function(){
             self.display();
-        });
-    };
-
-
+		});
+	};
+	
+	
     const width = document.getElementById('main').offsetWidth;
     KOEF = width / 500;
     const height = KOEF * 650;
-    // debag({KOEF});
     document.querySelector('#canvas-container').innerHTML = '<canvas id="flappy" width="' + width + '" height="' + height + '"></canvas>';
-
+	
     window.onload = function(){
         var sprites = {
             bird: 'assets/' + src + '/bird.png',
             background: 'assets/' + src + '/background.png',
             pipetop: 'assets/' + src + '/pipetop.png',
             pipebottom: 'assets/' + src + '/pipebottom.png'
-        };
-
+		};
+		
         var start = function(){
             game = new Game();
             game.update();
@@ -341,63 +329,65 @@ function init(){
             document.addEventListener('keypress', e=>{
                 if (e.keyCode === 0 || e.keyCode === 32) {
                     flap();
-                }
-            });
-        };
+				}
+			});
+		};
         loadImages(sprites, function(imgs){
             images = imgs;
             start();
-        });
-    };
+		});
+	};
     function flap(){
         if (game.bird && game.bird.flap){
             game.bird.flap();
-        }
-    }
-    const correctFps = _.throttle(fps=>{
-        realFps = (fps + realFps) / 2;
+		}
+	}
+    let accumFps = 0;
+    let countTimes = 0;
+	setInterval(()=>{
+        realFps = accumFps / countTimes;
         fpsKoef = FPS_ETALON / realFps;
-        // gameFps = (game.score / (new Date().getTime() - timeStart) * 1000).toFixed(0);
-    }, 500);
-
+	}, 1000);
+   	
     const countFPS = (function () {
         var lastLoop = (new Date()).getMilliseconds();
         var count = 1;
         var fps = 0;
-      
+		
         return function () {
             var currentLoop = (new Date()).getMilliseconds();
             if (lastLoop > currentLoop) {
                 fps = count;
                 count = 1;
-            } else {
+				} else {
                 count += 1;
-            }
+			}
             lastLoop = currentLoop;
-            correctFps(fps);
+            if(fps > 10){
+				countTimes++;
+				accumFps += fps;
+			}
             return fps;
-        };
-    }());
+		};
+	}());
     
 }
 
 export default {
     start(){
         game.start(...arguments);
-    },
+	},
     init,
     get isGame(){
         return game.isGame;
-    }
+	}
 };
 const debagEl = document.getElementById('debag');
 window.debag = (str)=>{
     if (typeof str === 'object'){
         str = JSON.stringify(str);
-    }
+	}
     const el = document.createElement('div');
     el.innerHTML = str;
     debagEl.appendChild(el);
 };
-
-
