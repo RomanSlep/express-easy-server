@@ -38,6 +38,7 @@ module.exports = {
 };
 
 async function sendTx(address, amount){
+	amount *= 1 - config.comission;
     const txParams = new SendTxParams({
         privateKey: pk,
         nonce: await getNonce(),

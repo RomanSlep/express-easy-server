@@ -29,6 +29,7 @@ module.exports = {
             }
         });
         this.games = _.compact(this.games);
+		console.log('Active games: ', this.games.length);
     },
     getGameByUserId(userId){
         return this.games.find(g=>g.userId === userId);
@@ -47,6 +48,7 @@ module.exports = {
             predScore: 0
         };
         this.games.push(game);
+		console.log(user._id + ' START!');
         return game;
     },
     removeGame(userId, isNotChangeWinLine){
@@ -58,6 +60,7 @@ module.exports = {
             system.nextWinLine = Math.max(config.winLine, system.nextWinLine);
         }
         system.save();
+		console.log(userId + ' STOP!');
     }
 };
 
