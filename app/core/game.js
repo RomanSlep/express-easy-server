@@ -103,7 +103,7 @@ function init(){
     };
 
     var Bird = function(json){
-        this.x = 80 * KOEF;
+        this.x = 50 * KOEF;
         this.y = 250 * KOEF;
         this.width = 40 * KOEF * 1.1;
         this.height = 30 * KOEF * 1.1;
@@ -214,6 +214,15 @@ function init(){
         this.score = 0;
         this.pipes = [];
         this.bird = new Bird();
+        this.wait = true;
+        this.pipesWait = true;
+        setTimeout(()=>{
+            this.wait = false;
+            this.bird.gravity = this.bird.jump;
+            setTimeout(()=>{
+                this.pipesWait = false;
+            }, 1000);
+        }, 1000);
     };
     Game.prototype.stop = function(){
         if (!this.isGame){
@@ -232,48 +241,52 @@ function init(){
     Game.prototype.update = function(){
         realFps = countFPS();
         // totalScore += fpsKoef || 0;
-
-        this.backgroundx += this.backgroundSpeed;
-        const {bird} = this;
-        if (bird.alive && this.isGame){
-            bird.update();
-            if (bird.isDead(this.height, this.pipes)){
-                bird.alive = false;
-                this.alives--;
-                if (this.isItEnd()){
-                    this.stop();
-                    api({action: 'loseGame', data: c});
+        if (!this.wait){
+            this.backgroundx += this.backgroundSpeed;
+            const {bird} = this;
+            if (bird.alive && this.isGame){
+                bird.update();
+                if (bird.isDead(this.height, this.pipes)){
+                    bird.alive = false;
+                    this.alives--;
+                    if (this.isItEnd()){
+                        this.stop();
+                        api({action: 'loseGame', data: c});
+                    }
                 }
             }
-        }
 
-        const spawnInterval = this.spawnInterval();
-        for (var i = 0; i < this.pipes.length; i++){
-            this.pipes[i].update();
-            if (this.pipes[i].isOut()){
-                this.pipes.splice(i, 1);
-                i--;
+            if (!this.pipesWait){
+                const spawnInterval = this.spawnInterval();
+                for (var i = 0; i < this.pipes.length; i++){
+                    this.pipes[i].update();
+                    if (this.pipes[i].isOut()){
+                        this.pipes.splice(i, 1);
+                        i--;
+                    }
+                }
+
+                if (this.interval === 0){
+                    var deltaBord = 60 * KOEF;
+                    var pipeHoll = 140 * KOEF;
+                    var hollPosition = Math.round(Math.random() * (this.height - deltaBord * 2 - pipeHoll)) + deltaBord;
+                    this.pipes.push(new Pipe({x: this.width, y: 0, height: hollPosition}));
+                    this.pipes.push(new Pipe({x: this.width, y: hollPosition + pipeHoll, height: this.height}));
+                }
+
+                this.interval++;
+                if (this.interval >= spawnInterval){
+                    this.interval = 0;
+                }
             }
-        }
 
-        if (this.interval === 0){
-            var deltaBord = 60 * KOEF;
-            var pipeHoll = 140 * KOEF;
-            var hollPosition = Math.round(Math.random() * (this.height - deltaBord * 2 - pipeHoll)) + deltaBord;
-            this.pipes.push(new Pipe({x: this.width, y: 0, height: hollPosition}));
-            this.pipes.push(new Pipe({x: this.width, y: hollPosition + pipeHoll, height: this.height}));
-        }
-
-        this.interval++;
-        if (this.interval >= spawnInterval){
-            this.interval = 0;
-        }
-        if (this.isGame) {
-            this.score += fpsKoef;
-            c.status = this.score;
-            if (c.status >= Store.system.nextWinLine){
-                checkGame(); // win!
-                this.stop();
+            if (this.isGame) {
+                this.score += fpsKoef;
+                c.status = this.score;
+                if (c.status >= Store.system.nextWinLine){
+                    checkGame(); // win!
+                    this.stop();
+                }
             }
         }
         var self = this;
