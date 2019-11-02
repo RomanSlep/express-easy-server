@@ -3,6 +3,7 @@ import $u from '../core/utils';
 import api from '../core/api';
 import config from '../../config';
 import _ from 'underscore';
+import app from '../app.vue';
 
 let game;
 let c = {};
@@ -374,6 +375,7 @@ function init(){
             document.addEventListener('keypress', e=>{
                 if (e.keyCode === 0 || e.keyCode === 32) {
                     flap();
+                    app.methods.startGame();
                 }
             });
         };

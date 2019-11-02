@@ -105,7 +105,7 @@ export default {
             }});
         },
         startGame() {
-            if (game.isGame) {
+            if (game.isGame || Store.isGameOver) {
                 return;
             }
             api({action: 'startGame', data: {userAgent: window.navigator.userAgent}}, data => {
