@@ -30,7 +30,7 @@ function init(){
 
             if (data.isWin){
                 game.stop();
-                $u.sound('sfx_point');
+                $u.sound('win');
                 Store.$notify({
                     type: 'success',
                     group: 'foo',
@@ -101,9 +101,9 @@ function init(){
 
     Bird.prototype.flap = function(){
         this.gravity = this.jump;
-        if (this.alive){
-            $u.sound('sfx_wing');
-        }
+        // if (this.alive){
+        // $u.sound('sfx_wing');
+        // }
     };
 
     Bird.prototype.update = function(){
@@ -113,7 +113,7 @@ function init(){
 
     Bird.prototype.isDead = function(height, pipes){
         if (this.y >= height || this.y + this.height <= 0){
-            $u.sound('sfx_die');
+            // $u.sound('sfx_die');
             return true;
         }
         for (var i in pipes){
@@ -123,7 +123,7 @@ function init(){
                 this.y > pipes[i].y + pipes[i].height ||
                 this.y + this.height < pipes[i].y
             )){
-                $u.sound('sfx_hit');
+                // $u.sound('sfx_hit');
                 return true;
             }
         }
