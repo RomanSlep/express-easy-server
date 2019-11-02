@@ -13,6 +13,7 @@ const c_default = {
     tLastSend: null,
     id: null
 };
+
 function init(){
     function checkGame() {
         c.tLastSend = $u.unix();
@@ -57,6 +58,18 @@ function init(){
     var realFps = 45;
     var FPS = FPS_DEFAULT;
     var images = {};
+    //---------------
+    let totalScore = 0;
+    let timeStart = 0;
+    let checkSpeed = 0;
+    setInterval(()=>{
+        const time = new Date().getTime();
+        const deff = (time - timeStart) / 1000;
+        checkSpeed = totalScore / deff;
+        // console.log(checkSpeed);
+        totalScore = 0;
+        timeStart = 0;
+    }, 500);
 
     var speed = function(fps){
         FPS = parseInt(fps);
@@ -208,6 +221,8 @@ function init(){
 
     Game.prototype.update = function(){
         realFps = countFPS();
+        totalScore += fpsKoef || 0;
+
         this.backgroundx += this.backgroundSpeed;
         const {bird} = this;
         if (bird.alive && this.isGame){
@@ -302,6 +317,7 @@ function init(){
         this.ctx.font = '20px Oswald, sans-serif';
         this.ctx.fillText('Score : ' + this.score.toFixed(0), 10, 75);
         this.ctx.fillText('Deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
+        this.ctx.fillText('checkSpeed : ' + checkSpeed, 10, 125);
         // this.ctx.font = '15px Oswald, sans-serif';
         // this.ctx.fillStyle = 'grey';
         // this.ctx.fillText('Fps: ' + realFps.toFixed(0), 10, 115);
@@ -330,6 +346,7 @@ function init(){
             game = new Game();
             game.update();
             game.display();
+            timeStart = new Date().getTime();
             game.canvas.addEventListener('mousedown', flap);
             document.addEventListener('keypress', e=>{
                 if (e.keyCode === 0 || e.keyCode === 32) {
@@ -351,8 +368,9 @@ function init(){
     let countTimes = 0;
     setInterval(()=>{
         realFps = accumFps / countTimes;
+        accumFps = countTimes = 0;
         fpsKoef = FPS_ETALON / realFps;
-    }, 200);
+    }, 300);
 
     const countFPS = (function () {
         var lastLoop = (new Date()).getMilliseconds();

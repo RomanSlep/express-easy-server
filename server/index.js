@@ -7,7 +7,7 @@ const DIR_NAME = __dirname + '/public/';
 require('./modules/api')(app);
 require('./modules/cron');
 require('./modules/checkerTx');
-require('./modules/tlgGame');
+// require('./modules/tlgGame');
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded

@@ -15,6 +15,8 @@ module.exports = {
         return {success: true, t: game.t, id: game.id};
     },
     loseGame(user, data){
+        user.countGames = user.countGames + 1 || 1;
+        user.save();
         Store.removeGame(user._id);
     },
     async checkGame(user, data){
