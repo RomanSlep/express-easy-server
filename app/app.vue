@@ -1,11 +1,11 @@
 <template>
     <div id="main" v-if="Store.isLoad" @click="Store.user.isLogged && !Store.isGameOver && startGame()">
-        
+
         <div id="top" class="line">
             <img class="getReady" src="/assets/img2/get_ready.png"
                 v-if="!Store.isGameOver && Store.user.deposit >= Store.config.bet && !Store.isGame">
             <img class="getReady" src="/assets/img2/game_over.png" v-if="Store.isGameOver">
-            <div id="blink2" class="warningDepositMsg" v-if="Store.user.deposit < Store.config.bet">Insert coin to start winning!</div>
+            <div id="blink2" class="warningDepositMsg" v-if="!Store.isGame && Store.user.deposit < Store.config.bet">Insert coin to start winning!</div>
         </div>
         <div id="user-content" @click.stop>
             <span v-if="Store.user.isLogged">

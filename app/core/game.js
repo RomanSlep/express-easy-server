@@ -52,7 +52,7 @@ function init(){
     };
     let KOEF;
     let fpsKoef = 1;
-    var FPS_DEFAULT = 45;
+    var FPS_DEFAULT = 60;
     var FPS_ETALON = 45;
     var realFps = 45;
     var FPS = FPS_DEFAULT;
@@ -222,6 +222,7 @@ function init(){
             }
         }
 
+        const spawnInterval = this.spawnInterval();
         for (var i = 0; i < this.pipes.length; i++){
             this.pipes[i].update();
             if (this.pipes[i].isOut()){
@@ -239,7 +240,7 @@ function init(){
         }
 
         this.interval++;
-        if (this.interval >= this.spawnInterval()){
+        if (this.interval >= spawnInterval){
             this.interval = 0;
         }
         if (this.isGame) {
@@ -301,9 +302,9 @@ function init(){
         this.ctx.font = '20px Oswald, sans-serif';
         this.ctx.fillText('Score : ' + this.score.toFixed(0), 10, 75);
         this.ctx.fillText('Deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
-        this.ctx.font = '15px Oswald, sans-serif';
-        this.ctx.fillStyle = 'grey';
-        this.ctx.fillText('Fps: ' + realFps.toFixed(0), 10, 115);
+        // this.ctx.font = '15px Oswald, sans-serif';
+        // this.ctx.fillStyle = 'grey';
+        // this.ctx.fillText('Fps: ' + realFps.toFixed(0), 10, 115);
 
         var self = this;
         requestAnimationFrame(function(){
@@ -351,7 +352,7 @@ function init(){
     setInterval(()=>{
         realFps = accumFps / countTimes;
         fpsKoef = FPS_ETALON / realFps;
-    }, 1000);
+    }, 200);
 
     const countFPS = (function () {
         var lastLoop = (new Date()).getMilliseconds();
@@ -374,7 +375,6 @@ function init(){
             return fps;
         };
     }());
-
 }
 
 export default {
