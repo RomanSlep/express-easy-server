@@ -56,8 +56,6 @@ function init(){
     var FPS_ETALON = 45;
     var realFps = 45;
     var FPS = FPS_DEFAULT;
-    let gameFps = 0;
-    let timeStart = 0;
     var images = {};
 
     var speed = function(fps){
@@ -178,7 +176,7 @@ function init(){
         if (this.isGame){
             return;
         }
-        timeStart = new Date().getTime();
+        $u.sound('start');
         Store.updatePublic();
         c = $u.clone(c_default);
         c.t = data.t;

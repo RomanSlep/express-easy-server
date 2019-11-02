@@ -13,7 +13,7 @@ export default {
         if (!Store.isSoundOn) {
             return;
         }
-        const s = new Audio('assets/sounds/' + name + '.ogg');
+        const s = new Audio('assets/sounds/' + name + '.mp3');
         s.play();
         s.volume = v;
     },
