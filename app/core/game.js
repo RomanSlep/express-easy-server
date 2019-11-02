@@ -8,6 +8,7 @@ let game;
 let c = {};
 let src = 'img2';
 const c_default = {
+    userAgent: window.navigator.userAgent,
     status: 0,
     t: null,
     tLastSend: null,
@@ -51,19 +52,19 @@ function init(){
             }, 3000);
         });
     };
-	let speedK = 1.7
+    let speedK = 1.7;
     let KOEF;
-  
+
     let fpsKoef = 1;
-    var FPS_DEFAULT = 60;
-    var FPS_ETALON = 45;
+    var FPS_DEFAULT = 65;
+    var FPS_ETALON = 55;
     var realFps = 45;
-	
-	FPS_DEFAULT /= speedK;
-	FPS_ETALON /= speedK;
-	fpsKoef /= speedK;
-	realFps /= speedK;
-	
+
+    FPS_DEFAULT /= speedK;
+    FPS_ETALON /= speedK;
+    fpsKoef /= speedK;
+    realFps /= speedK;
+
     var FPS = FPS_DEFAULT;
     var images = {};
     //---------------
@@ -71,13 +72,13 @@ function init(){
     // let timeStart = 0;
     // let checkSpeed = 0;
     // setInterval(()=>{
-        // const time = new Date().getTime();
-        // const deff = (time - timeStart) / 1000;
-        // checkSpeed = totalScore / deff;
-        // console.log(checkSpeed);
-		// speedK = FPS_ETALONrealFps;
-        // totalScore = 0;
-        // timeStart = 0;
+    // const time = new Date().getTime();
+    // const deff = (time - timeStart) / 1000;
+    // checkSpeed = totalScore / deff;
+    // console.log(checkSpeed);
+    // speedK = FPS_ETALONrealFps;
+    // totalScore = 0;
+    // timeStart = 0;
     // }, 1500);
 
     var speed = function(fps){

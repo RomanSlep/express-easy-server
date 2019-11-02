@@ -29,12 +29,12 @@ module.exports = {
             }
         });
         this.games = _.compact(this.games);
-		console.log('Active games: ', this.games.length);
+        console.log('Active games: ', this.games.length);
     },
     getGameByUserId(userId){
         return this.games.find(g=>g.userId === userId);
     },
-    createGame(user){
+    createGame(user, userAgent){
         const {bet} = config;
         user.deposit -= bet;
         this.system.totalBank += bet;
@@ -45,10 +45,11 @@ module.exports = {
             start: $u.unix(),
             userId: user._id,
             t: $u.unix(),
-            predScore: 0
+            predScore: 0,
+            userAgent
         };
         this.games.push(game);
-		console.log(user._id + ' START!');
+        console.log(user._id + ' START!' + userAgent);
         return game;
     },
     removeGame(userId, isNotChangeWinLine){
@@ -60,7 +61,7 @@ module.exports = {
             system.nextWinLine = Math.max(config.winLine, system.nextWinLine);
         }
         system.save();
-		console.log(userId + ' STOP!');
+        console.log(userId + ' STOP!');
     }
 };
 

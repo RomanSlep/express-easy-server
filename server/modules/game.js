@@ -4,14 +4,14 @@ const log = require('../helpers/log');
 const $u = require('../helpers/utils');
 
 module.exports = {
-    async startGame(user) {
+    async startGame(user, userAgent) {
         if (Store.getGameByUserId(user._id)) {
             return {success: false, msg: 'Не завершена предыдущая игра!'};
         }
         if (user.deposit < config.bet){
             return {success: false, msg: `Не достаточно средств. Ставка ${config.bet} ${config.coinName}!`};
         }
-        const game = await Store.createGame(user);
+        const game = await Store.createGame(user, userAgent);
         return {success: true, t: game.t, id: game.id};
     },
     loseGame(user, data){

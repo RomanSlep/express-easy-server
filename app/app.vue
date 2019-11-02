@@ -108,7 +108,7 @@ export default {
             if (game.isGame) {
                 return;
             }
-            api({action: 'startGame'}, data => {
+            api({action: 'startGame', data: {userAgent: window.navigator.userAgent}}, data => {
                 game.start(data);
                 Store.updateUser();
             });

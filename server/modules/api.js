@@ -58,7 +58,7 @@ module.exports = (app) => {
                 break;
 
             case ('startGame'):
-                const resStartGame = await game.startGame(User);
+                const resStartGame = await game.startGame(User, GET.userAgent);
                 if (resStartGame.success){
                     success(resStartGame, res);
                 } else {
