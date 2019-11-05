@@ -71,7 +71,7 @@ function init(){
 
     var FPS = FPS_DEFAULT;
 
-    const demoKoef = 1.2;
+    const demoKoef = 1.15;
     Store.$watch('isDemo', isDemo => {
         if (isDemo) {
             FPS_DEFAULT /= demoKoef;
