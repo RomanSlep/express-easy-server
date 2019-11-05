@@ -1,40 +1,52 @@
 <template>
-    <div id="main" v-if="Store.isLoad" @click="Store.user.isLogged && !Store.isGameOver && startGame()">
-
-        <div id="top" class="line">
-            <img class="getReady" src="/assets/img2/get_ready.png"
-                v-if="!Store.isGameOver && Store.user.deposit >= Store.config.bet && !Store.isGame">
-            <img class="getReady" src="/assets/img2/game_over.png" v-if="Store.isGameOver">
-            <div id="blink2" class="warningDepositMsg" v-if="!Store.isGame && Store.user.deposit < Store.config.bet">Insert coin to start winning!</div>
+    <span>
+        <div id="preloader" v-if="Store.isShowPreloader">
+            <div class="preloader_container">
+                <img src="/assets/img2/bird.png" class="preloaderImg">
+                <img src="/assets/img2/logo_fb.png" class="preloaderLogo">
+            </div>
         </div>
-        <div id="user-content" @click.stop>
-            <span v-if="Store.user.isLogged">
-                <div class="user-content_line">
-                    <span class="txt-red" @click="Store.defaultUser()">
-                        <i class="fa fa-sign-out" aria-hidden="true"></i>
-                    </span>
-                    {{Store.user.login}}
-                </div>
-                <div class="user-content_line" @click="billing">
-                    <span class="txt-green">
-                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
-                    </span>
-                    Pay
-                </div>
-                <div class="user-content_line" @click="withdraw">
-                     <span class="txt-red">
-                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
-                    </span>
-                    Withdraw
-                </div>
+        <div id="main" v-if="Store.isLoad" @click="Store.user.isLogged && !Store.isGameOver && startGame()">
 
-            </span>
-            <login v-else></login>
-             <modal></modal>
+            <div id="top" class="line">
+                <img class="getReady" src="/assets/img2/get_ready.png"
+                    v-if="!Store.isGameOver && Store.user.deposit >= Store.config.bet && !Store.isGame">
+                <img class="getReady" src="/assets/img2/game_over.png" v-if="Store.isGameOver">
+                <div id="blink2" class="warningDepositMsg"
+                    v-if="!Store.isDemo && !Store.isGame && Store.user.deposit < Store.config.bet">Insert coin to start winning!</div>
+            </div>
+            <div id="user-content" @click.stop>
+                <span v-if="Store.user.isLogged">
+                    <div class="user-content_line">
+                        <span class="txt-red" @click="Store.defaultUser()">
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        </span>
+                        {{Store.user.login}}
+                    </div>
+                    <div class="user-content_line" @click="billing">
+                        <span class="txt-green">
+                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+                        </span>
+                        Pay
+                    </div>
+                    <div class="user-content_line" @click="withdraw">
+                        <span class="txt-red">
+                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+                        </span>
+                        Withdraw
+                    </div>
+                    <div class="demo-toggle" @click="!Store.isGame && (Store.isDemo = !Store.isDemo)">
+                        <div class="nameMode txt-green" v-if="Store.isDemo"><i class="fa fa-smile-o" aria-hidden="true"></i> DEMO</div>
+                        <div class="nameMode txt-yellow" v-else><i class="fa fa-meh-o" aria-hidden="true"></i> ESCAPE</div>
+                    </div>
+                </span>
+                <login v-else></login>
+                <modal></modal>
+            </div>
+            <div id="canvas-container"></div>
+            <notifications group="foo" />
         </div>
-         <div id="canvas-container"></div>
-        <notifications group="foo" />
-    </div>
+    </span>
 </template>
 
 <script>
@@ -106,6 +118,10 @@ export default {
         },
         startGame() {
             if (game.isGame || Store.isGameOver) {
+                return;
+            }
+            if(Store.isDemo){
+                 game.start(true);
                 return;
             }
             api({action: 'startGame', data: {userAgent: window.navigator.userAgent}}, data => {

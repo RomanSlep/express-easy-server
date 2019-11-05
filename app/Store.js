@@ -10,6 +10,8 @@ export default new Vue({
         isGame: false,
         isGameOver: false,
         isSoundOn: true,
+        isShowPreloader: true,
+        isDemo: false,
         rout: '',
         modal: {},
         config,
@@ -53,12 +55,11 @@ export default new Vue({
         },
         hidePreloader(){
             setTimeout(()=>{
-                const preloader = document.getElementById('preloader');
-                preloader.classList.add('hidePreloader');
-                setTimeout(()=>{
-                    preloader.style.display = 'none';
-                }, 1000);
+                this.isShowPreloader = false;
             }, 1500);
+        },
+        showPreloader(){
+            this.isShowPreloader = true;
         }
     },
     watch: {

@@ -99,6 +99,16 @@ body {
 	animation-timing-function: linear;
 }
 
+.demo-toggle{
+    width: 95px;
+    text-align: center;
+    left: calc(50% - 45px);
+    background: rgba(0,0,0,0.5);
+    border-radius: 5px;
+    padding: 2px;
+    cursor: pointer;
+}
+
 @keyframes rotation {
     0% {
         transform:rotate(0deg);

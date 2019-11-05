@@ -18,6 +18,9 @@ const c_default = {
 
 function init(){
     function checkGame() {
+        if (Store.isDemo){
+            return;
+        }
         c.tLastSend = $u.unix();
         api({action: 'checkGame', data: c}, data => {
             if (!data.success){
@@ -67,21 +70,20 @@ function init(){
     realFps /= speedK;
 
     var FPS = FPS_DEFAULT;
-    var images = {};
-    //---------------
-    // let totalScore = 0;
-    // let timeStart = 0;
-    // let checkSpeed = 0;
-    // setInterval(()=>{
-    // const time = new Date().getTime();
-    // const deff = (time - timeStart) / 1000;
-    // checkSpeed = totalScore / deff;
-    // console.log(checkSpeed);
-    // speedK = FPS_ETALONrealFps;
-    // totalScore = 0;
-    // timeStart = 0;
-    // }, 1500);
 
+    const demoKoef = 1.2;
+    Store.$watch('isDemo', isDemo => {
+        if (isDemo) {
+            FPS_DEFAULT /= demoKoef;
+            FPS_ETALON /= demoKoef;
+            FPS /= demoKoef;
+        } else {
+            FPS_DEFAULT *= demoKoef;
+            FPS_ETALON *= demoKoef;
+            FPS *= demoKoef;
+        }
+    });
+    var images = {};
     var speed = function(fps){
         FPS = parseInt(fps);
     };
@@ -188,7 +190,13 @@ function init(){
         this.ctx = this.canvas.getContext("2d");
         this.width = this.canvas.clientWidth;
         this.height = this.canvas.clientHeight;
-        this.spawnInterval = ()=> 90 / fpsKoef;
+        this.spawnInterval = ()=> {
+            let interval = 90 / fpsKoef;
+            if (Store.isDemo){
+                interval *= demoKoef;
+            }
+            return interval;
+        };
         this.interval = 0;
         this.alives = 0;
         this.backgroundSpeed = 0.5;
@@ -252,7 +260,9 @@ function init(){
                     this.alives--;
                     if (this.isItEnd()){
                         this.stop();
-                        api({action: 'loseGame', data: c});
+                        if (!Store.isDemo){
+                            api({action: 'loseGame', data: c});
+                        }
                     }
                 }
             }
