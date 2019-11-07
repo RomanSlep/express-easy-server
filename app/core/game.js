@@ -56,7 +56,7 @@ function init(){
             }, 3000);
         });
     };
-    let speedK = 1.7;
+    let speedK = 1.8;
     let KOEF;
 
     let fpsKoef = 1;
@@ -71,7 +71,7 @@ function init(){
 
     var FPS = FPS_DEFAULT;
 
-    const demoKoef = 1.15;
+    const demoKoef = 1.05;
     Store.$watch('isDemo', isDemo => {
         if (isDemo) {
             FPS_DEFAULT /= demoKoef;
