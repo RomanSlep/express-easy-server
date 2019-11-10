@@ -347,7 +347,7 @@ function init(){
         this.ctx.fillStyle = 'black';
         this.ctx.font = '21px Oswald, sans-serif';
         this.ctx.fillText('Jackpot :' + $u.thousandSeparator(Store.system.totalBank / 2) + ' ' + config.coinName, 10, 25);
-        this.ctx.fillText('Hight Score :' + Store.system.nextWinLine + '(' + Store.system.winner + ')', 10, 50);
+        this.ctx.fillText('High Score :' + Store.system.nextWinLine + '(' + Store.system.winner + ')', 10, 50);
         this.ctx.font = '20px Oswald, sans-serif';
         this.ctx.fillText('Score : ' + this.score.toFixed(0), 10, 75);
         this.ctx.fillText('Deposit : ' + $u.thousandSeparator(Store.user.deposit), 10, 100);
