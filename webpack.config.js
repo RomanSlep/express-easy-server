@@ -51,6 +51,7 @@ if (isDev) {
     // ls.stdout.on('data', data => console.log('\x1b[35m', 'Server:', data.replace('\n', '')));
 } else {
     setTimeout(()=>{
+        return;
         console.log('Start JavaScriptObfuscator');
         const fs = require('fs');
         const fileName = Dist + '/build.js';
