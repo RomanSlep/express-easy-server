@@ -6,7 +6,7 @@ export default (obj, cb = () => {}, silent, type = 'api') => {
     obj.data = obj.data || {};
     obj.data.token = type === 'api' && (obj.token || Store.user.token);
     // console.log('Req: ', obj.action, obj.data);
-    axios.get(config.domain || '' + '/' + type + '?action=' + obj.action + '&data=' + JSON.stringify(obj.data))
+    axios.get(config.domain || '' + '/' + type + '?' + 'action=' + obj.action + '&data=' + encodeURIComponent(JSON.stringify(obj.data)))
         .then(function (res) {
             const data = res.data;
             // console.log('Resp:', obj.action + ' -> ', data.result);

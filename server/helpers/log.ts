@@ -1,9 +1,9 @@
-let fs = require('fs');
+import * as fs from 'fs';
 if (!fs.existsSync('./logs')) {
     fs.mkdirSync('./logs');
 }
 
-let infoStr = fs.createWriteStream('./logs/' + date() + '.log', {
+let infoStr:fs.WriteStream = fs.createWriteStream('./logs/' + date() + '.log', {
     flags: "a"
 });
 
@@ -12,19 +12,19 @@ _________________${fullTime()}_________________
 
 `);
 
-module.exports = {
-    error (str) {
+export default {
+    error (str:String) {
         infoStr.write(`
 ` + 'error|' + time() + '|' + str);
         console.log('\x1b[31m', 'error|' + time(), "\x1b[0m", str);
     },
-    info (str) {
+    info (str:String) {
         console.log('\x1b[32m', 'info|' + time(), "\x1b[0m", str);
 
         infoStr.write(`
 ` + 'info|' + time() + '|' + str);
     },
-    warn (str) {
+    warn (str:String) {
         console.log('\x1b[33m', 'warn|' + time(), "\x1b[0m", str);
 
         infoStr.write(`

@@ -1,7 +1,5 @@
 import Vue from 'vue/dist/vue.js';
 import api from './core/api';
-import $u from './core/utils';
-import config from '../config';
 
 export default new Vue({
     created() {

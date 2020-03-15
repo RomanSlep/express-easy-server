@@ -1,18 +1,18 @@
-const log = require('../helpers/log');
-const sha256 = require('sha256');
-const {usersDb} = require('./DB');
-const $u = require('../helpers/utils');
-const publicApi = require('./publicApi');
-const Store = require('../helpers/Store');
-const config = require('../helpers/configReader');
+import log from '../helpers/log';
+import {Express, Response} from 'express';
+import {usersDb} from './DB';
+import $u from '../helpers/utils';
+import publicApi from './publicApi';
 
-module.exports = (app) => {
+const sha256 = require('sha256');
+
+export default (app: Express) => {
     app.get('/api', async (req, res) => {
-        let checkUser;
+        let checkUser:IM_User;
         try {
-            const action = req.query.action;
-            const GET = JSON.parse(req.query.data);
-            const User = await $u.getUserFromQ({token: GET.token});
+            const action: string = req.query.action;
+            const GET = JSON.parse(decodeURIComponent(req.query.data));
+            const User:IM_User = await $u.getUserFromQ({token: GET.token});
             // роуты
             switch (action) {
             case ('getUser'):
@@ -37,27 +37,13 @@ module.exports = (app) => {
                 break;
 
             case ('registration'):
-                const {login, password, address} = GET;
-                if (!login.length || !password.length || !address.length) {
-                    error('No full data', res);
-                    return;
+                const resCreate:IResponse = await $u.createUser(GET);
+                if(resCreate.error){
+                    return error(resCreate.error, res);
                 }
-                checkUser = await usersDb.findOne({
-                    $or: [{ address }, { login }]
-                });
-                if (checkUser){
-                    error('Login or address already exists!', res);
-                    return;
-                }
-                const newUser = await $u.createUser({address, login, password});
-
-                success(await assignUser(newUser), res);
+                success(await assignUser(resCreate.result), res);
                 break;
-
-            case ('startGame'):
-
-                break;
-
+                
             default:
                 error('error endpoint', res);
                 break;
@@ -73,7 +59,7 @@ module.exports = (app) => {
     });
 };
 
-function error(msg, res) {
+function error(msg:string, res: Response) {
     try {
         log.error(msg);
         res.json({
@@ -84,7 +70,7 @@ function error(msg, res) {
         console.log(e);
     }
 }
-function success(data, res) {
+function success(data:IObject, res:Response) {
     try {
         res.json({
             success: true,
@@ -95,7 +81,7 @@ function success(data, res) {
     }
 }
 
-async function assignUser (user){
+async function assignUser (user:IM_User){
     try {
         const token = sha256(new Date().toString());
         user.token = token;

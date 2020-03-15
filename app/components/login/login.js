@@ -18,7 +18,8 @@ export default Vue.component('login', {
     methods: {
         logreg() {
             const user = this.user;
-            if (!user.login || !user.password || !user.isLoginned && !user.address) {
+            // if (!user.login || !user.password || !user.isLoginned && !user.address) {
+            if (!user.login || !user.password) {
                 this.$notify({
                     type: 'error',
                     group: 'foo',
@@ -27,15 +28,15 @@ export default Vue.component('login', {
                 });
                 return;
             }
-            if (user.address && (user.address.length < 40 || !user.address.startsWith('Mx'))){
-                this.$notify({
-                    type: 'warn',
-                    group: 'foo',
-                    title: 'Error ' + this.status,
-                    text: 'U minter adress must be Mx345536dsv34344...!'
-                });
-                return;
-            }
+            // if (user.address && (user.address.length < 40 || !user.address.startsWith('Mx'))){
+            //     this.$notify({
+            //         type: 'warn',
+            //         group: 'foo',
+            //         title: 'Error ' + this.status,
+            //         text: 'U minter adress must be Mx345536dsv34344...!'
+            //     });
+            //     return;
+            // }
             api({
                 action: this.status.toLowerCase(),
                 data: user
