@@ -18,9 +18,8 @@ export default (obj, cb = () => {}, silent, type = 'api') => {
             if (!silent) {
                 Store.$notify({
                     type: 'error',
-                    group: 'foo',
                     title: 'Error ' + obj.action,
-                    text: data.msg
+                    message: data.msg
                 });
             }
         })

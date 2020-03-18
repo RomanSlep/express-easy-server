@@ -1,5 +1,5 @@
 <template>
-<div id="modal" class="bg" :class="{'show-modal': isShow}">
+<!-- <div id="modal" class="bg" :class="{'show-modal': isShow}">
     <div id="modal-content">
         <div id="modal-header" class="bg-blue bg">
             <span class="title">{{header}}</span>
@@ -11,7 +11,7 @@
             <div class="but hovered bg bg-green" v-show="cb" @click="success">Ok</div>
         </div>
     </div>
-</div>
+</div> -->
 </template>
 
 <script>
