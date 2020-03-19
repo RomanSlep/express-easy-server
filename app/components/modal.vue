@@ -1,17 +1,15 @@
 <template>
-<!-- <div id="modal" class="bg" :class="{'show-modal': isShow}">
-    <div id="modal-content">
-        <div id="modal-header" class="bg-blue bg">
-            <span class="title">{{header}}</span>
-            <i class="fa fa-times-circle-o hovered" aria-hidden="true" @click="hide"></i>
-        </div>
-        <div id="modal-body" v-html="body"></div>
-        <div id="modal-but">
-            <div class="but bg-red hovered bg" @click="hide">Cancel</div>
-            <div class="but hovered bg bg-green" v-show="cb" @click="success">Ok</div>
-        </div>
-    </div>
-</div> -->
+<el-dialog
+  :title="header"
+  :visible.sync="isShow"
+  width="300px"
+  :before-close="cb">
+  <span>This is a message</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="isShow = false">Cancel</el-button>
+    <el-button type="primary" @click="isShow = false">Confirm</el-button>
+  </span>
+</el-dialog>
 </template>
 
 <script>
@@ -27,7 +25,6 @@ export default {
     },
     created() {
         Store.modal = this;
-        console.log('Store', Store)
     },
     methods: {
         show(params) {

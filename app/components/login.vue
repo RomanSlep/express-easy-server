@@ -3,20 +3,25 @@
 
         <h4 class="mt10">{{status}}</h4>
 
-        <el-input placeholder="Input login" maxlength="10" v-model="user.login" clearable class="mt5"></el-input>
-        <el-input placeholder="Input password" v-model="user.password" clearable show-password class="mt5"></el-input>
+        <el-input placeholder="Login" maxlength="10" v-model="user.login" clearable class="mt10"></el-input>
+        <el-input placeholder="Password" v-model="user.password" clearable show-password class="mt10"></el-input>
+        <div class="mt5" v-show="!user.isLoginned">
+            <el-checkbox v-model="checked"></el-checkbox>&nbsp;
+            <span class="smallsmall hovered" @click="checked = !checked">Я подтверждаю, что мне исполнилось 18 полных лет, и я понимаю и принимаю
+                риски связанные с использованнием криптовалют.</span>
+        </div>
+        <el-button type="info" @click="logreg" plain class="mt15">{{status}}</el-button>
 
-        <el-button type="info" @click="logreg" plain class="mt10">{{status}}</el-button>
-
-        <div class="hovered mt10" @click="user.isLoginned =!user.isLoginned">
-            <el-link v-if="user.isLoginned" href="#">Got registration?</el-link>
-            <el-link v-else href="#">Got login?</el-link>
+        <div class="mt10" @click="user.isLoginned =!user.isLoginned">
+            <el-link v-if="user.isLoginned">Got registration?</el-link>
+            <el-link v-else>Got login?</el-link>
         </div>
 
     </el-form>
 
 </template>
 <script>
+
 import Vue from 'vue/dist/vue.js';
 import Store from '../Store';
 import api from '../core/api';
@@ -24,7 +29,8 @@ import api from '../core/api';
 export default Vue.component('login', {
     data() {
         return {
-            user: Store.user
+            user: Store.user,
+            checked: false
         };
     },
     computed: {
@@ -35,8 +41,7 @@ export default Vue.component('login', {
     methods: {
         logreg() {
             const user = this.user;
-            // if (!user.login || !user.password || !user.isLoginned && !user.address) {
-            if (!user.login || !user.password) {
+            if (!user.login || !user.password || !user.isLoginned && !this.checked) {
                 this.$notify({
                     title: 'Error ' + this.status,
                     message: 'Fill in all the fields!',
@@ -55,6 +60,7 @@ export default Vue.component('login', {
                     message: 'Ready!'
                 });
                 Store.user.isLogged = true;
+                Store.rout('mainPage');
             });
         }
     }

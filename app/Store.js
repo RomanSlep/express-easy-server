@@ -3,13 +3,19 @@ import api from './core/api';
 
 export default new Vue({
     created() {
+        // Router start
+        window.addEventListener('popstate', ()=> this.rout(window.location.hash));
+        this.rout(window.location.hash);
+
         this.defaultUser();
         this.user.token = localStorage.getItem('wstoken') || false;
+        
         if (this.user.token) {
             this.updateUser();
         } else {
             this.isLoad = true;
         }
+        
         this.updatePublic();
         setInterval(() => {
             this.updatePublic();
@@ -18,7 +24,7 @@ export default new Vue({
     data: {
         isLoad: false,
         user: {},
-        rout: '',
+        router: '',
         modal: {}
     },
     methods: {
@@ -28,9 +34,7 @@ export default new Vue({
                 isLoginned: true, // хочет логиниться / регаться
                 password: '',
                 login: '',
-                address: '',
-                token: false,
-                deposit: 0
+                token: false
             };
         },
         updatePublic() {
@@ -43,6 +47,20 @@ export default new Vue({
                 self.user = data;
                 cb && cb();
             }, true);
+        },
+        rout(hash){
+            console.log({hash});
+            if (hash === '#' + this.router){
+                return;
+            }
+
+            this.router = hash.replace('#', '');
+            if (this.router === ''){
+                this.router = 'mainPage';
+            }
+            if (window.location.hash !== '#' + this.router){
+                window.location.hash = this.router;
+            }
         }
     },
     watch: {

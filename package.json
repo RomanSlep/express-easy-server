@@ -14,7 +14,16 @@
     "babel": {
         "presets": [
             "@babel/preset-env"
-        ]
+        ],
+        "plugins": [
+            [
+              "component",
+              {
+                "libraryName": "element-ui",
+                "styleLibraryName": "theme-chalk"
+              }
+            ]
+          ]
     },
     "dependencies": {
         "axios": "^0.18.0",
@@ -43,6 +52,7 @@
         "@types/node": "^13.9.1",
         "babel-core": "^6.26.3",
         "babel-loader": "^8.0.5",
+        "babel-plugin-component": "^1.1.1",
         "babel-preset-env": "^1.7.0",
         "css-loader": "^3.4.2",
         "element-theme-dark": "^1.0.3",
